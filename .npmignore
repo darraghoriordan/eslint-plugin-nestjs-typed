@@ -1,0 +1,33 @@
+.bash_history
+.config/
+
+.DS_Store
+.env
+.npmrc
+.npm/
+.rpt2_cache
+
+.docker-persist/
+coverage/
+node_modules/
+lerna-debug.log
+yarn-error.log
+dist/
+.docker-compose/.persist/
+.docker-compose/.develop_cache/
+.docker-compose/.env_cache/
+config/local*.json
+
+# IntelliJ Specific
+*.iml
+.idea/*
+!.idea/runConfigurations
+*.tgz
+
+# Visual Studio Specific
+.vscode
+.jest_cache
+reports
+junit.xml
+.develop_cache
+.env_cache
