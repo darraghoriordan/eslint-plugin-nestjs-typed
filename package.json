@@ -19,10 +19,10 @@
             "main"
         ]
     },
-    "homepage": "https://github.com/darraghoriordan/nest-eslint-plugin",
+    "homepage": "https://github.com/darraghoriordan/eslint-plugin-nestjs-typed",
     "repository": {
         "type": "git",
-        "url": "https://github.com/darraghoriordan/nest-eslint-plugin"
+        "url": "https://github.com/darraghoriordan/eslint-plugin-nestjs-typed"
     },
     "engines": {
         "node": ">=12"
