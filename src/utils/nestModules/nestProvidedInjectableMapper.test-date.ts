@@ -26,11 +26,13 @@ export const moduleMappingTestData = [
         exports: [MyInjectable],
     })
     export class MyModule {}`,
-        expectedMapping: new NestProvidedInjectablesMap(
+        expectedMapping: [
             fakeFilePath,
-            new Set(["MyController"]),
-            new Set(["MyProvider", "MyInjectable"])
-        ),
+            new NestProvidedInjectablesMap(
+                new Set(["MyController"]),
+                new Set(["MyProvider", "MyInjectable"])
+            ),
+        ],
     },
     {
         moduleCode: `import { Provider } from "@nestjs/common";
@@ -45,10 +47,12 @@ export const MyOtherInjectableProvider: Provider = {
     },
     inject: [MyService],
 };`,
-        expectedMapping: new NestProvidedInjectablesMap(
+        expectedMapping: [
             fakeFilePath,
-            new Set([]),
-            new Set(["MyOtherInjectable"])
-        ),
+            new NestProvidedInjectablesMap(
+                new Set([]),
+                new Set(["MyOtherInjectable"])
+            ),
+        ],
     },
 ];

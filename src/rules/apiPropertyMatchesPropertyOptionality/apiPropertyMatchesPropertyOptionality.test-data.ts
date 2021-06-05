@@ -4,48 +4,48 @@ export const testCases = [
         @Expose()
         @ApiPropertyOptional()
         thisIsAStringProp?: string;}`,
-        hasOptionalMismatch: false,
-        hasRequiredMismatch: false,
+        shouldUseOptionalDecorator: false,
+        shouldUseRequiredDecorator: false,
         message: "optional everywhere",
     },
     {
         moduleCode: `class TestClass {@Expose()
         @ApiPropertyOptional()
         thisIsAStringProp: string;}`,
-        hasOptionalMismatch: true,
-        hasRequiredMismatch: false,
+        shouldUseOptionalDecorator: false,
+        shouldUseRequiredDecorator: true,
         message: "optional decorator, required prop",
     },
     {
         moduleCode: `class TestClass {@Expose()
         @ApiPropertyOptional()
         thisIsAStringProp!: string;}`,
-        hasOptionalMismatch: true,
-        hasRequiredMismatch: false,
+        shouldUseOptionalDecorator: false,
+        shouldUseRequiredDecorator: true,
         message: "optional decorator, required prop",
     },
     {
         moduleCode: `class TestClass {@Expose()
         @ApiProperty()
         thisIsAStringProp?: string;}`,
-        hasOptionalMismatch: false,
-        hasRequiredMismatch: true,
+        shouldUseOptionalDecorator: true,
+        shouldUseRequiredDecorator: false,
         message: "required decorator, optional prop",
     },
     {
         moduleCode: `class TestClass {@Expose()
         @ApiProperty()
         thisIsAStringProp: string | undefined;}`,
-        hasOptionalMismatch: false,
-        hasRequiredMismatch: true,
+        shouldUseOptionalDecorator: true,
+        shouldUseRequiredDecorator: false,
         message: "required decorator, optional prop",
     },
     {
         moduleCode: `class TestClass {@Expose()
         @ApiPropertyOptional()
         thisIsAStringProp: string | undefined;}`,
-        hasOptionalMismatch: false,
-        hasRequiredMismatch: false,
+        shouldUseOptionalDecorator: false,
+        shouldUseRequiredDecorator: false,
         message: "optional decorator, optional prop",
     },
 ];

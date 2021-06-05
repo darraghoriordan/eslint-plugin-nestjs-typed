@@ -35,8 +35,9 @@ const NestProvidedInjectableMapper = {
     parseFileList(
         files: Array<FilePath>,
         context: Readonly<RuleContext<never, never[]>>
-    ): Array<NestProvidedInjectablesMap> {
-        const modules = files
+    ): Map<string, NestProvidedInjectablesMap> {
+        const moduleMaps = new Map<string, NestProvidedInjectablesMap>();
+        files
             .map((f) =>
                 NestProvidedInjectableMapper.mapAllProvidedInjectables(
                     typedTokenHelpers.parseStringToAst(
@@ -50,9 +51,15 @@ const NestProvidedInjectableMapper = {
                 )
             )
             // eslint-disable-next-line @typescript-eslint/unbound-method
-            .filter(NestProvidedInjectableMapper.notEmpty);
+            .filter(NestProvidedInjectableMapper.notEmpty)
+            .forEach((m) =>
+                moduleMaps.set(
+                    m[0] as string,
+                    m[1] as NestProvidedInjectablesMap
+                )
+            );
 
-        return modules;
+        return moduleMaps;
     },
     notEmpty<TValue>(value: TValue | null): value is TValue {
         if (value === null || value === undefined) return false;
@@ -81,7 +88,7 @@ const NestProvidedInjectableMapper = {
     mapAllProvidedInjectables(
         ast: TSESTree.Program,
         path: string
-    ): NestProvidedInjectablesMap | null {
+    ): Array<string | NestProvidedInjectablesMap> | null {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
 

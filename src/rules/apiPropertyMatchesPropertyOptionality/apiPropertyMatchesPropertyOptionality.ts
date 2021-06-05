@@ -5,7 +5,7 @@ import {TSESTree} from "@typescript-eslint/types";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
-export const hasMismatchedOptionalDecorator = (
+export const shouldUseRequiredDecorator = (
     node: TSESTree.ClassProperty
 ): boolean => {
     const hasOptionalDecorator = typedTokenHelpers.nodeHasDecoratorNamed(
@@ -19,7 +19,7 @@ export const hasMismatchedOptionalDecorator = (
     return hasOptionalDecorator && !isOptionalPropertyValue;
 };
 
-export const hasMismatchedRequiredDecorator = (
+export const shouldUseOptionalDecorator = (
     node: TSESTree.ClassProperty
 ): boolean => {
     const hasRequiredDecorator = typedTokenHelpers.nodeHasDecoratorNamed(
@@ -43,8 +43,8 @@ const rule = createRule({
             requiresTypeChecking: true,
         },
         messages: {
-            optionalPropertyOptional: `Property marked optional should use @ApiPropertyOptional`,
-            requiredPropertyRequired: `Property marked not optional should use @ApiProperty decorator`,
+            shouldUseOptionalDecorator: `Property marked as optional should use @ApiPropertyOptional decorator`,
+            shouldUseRequiredDecorator: `Property marked as required should use @ApiProperty decorator`,
         },
         schema: [],
         type: "suggestion",
@@ -55,16 +55,16 @@ const rule = createRule({
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassProperty(node: TSESTree.ClassProperty): void {
-                if (hasMismatchedOptionalDecorator(node)) {
+                if (shouldUseOptionalDecorator(node)) {
                     context.report({
                         node: node,
-                        messageId: "optionalPropertyOptional",
+                        messageId: "shouldUseOptionalDecorator",
                     });
                 }
-                if (hasMismatchedRequiredDecorator(node)) {
+                if (shouldUseRequiredDecorator(node)) {
                     context.report({
                         node: node,
-                        messageId: "requiredPropertyRequired",
+                        messageId: "shouldUseRequiredDecorator",
                     });
                 }
             },

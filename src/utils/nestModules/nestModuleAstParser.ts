@@ -29,7 +29,7 @@ export const nestModuleAstParser = {
     mapNestModuleDecorator(
         n: TSESTree.ClassDeclaration,
         path: string
-    ): NestProvidedInjectablesMap | null {
+    ): Array<string | NestProvidedInjectablesMap> | null {
         // The nest module decorator is called "Module"
         const moduleDecorator = n.decorators?.find(
             (d) =>
@@ -50,12 +50,14 @@ export const nestModuleAstParser = {
                     "providers"
                 );
 
-            const nestModuleMap = new NestProvidedInjectablesMap(
+            const nestModuleMap = [
                 path,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                mappedControllerElements,
-                mappedProviderElements
-            );
+                new NestProvidedInjectablesMap(
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    mappedControllerElements,
+                    mappedProviderElements
+                ),
+            ];
             return nestModuleMap;
         }
 

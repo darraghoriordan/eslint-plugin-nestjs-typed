@@ -1,6 +1,6 @@
 import {
-    hasMismatchedOptionalDecorator,
-    hasMismatchedRequiredDecorator,
+    shouldUseOptionalDecorator,
+    shouldUseRequiredDecorator,
 } from "./apiPropertyMatchesPropertyOptionality";
 import {testCases} from "./apiPropertyMatchesPropertyOptionality.test-data";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
@@ -16,8 +16,8 @@ describe("apiPropertyMatchesPropertyOptionality", () => {
         "is an expected response for %#",
         (testCase: {
             moduleCode: string;
-            hasOptionalMismatch: boolean;
-            hasRequiredMismatch: boolean;
+            shouldUseOptionalDecorator: boolean;
+            shouldUseRequiredDecorator: boolean;
             message: string;
         }) => {
             const ast = typedTokenHelpers.parseStringToAst(
@@ -26,19 +26,23 @@ describe("apiPropertyMatchesPropertyOptionality", () => {
                 fakeContext
             );
 
-            const hasOptionalMismatch = hasMismatchedOptionalDecorator(
+            const shouldUseOptional = shouldUseOptionalDecorator(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (ast.body[0] as TSESTree.ClassDeclaration).body
                     .body[0] as TSESTree.ClassProperty
             );
-            expect(hasOptionalMismatch).toEqual(testCase.hasOptionalMismatch);
+            expect(shouldUseOptional).toEqual(
+                testCase.shouldUseOptionalDecorator
+            );
 
-            const hasRequiredMismatch = hasMismatchedRequiredDecorator(
+            const shouldUseRequired = shouldUseRequiredDecorator(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (ast.body[0] as TSESTree.ClassDeclaration).body
                     .body[0] as TSESTree.ClassProperty
             );
-            expect(hasRequiredMismatch).toEqual(testCase.hasRequiredMismatch);
+            expect(shouldUseRequired).toEqual(
+                testCase.shouldUseRequiredDecorator
+            );
         }
     );
 });
