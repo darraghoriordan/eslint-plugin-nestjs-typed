@@ -1,9 +1,9 @@
-import apiMethodsHaveDocumentation from "./apiMethodsHaveDocumentation/apiMethodsHaveDocumentation";
 import injectableShouldBeProvided from "./injectablesShouldBeProvided/injectableShouldBeProvided";
 import providedInjectedShouldMatchFactoryParameters from "./providerInjectedShouldMatchFactory/ProviderInjectedShouldMatchFactory";
-
+import apiPropertyMatchesPropertyOptionality from "./apiPropertyMatchesPropertyOptionality/apiPropertyMatchesPropertyOptionality";
 const allRules = {
-    "api-methods-have-documentation": apiMethodsHaveDocumentation,
+    "api-property-matches-property-optionality":
+        apiPropertyMatchesPropertyOptionality,
     "injectable-should-be-provided": injectableShouldBeProvided,
     "provided-injected-should-match-factory-parameters":
         providedInjectedShouldMatchFactoryParameters,

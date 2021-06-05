@@ -1,10 +1,10 @@
-import {TSESTree} from "@typescript-eslint/experimental-utils";
+import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/experimental-utils";
 import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import {parse} from "@typescript-eslint/parser";
 
 export const typedTokenHelpers = {
-    classHasDecorator(
-        n: TSESTree.ClassDeclaration,
+    nodeHasDecoratorNamed(
+        n: TSESTree.ClassDeclaration | TSESTree.ClassProperty,
         decoratorName: string
     ): boolean {
         const moduleDecorator = n.decorators?.find(
@@ -29,5 +29,17 @@ export const typedTokenHelpers = {
             loc: true,
             ...context.parserOptions,
         });
+    },
+    isOptionalPropertyValue(node: TSESTree.ClassProperty): boolean {
+        const isUndefinedType =
+            (
+                node.typeAnnotation?.typeAnnotation as TSESTree.TSUnionType
+            )?.types?.find(
+                (t) => t.type === AST_NODE_TYPES.TSUndefinedKeyword
+            ) !== undefined;
+
+        const isOptionalPropertyValue =
+            node.optional || isUndefinedType || false;
+        return isOptionalPropertyValue;
     },
 };
