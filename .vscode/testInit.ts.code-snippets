@@ -1,0 +1,45 @@
+{
+    "Simple Test": {
+        "scope": "typescript",
+        "prefix": "ntest",
+        "body": [
+            "import createMockInstance from \"jest-create-mock-instance\";",
+            "",
+            "describe(\"$1\", () => {",
+            "    let classUnderTest: $1;",
+            "",
+            "    let myMockedDep: jest.Mocked<MockClass>;",
+            "",
+            "    beforeEach(() => {",
+            "        jest.resetAllMocks();",
+            "",
+            "        myMockedDep = createMockInstance(MyDependancy)",
+            "        classUnderTest = new $1(myMockedDep);",
+            "    });",
+            "",
+            "    test.each([",
+            "        [\"true\", true],",
+            "        [\"false\", false],",
+            "    ])(\"is an expected response\", (input: string, expected: boolean) => {",
+            "        const result = classUnderTest.getTaskDefinitionBySlug(input);",
+            "        expect(result).toEqual(expected);",
+            "    });",
+            "});"
+        ],
+        "description": "A simple test template for starting a unit test"
+    },
+
+    "Nest class": {
+        "scope": "typescript",
+        "prefix": "nclass",
+        "body": [
+            "import { Injectable } from \"@nestjs/common\";",
+            "",
+            "@Injectable()",
+            "export class $1 {",
+            "    constructor() {}",
+            "}"
+        ],
+        "description": "A simple nest class"
+    }
+}

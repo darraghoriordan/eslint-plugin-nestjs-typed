@@ -1,0 +1,9 @@
+{
+    "xo.enable": true,
+    "xo.format.enable": true,
+    "cSpell.words": [
+        "TSES",
+        "injectables"
+    ],
+    "prettier.configPath": ".prettierrc.json",
+}

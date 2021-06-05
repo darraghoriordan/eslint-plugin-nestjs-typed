@@ -1,0 +1,5 @@
+{
+  "*.ts": [
+    "prettier --parser typescript --write","npx eslint -c .eslintrc.js --ext .ts --max-warnings 0"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.common",
+    "include": ["src/**/*"],
+    "exclude": [
+        "node_modules",
+        "**/node_modules/**",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/*.test-data.ts",
+        "dist"
+    ]
+}
