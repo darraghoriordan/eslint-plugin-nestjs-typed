@@ -8,18 +8,19 @@ import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestPro
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
 let listFilesToProcess;
-let nestModuleMap: NestProvidedInjectablesMap[];
+let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
 
 const findModuleMapping = (
     classNAme: string,
     propertyName: "controllers" | "providers",
-    nestModuleMap: NestProvidedInjectablesMap[]
+    nestModuleMap: Map<string, NestProvidedInjectablesMap>
 ): NestProvidedInjectablesMap | undefined => {
-    const foundModule = nestModuleMap.find((m) =>
-        m[propertyName].has(classNAme)
-    );
-
-    return foundModule;
+    for (const entry of nestModuleMap.values()) {
+        if (entry[propertyName].has(classNAme)) {
+            return entry;
+        }
+    }
+    return undefined;
 };
 
 // super fragile types but whatevs
@@ -127,7 +128,7 @@ const rule = createRule({
             // unusedExports,
         } = context.options[0] || {};
 
-        if (nestModuleMap === undefined || nestModuleMap.length === 0) {
+        if (nestModuleMap === undefined || nestModuleMap.size === 0) {
             initialiseModuleMappings(src, filterFromPaths, context);
         }
 
@@ -148,6 +149,22 @@ const rule = createRule({
                     "controllersInModule",
                     context
                 );
+            },
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            "Program:exit"(): void {
+                // map the source to a mapping thing
+                // if not undefined set it to the mapping set
+                const mappedProvidedInjectables =
+                    NestProvidedInjectableMapper.mapAllProvidedInjectables(
+                        context.getSourceCode().ast,
+                        context.getFilename()
+                    );
+                if (mappedProvidedInjectables !== null) {
+                    nestModuleMap.set(
+                        mappedProvidedInjectables[0] as string,
+                        mappedProvidedInjectables[1] as NestProvidedInjectablesMap
+                    );
+                }
             },
         };
     },

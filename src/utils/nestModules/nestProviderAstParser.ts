@@ -5,15 +5,17 @@ export const nestProviderAstParser = {
     mapNestProviderObject(
         n: TSESTree.Property,
         path: string
-    ): NestProvidedInjectablesMap | null {
+    ): Array<string | NestProvidedInjectablesMap> | null {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const propertyName = (n.value as TSESTree.Identifier).name;
         if (propertyName) {
-            return new NestProvidedInjectablesMap(
+            return [
                 path,
-                new Set(),
-                new Set([propertyName])
-            );
+                new NestProvidedInjectablesMap(
+                    new Set(),
+                    new Set([propertyName])
+                ),
+            ];
         }
         return null;
     },

@@ -41,7 +41,7 @@ describe("nest module ast mapper", () => {
         "Can parse a module",
         (testItem: {
             moduleCode: string;
-            expectedMapping: NestProvidedInjectablesMap;
+            expectedMapping: Array<string | NestProvidedInjectablesMap>;
         }) => {
             const ast = typedTokenHelpers.parseStringToAst(
                 testItem.moduleCode,
