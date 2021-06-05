@@ -1,11 +1,9 @@
 import rules from "./rules";
-import recommended from "./configs/recommended";
+import configs from "./configs";
 
 const configuration = {
     rules,
-    configs: {
-        recommended,
-    },
+    configs,
 };
 
 export = configuration;

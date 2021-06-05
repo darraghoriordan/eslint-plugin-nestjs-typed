@@ -37,7 +37,7 @@ const checkNode = (
     ) {
         return;
     }
-    if (typedTokenHelpers.classHasDecorator(node, decoratorName)) {
+    if (typedTokenHelpers.nodeHasDecoratorNamed(node, decoratorName)) {
         const name = node.id?.name;
         if (!name) {
             return;

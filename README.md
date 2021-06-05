@@ -8,7 +8,7 @@ npm install --save-dev @darraghor/eslint-plugin-nestjs-typed
 
 Then update your eslint with the plugin import and add the recommended rule set
 
-```
+```ts
 module.exports = {
     env: {
         es6: true,
@@ -22,10 +22,19 @@ module.exports = {
     },
     plugins: ["@darraghor/nestjs-typed"],
 };
-
 ```
 
 Note: the injectables test scans your whole project. It's best to filter out ts things that don't matter - use `filterFromPaths` configuration setting for this. There are some defaults already applied. See details below.
+
+Note: You can easily turn off all the swagger rules if you don't use swagger by adding the `no-swagger` rule set AFTER the recommended rule set.
+
+```ts
+// all the other config
+    extends: ["plugin:@darraghor/nestjs-typed/recommended",
+    "plugin:@darraghor/nestjs-typed/no-swagger"
+    ],
+    // more config
+```
 
 ## Rules
 
@@ -73,4 +82,28 @@ There is some additional configuration you can provide for this rule. This is th
                 filterFromPaths: ["node_modules", ".test.", ".spec."],
             },
         ],
+```
+
+### Rule: api-property-matches-property-optionality
+
+This checks that you have added the correct api property decorator for your swagger documents. There are specific decorators for optional properties
+
+The following FAILS because this is an optional property and should have `@ApiPropertyOptional`
+
+```ts
+class TestClass {
+    @Expose()
+    @ApiProperty()
+    thisIsAStringProp?: string;
+}
+```
+
+The following FAILS because this is a required property and should have `@ApiProperty`
+
+```ts
+class TestClass {
+    @Expose()
+    @ApiPropertyOptional()
+    thisIsAStringProp!: string;
+}
 ```

@@ -1,7 +1,3 @@
-// THIS CODE WAS AUTOMATICALLY GENERATED
-// DO NOT EDIT THIS CODE BY HAND
-// YOU CAN REGENERATE IT USING yarn generate:configs
-
 export = {
     parser: "@typescript-eslint/parser",
     parserOptions: {sourceType: "module"},
@@ -16,5 +12,7 @@ export = {
                 filterFromPaths: ["node_modules", ".test.", ".spec."],
             },
         ],
+        "@darraghor/nestjs-typed/api-property-matches-property-optionality":
+            "error",
     },
 };
