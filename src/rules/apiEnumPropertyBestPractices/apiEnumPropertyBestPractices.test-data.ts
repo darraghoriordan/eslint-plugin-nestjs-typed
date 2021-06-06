@@ -65,4 +65,32 @@ export const testCases = [
         needsTypeRemoved: false,
         message: "not an enum",
     },
+    {
+        moduleCode: `enum MyEnum{
+            ValA,
+            ValB
+        }
+        
+        class MyClass {
+            @ApiProperty()
+            public myProperty!:MyEnum
+        }`,
+        needsEnumNameProperty: false,
+        needsTypeRemoved: false,
+        message: "not an enum",
+    },
+    {
+        moduleCode: `enum MyEnum{
+            ValA,
+            ValB
+        }
+        
+        class MyClass {
+            @ApiProperty({})
+            public myProperty!:MyEnum
+        }`,
+        needsEnumNameProperty: false,
+        needsTypeRemoved: false,
+        message: "not an enum",
+    },
 ];

@@ -17,6 +17,9 @@ export const hasEnumSpecifiedCorrectly = (
 
     const firstArgument = (decorators[0].expression as TSESTree.CallExpression)
         .arguments[0] as TSESTree.ObjectExpression;
+    if (!firstArgument) {
+        return new EnumTestResultModel(false, false);
+    }
     // is it an enum prop?
     // OK so this could be changed later to actually parse the property type for an enum
     // and so check if enum: is needed too. However we don't do this yet so we depend on enum having
