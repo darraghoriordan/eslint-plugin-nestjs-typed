@@ -3,6 +3,7 @@
     "xo.format.enable": true,
     "cSpell.words": [
         "TSES",
+        "darraghor",
         "injectables"
     ],
     "prettier.configPath": ".prettierrc.json",
