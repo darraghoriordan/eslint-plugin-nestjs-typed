@@ -28,6 +28,8 @@ Nest Swagger
 -   api-property-matches-property-optionality
 -   controllers-should-supply-api-tags
 -   api-method-should-specify-api-operation
+-   api-enum-property-best-practices
+-   api-property-returning-array-should-set-array
 
 ## To install
 
@@ -183,5 +185,83 @@ class TestClass {
     public getAll(): Promise<string[]> {
         return [];
     }
+}
+```
+
+### Rule: api-enum-property-best-practices
+
+If you use enums you should set the correct properties in the ApiProperty decorator. Note I don't actually check the types on the property, I only check properties where `enum: EnumType` is already set to make sure they are set correctly.
+
+If you don't use enumName then Open api will create a new enum for each api method. This is awful to use in a generated client.
+You don't need to use type any more. This used to be necessary in old versions to get enum strings correctly output.
+
+This is perfect
+
+```ts
+class TestClass {
+    @ApiPropertyOptional({enum: MyEnum, enumName: "MyEnum"})
+    thisIsAnEnumProp!: MyEnum;
+}
+```
+
+Fails - you don't need type
+
+```ts
+class TestClass {
+    @ApiPropertyOptional({type: MyEnum, enum: MyEnum, enumName: "MyEnum"})
+    thisIsAnEnumProp!: MyEnum;
+}
+```
+
+Fails - you need to add a name
+
+```ts
+class TestClass {
+    @ApiPropertyOptional({enum: MyEnum})
+    thisIsAnEnumProp!: MyEnum;
+}
+```
+
+### Rule: api-property-returning-array-should-set-array
+
+If you return an array you should indicate this in the api property. There are two ways to do this
+
+`ApiProperty({type:[String]}) OR ApiProperty({type:String, isArray:true})`
+
+I enforce the second long way! You can turn this off if you prefer the shorthand way but you won't get warned if you missed the array specification.
+
+This passes
+
+```ts
+class TestClass {
+    @ApiPropertyOptional({enumName: "MyEnum" isArray:true})
+    thisIsAProp!: MyEnum[];
+}
+```
+
+This passes
+
+```ts
+class TestClass {
+    @ApiPropertyOptional({type: String, isArray: true})
+    thisIsAProp!: Array<string>;
+}
+```
+
+This FAILS - missing isArray
+
+```ts
+class TestClass {
+    @ApiPropertyOptional({type: String})
+    thisIsAProp!: Array<string>;
+}
+```
+
+This FAILS - doesn't need isArray
+
+```ts
+class TestClass {
+    @ApiPropertyOptional({type: String, isArray: true})
+    thisIsAProp!: string;
 }
 ```

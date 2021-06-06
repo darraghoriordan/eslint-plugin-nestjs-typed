@@ -83,7 +83,7 @@ const rule = createRule({
             description: "Public api methods should have documentation",
             category: "Best Practices",
             recommended: false,
-            requiresTypeChecking: true,
+            requiresTypeChecking: false,
         },
         messages: {
             injectableInModule: `Classes marked as Injectable must be added to a module's providers. If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
