@@ -8,9 +8,9 @@ import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 export const shouldUseRequiredDecorator = (
     node: TSESTree.ClassProperty
 ): boolean => {
-    const hasOptionalDecorator = typedTokenHelpers.nodeHasDecoratorNamed(
+    const hasOptionalDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(
         node,
-        "ApiPropertyOptional"
+        ["ApiPropertyOptional"]
     );
 
     const isOptionalPropertyValue =
@@ -22,9 +22,9 @@ export const shouldUseRequiredDecorator = (
 export const shouldUseOptionalDecorator = (
     node: TSESTree.ClassProperty
 ): boolean => {
-    const hasRequiredDecorator = typedTokenHelpers.nodeHasDecoratorNamed(
+    const hasRequiredDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(
         node,
-        "ApiProperty"
+        ["ApiProperty"]
     );
 
     const isOptionalPropertyValue =
@@ -37,7 +37,8 @@ const rule = createRule({
     name: "api-property-matches-property-optionality",
     meta: {
         docs: {
-            description: "Public api methods should have documentation",
+            description:
+                "Properties should have correct @ApiProperty decorators",
             category: "Best Practices",
             recommended: false,
             requiresTypeChecking: true,

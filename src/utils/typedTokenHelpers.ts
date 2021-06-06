@@ -3,16 +3,20 @@ import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint"
 import {parse} from "@typescript-eslint/parser";
 
 export const typedTokenHelpers = {
-    nodeHasDecoratorNamed(
-        n: TSESTree.ClassDeclaration | TSESTree.ClassProperty,
-        decoratorName: string
+    nodeHasDecoratorsNamed(
+        n:
+            | TSESTree.ClassDeclaration
+            | TSESTree.ClassProperty
+            | TSESTree.MethodDefinition,
+        decoratorNames: string[]
     ): boolean {
-        const moduleDecorator = n.decorators?.find(
-            (d) =>
+        const moduleDecorator = n.decorators?.find((d) =>
+            decoratorNames.includes(
                 (
                     (d.expression as TSESTree.CallExpression)
                         .callee as TSESTree.Identifier
-                ).name === decoratorName
+                ).name
+            )
         );
 
         return moduleDecorator !== undefined;

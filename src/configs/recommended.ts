@@ -14,5 +14,8 @@ export = {
         ],
         "@darraghor/nestjs-typed/api-property-matches-property-optionality":
             "error",
+        "@darraghor/nestjs-typed/api-method-should-specify-api-operation":
+            "error",
+        "@darraghor/nestjs-typed/controllers-should-supply-api-tags": "error",
     },
 };

@@ -1,5 +1,34 @@
 # Some eslint rules for working with NestJs projects
 
+## Why
+
+### Nest Dependency Injection
+
+There are some things you don't want to forget when working with Nest dependency injection.
+
+The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time.
+
+If you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get unexpected operation.
+
+### Open Api / Swagger and automatically generating a client for front end
+
+When working with NestJS I generate my front end models using the swagger generated from the nest controllers and models. I have a bunch of rules that are mostly for strict typing for those controllers and models.
+
+They are somewhat opinionated but necessary for clean model generation if using an Open Api model generator.
+
+## Rule list (more details for each rule below)
+
+Nest Modules
+
+-   provided-injected-should-match-factory-parameters
+-   injectable-should-be-provided
+
+Nest Swagger
+
+-   api-property-matches-property-optionality
+-   controllers-should-supply-api-tags
+-   api-method-should-specify-api-operation
+
 ## To install
 
 ```
@@ -86,7 +115,9 @@ There is some additional configuration you can provide for this rule. This is th
 
 ### Rule: api-property-matches-property-optionality
 
-This checks that you have added the correct api property decorator for your swagger documents. There are specific decorators for optional properties
+This checks that you have added the correct api property decorator for your swagger documents.
+
+There are specific decorators for optional properties and using the correct one affects Open Api generation.
 
 The following FAILS because this is an optional property and should have `@ApiPropertyOptional`
 
@@ -105,5 +136,52 @@ class TestClass {
     @Expose()
     @ApiPropertyOptional()
     thisIsAStringProp!: string;
+}
+```
+
+### Rule: controllers-should-supply-api-tags
+
+If you have more than a handful of api methods the swagger UI is difficult to navigate. It's easier to group api methods by using tags.
+
+This PASSES because it has api tags
+
+```ts
+@ApiTags("my-group-of-methods")
+@Controller("my-controller")
+class TestClass {}
+```
+
+The following FAILS because it's missing api tags
+
+```ts
+@Controller("my-controller")
+class TestClass {}
+```
+
+### Rule: api-method-should-specify-api-operation
+
+If you have an api method like @Get() you should specify the return status code (and type!) by using @ApiOkResponse and the other expected responses. I often leave out 400s and 500s because it's kind of assumed but they should be used if the return type changes!
+
+This PASSES
+
+```ts
+class TestClass {
+    @Get()
+    @ApiOkResponse({type: String, isArray: true})
+    @ApiBadRequestResponse({description: "Bad Request"})
+    public getAll(): Promise<string[]> {
+        return [];
+    }
+}
+```
+
+The following FAILS because it's missing api operation decorators
+
+```ts
+class TestClass {
+    @Get()
+    public getAll(): Promise<string[]> {
+        return [];
+    }
 }
 ```

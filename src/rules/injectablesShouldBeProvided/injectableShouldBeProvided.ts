@@ -38,7 +38,7 @@ const checkNode = (
     ) {
         return;
     }
-    if (typedTokenHelpers.nodeHasDecoratorNamed(node, decoratorName)) {
+    if (typedTokenHelpers.nodeHasDecoratorsNamed(node, [decoratorName])) {
         const name = node.id?.name;
         if (!name) {
             return;
@@ -86,8 +86,8 @@ const rule = createRule({
             requiresTypeChecking: true,
         },
         messages: {
-            injectableInModule: `Classes marked as Injectable must be added to a module's providers`,
-            controllersInModule: `Classes marked as Controller must be added to a module's controllers`,
+            injectableInModule: `Classes marked as Injectable must be added to a module's providers. If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
+            controllersInModule: `Classes marked as Controller must be added to a module's controllers. If you added it already but this error still shows in your editor, please change one character in the controller file to poke your eslint plugin.`,
         },
         schema: [
             {
