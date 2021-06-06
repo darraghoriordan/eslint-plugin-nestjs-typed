@@ -10,7 +10,18 @@ export const typedTokenHelpers = {
             | TSESTree.MethodDefinition,
         decoratorNames: string[]
     ): boolean {
-        const moduleDecorator = n.decorators?.find((d) =>
+        const decorators = this.getDecoratorsNamed(n, decoratorNames);
+
+        return decorators.length > 0;
+    },
+    getDecoratorsNamed(
+        n:
+            | TSESTree.ClassDeclaration
+            | TSESTree.ClassProperty
+            | TSESTree.MethodDefinition,
+        decoratorNames: string[]
+    ): TSESTree.Decorator[] {
+        const decorators = n.decorators?.filter((d) =>
             decoratorNames.includes(
                 (
                     (d.expression as TSESTree.CallExpression)
@@ -19,7 +30,7 @@ export const typedTokenHelpers = {
             )
         );
 
-        return moduleDecorator !== undefined;
+        return decorators || [];
     },
     parseStringToAst(
         code: string,

@@ -41,7 +41,7 @@ const rule = createRule({
                 "Properties should have correct @ApiProperty decorators",
             category: "Best Practices",
             recommended: false,
-            requiresTypeChecking: true,
+            requiresTypeChecking: false,
         },
         messages: {
             shouldUseOptionalDecorator: `Property marked as optional should use @ApiPropertyOptional decorator`,

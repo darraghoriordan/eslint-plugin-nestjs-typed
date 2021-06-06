@@ -51,7 +51,7 @@ const rule = createRule({
                 "The injected items in a provider should typically match the parameters to the factory method used",
             category: "Best Practices",
             recommended: false,
-            requiresTypeChecking: true,
+            requiresTypeChecking: false,
         },
         messages: {
             mainMessage: `The injected items don't match the factory method parameters, did you forget to add one?`,

@@ -8,5 +8,8 @@ export = {
         "@darraghor/nestjs-typed/api-method-should-specify-api-operation":
             "off",
         "@darraghor/nestjs-typed/controllers-should-supply-api-tags": "off",
+        "@darraghor/nestjs-typed/api-enum-property-best-practices": "off",
+        "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
+            "off",
     },
 };

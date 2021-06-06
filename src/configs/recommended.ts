@@ -17,5 +17,8 @@ export = {
         "@darraghor/nestjs-typed/api-method-should-specify-api-operation":
             "error",
         "@darraghor/nestjs-typed/controllers-should-supply-api-tags": "error",
+        "@darraghor/nestjs-typed/api-enum-property-best-practices": "error",
+        "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
+            "error",
     },
 };
