@@ -12,43 +12,69 @@ export const hasEnumSpecifiedCorrectly = (
     ]);
 
     if (decorators.length === 0) {
-        return new EnumTestResultModel(false, false);
+        return new EnumTestResultModel(false, false, false);
     }
 
     const firstArgument = (decorators[0].expression as TSESTree.CallExpression)
         .arguments[0] as TSESTree.ObjectExpression;
     if (!firstArgument) {
-        return new EnumTestResultModel(false, false);
+        return new EnumTestResultModel(false, false, false);
     }
     // is it an enum prop?
-    // OK so this could be changed later to actually parse the property type for an enum
+    // OK so this could be changed later to actually parse the property's type for an enum
     // and so check if enum: is needed too. However we don't do this yet so we depend on enum having
     // been added already and this rule just recommends keeping it tidy. So, you will still have to at
     // least remember to add "enum: Blah" to your api decorator.
-    const hasEnumProperty =
-        firstArgument.properties.find(
-            (p) =>
-                ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
-                "enum"
-        ) !== undefined;
+    const enumProperty = firstArgument.properties.find(
+        (p) =>
+            ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
+            "enum"
+    );
 
-    if (!hasEnumProperty) {
-        return new EnumTestResultModel(false, false);
+    if (enumProperty === undefined) {
+        return new EnumTestResultModel(false, false, false);
     }
+
+    // now check the rules
+    // check if there is a type: property in the provided options
     const hasTypeProperty =
         firstArgument.properties.find(
             (p) =>
                 ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
                 "type"
         ) !== undefined;
-    const hasEnumNameProperty =
-        firstArgument.properties.find(
-            (p) =>
-                ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
-                "enumName"
-        ) !== undefined;
 
-    return new EnumTestResultModel(hasTypeProperty, !hasEnumNameProperty);
+    // check if there is an enumName: property in the provided options
+    const enumNameProperty = firstArgument.properties.find(
+        (p) =>
+            ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
+            "enumName"
+    );
+
+    return new EnumTestResultModel(
+        hasTypeProperty,
+        enumNameProperty === undefined,
+        needsEnumNameMatchingEnumType(
+            enumNameProperty as TSESTree.Property,
+            enumProperty as TSESTree.Property
+        )
+    );
+};
+
+export const needsEnumNameMatchingEnumType = (
+    enumNameProperty: TSESTree.Property,
+    enumProperty: TSESTree.Property
+): boolean => {
+    // if enum props aren't specified we don't care about this scenario
+    if (enumNameProperty === undefined || enumProperty === undefined) {
+        return false;
+    }
+
+    const isEnumNameMatchingEnumType =
+        (enumNameProperty.value as TSESTree.Literal).value ===
+        (enumProperty.value as TSESTree.Identifier).name;
+
+    return !isEnumNameMatchingEnumType;
 };
 
 const rule = createRule({
@@ -64,6 +90,7 @@ const rule = createRule({
         messages: {
             needsEnumNameAdded: `Properties with enum should also specify an enumName property to keep generated models clean`,
             needsTypeRemoved: `Properties with enum should not specify a type property`,
+            enumNameShouldMatchType: `The enumName should match the enum type provided`,
         },
         schema: [],
         type: "suggestion",
@@ -85,6 +112,12 @@ const rule = createRule({
                     context.report({
                         node: node,
                         messageId: "needsTypeRemoved",
+                    });
+                }
+                if (result.needsEnumNameToMatchEnumType) {
+                    context.report({
+                        node: node,
+                        messageId: "enumNameShouldMatchType",
                     });
                 }
             },

@@ -193,9 +193,12 @@ class TestClass {
 If you use enums you should set the correct properties in the ApiProperty decorator. Note I don't actually check the types on the property, I only check properties where `enum: EnumType` is already set to make sure they are set correctly.
 
 If you don't use enumName then Open api will create a new enum for each api method. This is awful to use in a generated client.
-You don't need to use type any more. This used to be necessary in old versions to get enum strings correctly output.
 
-This is perfect
+You don't need to use `type:` any more. This used to be necessary in old versions to get enum strings correctly output.
+
+The enumName should match the enum type you specify. It's easier to match them up when working on BE and FE. And it reduces chance for typos resulting in duplicate enums.
+
+This is a perfect enum description
 
 ```ts
 class TestClass {
@@ -219,6 +222,15 @@ Fails - you need to add a name
 class TestClass {
     @ApiPropertyOptional({enum: MyEnum})
     thisIsAnEnumProp!: MyEnum;
+}
+```
+
+Fails - the enumName doesn't match the enumType
+
+```ts
+class MyClass {
+    @ApiProperty({enumName: "MyEnumTYPO", enum: MyEnum})
+    public myProperty!: MyEnum;
 }
 ```
 
