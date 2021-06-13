@@ -10,6 +10,8 @@ The Nest DI is declarative and if you forget to provide an injectable you wont s
 
 If you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get unexpected operation.
 
+These are described in the "Common Errors" section of the nest js docs.
+
 ### Open Api / Swagger and automatically generating a client for front end
 
 When working with NestJS I generate my front end models using the swagger generated from the nest controllers and models. I have a bunch of rules that are mostly for strict typing for those controllers and models.
