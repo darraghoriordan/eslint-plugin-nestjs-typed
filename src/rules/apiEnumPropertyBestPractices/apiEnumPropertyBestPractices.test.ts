@@ -15,6 +15,7 @@ describe("apiEnumPropertyBestPractices", () => {
             moduleCode: string;
             needsEnumNameProperty: boolean;
             needsTypeRemoved: boolean;
+            needsEnumNameToMatchEnumType: boolean;
             message: string;
         }) => {
             const ast = typedTokenHelpers.parseStringToAst(
@@ -33,6 +34,9 @@ describe("apiEnumPropertyBestPractices", () => {
             );
             expect(hasValidEnumSpecResult.needsTypeRemoved).toEqual(
                 testCase.needsTypeRemoved
+            );
+            expect(hasValidEnumSpecResult.needsEnumNameToMatchEnumType).toEqual(
+                testCase.needsEnumNameToMatchEnumType
             );
         }
     );

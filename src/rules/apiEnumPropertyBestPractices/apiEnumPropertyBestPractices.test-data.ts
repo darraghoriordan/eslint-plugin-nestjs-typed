@@ -7,13 +7,14 @@ export const testCases = [
         
         class MyClass {
             @ApiProperty({
-                type: BizTaskUiCollectionEnum,
-                enum: BizTaskUiCollectionEnum,
+                type: MyEnum,
+                enum: MyEnum,
             })
             public myProperty!:MyEnum
         }`,
         needsEnumNameProperty: true,
         needsTypeRemoved: true,
+        needsEnumNameToMatchEnumType: false,
         message: "type is present, no enum name",
     },
     {
@@ -24,13 +25,14 @@ export const testCases = [
         
         class MyClass {
             @ApiProperty({
-                enumName: BizTaskUiCollectionEnum,
-                enum: BizTaskUiCollectionEnum,
+                enumName: "MyEnum",
+                enum: MyEnum,
             })
             public myProperty!:MyEnum
         }`,
         needsEnumNameProperty: false,
         needsTypeRemoved: false,
+        needsEnumNameToMatchEnumType: false,
         message: "perfect",
     },
     {
@@ -41,12 +43,13 @@ export const testCases = [
         
         class MyClass {
             @ApiProperty({
-                enum: BizTaskUiCollectionEnum,
+                enum: MyEnum,
             })
             public myProperty!:MyEnum
         }`,
         needsEnumNameProperty: true,
         needsTypeRemoved: false,
+        needsEnumNameToMatchEnumType: false,
         message: "optional everywhere",
     },
     {
@@ -57,12 +60,13 @@ export const testCases = [
         
         class MyClass {
             @ApiProperty({
-                type: BizTaskUiCollectionEnum,
+                type: MyEnum,
             })
             public myProperty!:MyEnum
         }`,
         needsEnumNameProperty: false,
         needsTypeRemoved: false,
+        needsEnumNameToMatchEnumType: false,
         message: "not an enum",
     },
     {
@@ -77,6 +81,7 @@ export const testCases = [
         }`,
         needsEnumNameProperty: false,
         needsTypeRemoved: false,
+        needsEnumNameToMatchEnumType: false,
         message: "not an enum",
     },
     {
@@ -91,6 +96,23 @@ export const testCases = [
         }`,
         needsEnumNameProperty: false,
         needsTypeRemoved: false,
+        needsEnumNameToMatchEnumType: false,
         message: "not an enum",
+    },
+    {
+        moduleCode: `enum MyEnum{
+            ValA,
+            ValB
+        }
+        
+        class MyClass {
+            @ApiProperty({enumName: "MyEnumTYPO",
+                enum: MyEnum,})
+            public myProperty!:MyEnum
+        }`,
+        needsEnumNameProperty: false,
+        needsTypeRemoved: false,
+        needsEnumNameToMatchEnumType: true,
+        message: "enum name doesn't match enum type",
     },
 ];
