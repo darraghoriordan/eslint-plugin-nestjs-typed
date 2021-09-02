@@ -29,7 +29,7 @@ Nest Swagger
 
 -   api-property-matches-property-optionality
 -   controllers-should-supply-api-tags
--   api-method-should-specify-api-operation
+-   api-method-should-specify-api-response
 -   api-enum-property-best-practices
 -   api-property-returning-array-should-set-array
 
@@ -162,24 +162,23 @@ The following FAILS because it's missing api tags
 class TestClass {}
 ```
 
-### Rule: api-method-should-specify-api-operation
+### Rule: api-method-should-specify-api-response
 
-If you have an api method like @Get() you should specify the return status code (and type!) by using @ApiOkResponse and the other expected responses. I often leave out 400s and 500s because it's kind of assumed but they should be used if the return type changes!
+If you have an api method like @Get() you should specify the return status code (and type!) by using @ApiResponse and the other expected responses. I often leave out 400s and 500s because it's kind of assumed but they should be used if the return type changes!
 
 This PASSES
 
 ```ts
 class TestClass {
     @Get()
-    @ApiOkResponse({type: String, isArray: true})
-    @ApiBadRequestResponse({description: "Bad Request"})
+    @ApiResponse({status: 200, type: String})
     public getAll(): Promise<string[]> {
         return [];
     }
 }
 ```
 
-The following FAILS because it's missing api operation decorators
+The following FAILS because it's missing api response decorators
 
 ```ts
 class TestClass {
