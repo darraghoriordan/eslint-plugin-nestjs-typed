@@ -5,7 +5,7 @@ import {TSESTree} from "@typescript-eslint/types";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
-export const shouldUseApiOperationDecorator = (
+export const shouldUseApiResponseDecorator = (
     node: TSESTree.MethodDefinition
 ): boolean => {
     const hasApiMethodDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(
@@ -13,7 +13,7 @@ export const shouldUseApiOperationDecorator = (
         ["Get", "Post", "Put", "Delete", "Patch", "Options", "Head", "All"]
     );
 
-    const hasApiOperationDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(
+    const hasApiResponseDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(
         node,
         [
             "ApiResponse",
@@ -46,11 +46,11 @@ export const shouldUseApiOperationDecorator = (
         ]
     );
 
-    return hasApiMethodDecorator && !hasApiOperationDecorator;
+    return hasApiMethodDecorator && !hasApiResponseDecorator;
 };
 
 const rule = createRule({
-    name: "api-method-should-specify-api-operation",
+    name: "api-method-should-specify-api-response",
     meta: {
         docs: {
             description:
@@ -60,7 +60,7 @@ const rule = createRule({
             requiresTypeChecking: false,
         },
         messages: {
-            shouldSpecifyApiOperation: `A method decorated with @Get, @Post etc. should specify the expected ApiOperation e.g. @ApiOkResponse(type: MyType)`,
+            shouldSpecifyApiResponse: `A method decorated with @Get, @Post etc. should specify the expected ApiResponse e.g. @ApiOkResponse(type: MyType)`,
         },
         schema: [],
         type: "suggestion",
@@ -71,10 +71,10 @@ const rule = createRule({
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             MethodDefinition(node: TSESTree.MethodDefinition): void {
-                if (shouldUseApiOperationDecorator(node)) {
+                if (shouldUseApiResponseDecorator(node)) {
                     context.report({
                         node: node,
-                        messageId: "shouldSpecifyApiOperation",
+                        messageId: "shouldSpecifyApiResponse",
                     });
                 }
             },

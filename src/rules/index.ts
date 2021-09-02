@@ -2,7 +2,7 @@ import injectableShouldBeProvided from "./injectablesShouldBeProvided/injectable
 import providedInjectedShouldMatchFactoryParameters from "./providerInjectedShouldMatchFactory/ProviderInjectedShouldMatchFactory";
 import apiPropertyMatchesPropertyOptionality from "./apiPropertyMatchesPropertyOptionality/apiPropertyMatchesPropertyOptionality";
 import controllerDecoratedHasApiTags from "./controllerDecoratedHasApiTags/controllerDecoratedHasApiTags";
-import apiMethodsShouldSpecifyApiOperation from "./apiMethodsShouldSpecifyApiOperation/apiMethodsShouldSpecifyApiOperation";
+import apiMethodsShouldSpecifyApiResponse from "./apiMethodsShouldSpecifyApiResponse/apiMethodsShouldSpecifyApiResponse";
 import apiEnumPropertyBestPractices from "./apiEnumPropertyBestPractices/apiEnumPropertyBestPractices";
 import apiPropertyReturningArrayShouldSetArray from "./apiPropertyReturningArrayShouldSetArray/apiPropertyReturningArrayShouldSetArray";
 
@@ -13,8 +13,8 @@ const allRules = {
     "provided-injected-should-match-factory-parameters":
         providedInjectedShouldMatchFactoryParameters,
     "controllers-should-supply-api-tags": controllerDecoratedHasApiTags,
-    "api-method-should-specify-api-operation":
-        apiMethodsShouldSpecifyApiOperation,
+    "api-method-should-specify-api-response":
+    apiMethodsShouldSpecifyApiResponse,
     "api-enum-property-best-practices": apiEnumPropertyBestPractices,
     "api-property-returning-array-should-set-array":
         apiPropertyReturningArrayShouldSetArray,

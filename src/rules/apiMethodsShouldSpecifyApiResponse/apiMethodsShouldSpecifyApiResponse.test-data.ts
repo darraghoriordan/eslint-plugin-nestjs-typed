@@ -14,6 +14,17 @@ export const testCases = [
     {
         moduleCode: `class TestClass {
             @Get()
+            @ApiResponse({ status: 200, type: String })
+            public getAll(): Promise<string[]> {
+                return [];
+            }
+        }`,
+        shouldUseDecorator: false,
+        message: "all good",
+    },
+    {
+        moduleCode: `class TestClass {
+            @Get()
             public getAll(): Promise<string[]> {
                 return [];
             }
