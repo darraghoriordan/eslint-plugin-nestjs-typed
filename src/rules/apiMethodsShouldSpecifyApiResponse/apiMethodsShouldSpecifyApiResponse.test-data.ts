@@ -30,7 +30,7 @@ export const testCases = [
             }
         }`,
         shouldUseDecorator: true,
-        message: "no api operation decorator",
+        message: "no api respones decorator",
     },
     {
         moduleCode: `class TestClass {
