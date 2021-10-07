@@ -1,4 +1,4 @@
-name: PublishToNpm
+name: BuildPR
 on:
     pull_request:
         branches:
