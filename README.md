@@ -8,7 +8,7 @@ There are some things you don't want to forget when working with Nest dependency
 
 The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time.
 
-If you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get unexpected operation.
+If you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get an unexpected operation.
 
 These are described in the "Common Errors" section of the nest js docs.
 
