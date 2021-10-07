@@ -172,6 +172,7 @@ This PASSES
 class TestClass {
     @Get()
     @ApiResponse({status: 200, type: String})
+    @ApiBadRequestResponse({description: "Bad Request"})
     public getAll(): Promise<string[]> {
         return [];
     }
