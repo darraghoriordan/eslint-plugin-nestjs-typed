@@ -4,7 +4,7 @@ import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import ArraySetResultModel from "./arraySetResultModel";
 
 export const shouldSetArrayProperty = (
-    node: TSESTree.ClassProperty
+    node: TSESTree.PropertyDefinition
 ): ArraySetResultModel => {
     const decorators = typedTokenHelpers.getDecoratorsNamed(node, [
         "ApiPropertyOptional",
@@ -52,7 +52,6 @@ const rule = createRule({
     meta: {
         docs: {
             description: "Properties of array should set array",
-            category: "Best Practices",
             recommended: false,
             requiresTypeChecking: false,
         },
@@ -61,6 +60,7 @@ const rule = createRule({
             shouldSetArrayPropertyFalse: `Property not returning array should not set array option property true`,
         },
         schema: [],
+        hasSuggestions: false,
         type: "suggestion",
     },
     defaultOptions: [],
@@ -68,7 +68,7 @@ const rule = createRule({
     create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassProperty(node: TSESTree.ClassProperty): void {
+            ClassProperty(node: TSESTree.PropertyDefinition): void {
                 const shouldSetArrayResults = shouldSetArrayProperty(node);
                 if (shouldSetArrayResults.isArrayShouldBeSetFalse) {
                     context.report({

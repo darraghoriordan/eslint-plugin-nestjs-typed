@@ -26,7 +26,6 @@ const rule = createRule({
         docs: {
             description:
                 "Controllers should supply an ApiTag to make swagger UI easier to navigate",
-            category: "Best Practices",
             recommended: false,
             requiresTypeChecking: false,
         },
@@ -34,6 +33,7 @@ const rule = createRule({
             shouldUseApiTagDecorator: `Controllers should use @ApiTags decorator. This makes it much easier to navigate swagger UI.`,
         },
         schema: [],
+        hasSuggestions: false,
         type: "suggestion",
     },
     defaultOptions: [],

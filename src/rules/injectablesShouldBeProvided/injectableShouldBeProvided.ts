@@ -81,7 +81,6 @@ const rule = createRule({
     meta: {
         docs: {
             description: "Public api methods should have documentation",
-            category: "Best Practices",
             recommended: false,
             requiresTypeChecking: false,
         },
@@ -115,7 +114,7 @@ const rule = createRule({
                 },
             },
         ],
-        type: "suggestion",
+        type: "problem",
     },
     defaultOptions: [],
 

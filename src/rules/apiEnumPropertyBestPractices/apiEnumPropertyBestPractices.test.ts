@@ -13,9 +13,11 @@ describe("apiEnumPropertyBestPractices", () => {
         "is an expected response for %#",
         (testCase: {
             moduleCode: string;
+            needsEnumProperty: boolean;
             needsEnumNameProperty: boolean;
             needsTypeRemoved: boolean;
             needsEnumNameToMatchEnumType: boolean;
+            isEnumType: boolean;
             message: string;
         }) => {
             const ast = typedTokenHelpers.parseStringToAst(
@@ -27,7 +29,11 @@ describe("apiEnumPropertyBestPractices", () => {
             const hasValidEnumSpecResult = hasEnumSpecifiedCorrectly(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (ast.body[1] as TSESTree.ClassDeclaration).body
-                    .body[0] as TSESTree.ClassProperty
+                    .body[0] as TSESTree.PropertyDefinition,
+                testCase.isEnumType
+            );
+            expect(hasValidEnumSpecResult.needsEnumAdded).toEqual(
+                testCase.needsEnumProperty
             );
             expect(hasValidEnumSpecResult.needsEnumNameAdded).toEqual(
                 testCase.needsEnumNameProperty

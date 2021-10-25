@@ -29,7 +29,7 @@ describe("apiPropertyMatchesPropertyOptionality", () => {
             const shouldUseOptional = shouldUseOptionalDecorator(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (ast.body[0] as TSESTree.ClassDeclaration).body
-                    .body[0] as TSESTree.ClassProperty
+                    .body[0] as TSESTree.PropertyDefinition
             );
             expect(shouldUseOptional).toEqual(
                 testCase.shouldUseOptionalDecorator
@@ -38,7 +38,7 @@ describe("apiPropertyMatchesPropertyOptionality", () => {
             const shouldUseRequired = shouldUseRequiredDecorator(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (ast.body[0] as TSESTree.ClassDeclaration).body
-                    .body[0] as TSESTree.ClassProperty
+                    .body[0] as TSESTree.PropertyDefinition
             );
             expect(shouldUseRequired).toEqual(
                 testCase.shouldUseRequiredDecorator

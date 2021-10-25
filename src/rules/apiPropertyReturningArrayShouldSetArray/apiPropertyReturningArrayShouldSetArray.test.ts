@@ -26,7 +26,7 @@ describe("apiPropertyReturningArrayShouldSetArray", () => {
             const isArraySetResults = shouldSetArrayProperty(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (ast.body[0] as TSESTree.ClassDeclaration).body
-                    .body[0] as TSESTree.ClassProperty
+                    .body[0] as TSESTree.PropertyDefinition
             );
             expect(isArraySetResults.isArrayShouldBeSetFalse).toEqual(
                 testCase.shouldSetIsArrayFalse

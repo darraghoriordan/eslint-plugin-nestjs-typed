@@ -55,7 +55,6 @@ const rule = createRule({
         docs: {
             description:
                 "Api methods should at least specify the expected OK response with @ApiOkResponse. But also add any error responses that might not be expected (e.g. 429)",
-            category: "Best Practices",
             recommended: false,
             requiresTypeChecking: false,
         },
@@ -63,6 +62,7 @@ const rule = createRule({
             shouldSpecifyApiResponse: `A method decorated with @Get, @Post etc. should specify the expected ApiResponse e.g. @ApiOkResponse(type: MyType)`,
         },
         schema: [],
+        hasSuggestions: false,
         type: "suggestion",
     },
     defaultOptions: [],

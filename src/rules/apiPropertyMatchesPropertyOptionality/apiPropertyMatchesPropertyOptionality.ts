@@ -6,7 +6,7 @@ import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
 export const shouldUseRequiredDecorator = (
-    node: TSESTree.ClassProperty
+    node: TSESTree.PropertyDefinition
 ): boolean => {
     const hasOptionalDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(
         node,
@@ -20,7 +20,7 @@ export const shouldUseRequiredDecorator = (
 };
 
 export const shouldUseOptionalDecorator = (
-    node: TSESTree.ClassProperty
+    node: TSESTree.PropertyDefinition
 ): boolean => {
     const hasRequiredDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(
         node,
@@ -39,7 +39,6 @@ const rule = createRule({
         docs: {
             description:
                 "Properties should have correct @ApiProperty decorators",
-            category: "Best Practices",
             recommended: false,
             requiresTypeChecking: false,
         },
@@ -48,6 +47,7 @@ const rule = createRule({
             shouldUseRequiredDecorator: `Property marked as required should use @ApiProperty decorator`,
         },
         schema: [],
+        hasSuggestions: false,
         type: "suggestion",
     },
     defaultOptions: [],
@@ -55,7 +55,7 @@ const rule = createRule({
     create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassProperty(node: TSESTree.ClassProperty): void {
+            ClassProperty(node: TSESTree.PropertyDefinition): void {
                 if (shouldUseOptionalDecorator(node)) {
                     context.report({
                         node: node,

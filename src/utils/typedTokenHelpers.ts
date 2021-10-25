@@ -6,7 +6,7 @@ export const typedTokenHelpers = {
     nodeHasDecoratorsNamed(
         n:
             | TSESTree.ClassDeclaration
-            | TSESTree.ClassProperty
+            | TSESTree.PropertyDefinition
             | TSESTree.MethodDefinition,
         decoratorNames: string[]
     ): boolean {
@@ -17,7 +17,7 @@ export const typedTokenHelpers = {
     getDecoratorsNamed(
         n:
             | TSESTree.ClassDeclaration
-            | TSESTree.ClassProperty
+            | TSESTree.PropertyDefinition
             | TSESTree.MethodDefinition,
         decoratorNames: string[]
     ): TSESTree.Decorator[] {
@@ -45,7 +45,7 @@ export const typedTokenHelpers = {
             ...context.parserOptions,
         });
     },
-    isOptionalPropertyValue(node: TSESTree.ClassProperty): boolean {
+    isOptionalPropertyValue(node: TSESTree.PropertyDefinition): boolean {
         const isUndefinedType =
             (
                 node.typeAnnotation?.typeAnnotation as TSESTree.TSUnionType

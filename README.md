@@ -1,24 +1,26 @@
 # Some eslint rules for working with NestJs projects
 
-## Why
+## Why use this package?
 
-### Nest Dependency Injection
+### 1. Detect Nest Dependency Injection issues
 
 There are some things you don't want to forget when working with Nest dependency injection.
 
-The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time.
+The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time. Nest is good at telling you where these are but sometimes it's not.
 
-If you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get unexpected operation.
+In particular if you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get unexpected operation.
 
 These are described in the "Common Errors" section of the nest js docs.
 
-### Open Api / Swagger and automatically generating a client for front end
+### 2. Using Open Api / Swagger decorators and automatically generating a clients
 
-When working with NestJS I generate my front end models using the swagger generated from the nest controllers and models. I have a bunch of rules that are mostly for strict typing for those controllers and models.
+When working with NestJS I generate my front end client and models using the swagger generated from the nest controllers and models.
 
-They are somewhat opinionated but necessary for clean model generation if using an Open Api model generator.
+I have a bunch of rules here that are mostly for strict typing with decorators for those controllers and models.
 
-## Rule list (more details for each rule below)
+These rules are somewhat opinionated, but necessary for clean model generation if using an Open Api model generator.
+
+## Available rule index (more details are available for each rule below)
 
 Nest Modules
 
@@ -69,7 +71,7 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
     // more config
 ```
 
-## Rules
+## Rule Details
 
 ### Rule: provided-injected-should-match-factory-parameters
 
@@ -192,9 +194,11 @@ class TestClass {
 
 ### Rule: api-enum-property-best-practices
 
-If you use enums you should set the correct properties in the ApiProperty decorator. Note I don't actually check the types on the property, I only check properties where `enum: EnumType` is already set to make sure they are set correctly.
+If you use enums on properties you should set the correct open api properties in the ApiProperty decorator.
 
-If you don't use enumName then Open api will create a new enum for each api method. This is awful to use in a generated client.
+If you don't use `enum` open api won't use the enum correctly.
+
+If you don't use `enumName` then Open api will create a new enum for each api method. This is awful to use in a generated client.
 
 You don't need to use `type:` any more. This used to be necessary in old versions to get enum strings correctly output.
 
@@ -205,7 +209,7 @@ This is a perfect enum description
 ```ts
 class TestClass {
     @ApiPropertyOptional({enum: MyEnum, enumName: "MyEnum"})
-    thisIsAnEnumProp!: MyEnum;
+    thisIsAnEnumProp?: MyEnum;
 }
 ```
 
@@ -214,7 +218,7 @@ Fails - you don't need type
 ```ts
 class TestClass {
     @ApiPropertyOptional({type: MyEnum, enum: MyEnum, enumName: "MyEnum"})
-    thisIsAnEnumProp!: MyEnum;
+    thisIsAnEnumProp?: MyEnum;
 }
 ```
 
@@ -223,7 +227,7 @@ Fails - you need to add a name
 ```ts
 class TestClass {
     @ApiPropertyOptional({enum: MyEnum})
-    thisIsAnEnumProp!: MyEnum;
+    thisIsAnEnumProp?: MyEnum;
 }
 ```
 

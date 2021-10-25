@@ -12,10 +12,12 @@ export const testCases = [
             })
             public myProperty!:MyEnum
         }`,
+        needsEnumProperty: false,
         needsEnumNameProperty: true,
         needsTypeRemoved: true,
         needsEnumNameToMatchEnumType: false,
-        message: "type is present, no enum name",
+        isEnumType: true,
+        message: "type is present, no enum name prop",
     },
     {
         moduleCode: `enum MyEnum{
@@ -30,9 +32,11 @@ export const testCases = [
             })
             public myProperty!:MyEnum
         }`,
+        needsEnumProperty: false,
         needsEnumNameProperty: false,
         needsTypeRemoved: false,
         needsEnumNameToMatchEnumType: false,
+        isEnumType: true,
         message: "perfect",
     },
     {
@@ -47,10 +51,12 @@ export const testCases = [
             })
             public myProperty!:MyEnum
         }`,
+        needsEnumProperty: false,
         needsEnumNameProperty: true,
         needsTypeRemoved: false,
         needsEnumNameToMatchEnumType: false,
-        message: "optional everywhere",
+        isEnumType: true,
+        message: "missing enum name, no type present",
     },
     {
         moduleCode: `enum MyEnum{
@@ -64,10 +70,12 @@ export const testCases = [
             })
             public myProperty!:MyEnum
         }`,
-        needsEnumNameProperty: false,
-        needsTypeRemoved: false,
+        needsEnumProperty: true,
+        needsEnumNameProperty: true,
+        needsTypeRemoved: true,
         needsEnumNameToMatchEnumType: false,
-        message: "not an enum",
+        isEnumType: true,
+        message: "has type, missing everything else",
     },
     {
         moduleCode: `enum MyEnum{
@@ -77,12 +85,14 @@ export const testCases = [
         
         class MyClass {
             @ApiProperty()
-            public myProperty!:MyEnum
+            public myProperty!:Object
         }`,
+        needsEnumProperty: false,
         needsEnumNameProperty: false,
         needsTypeRemoved: false,
         needsEnumNameToMatchEnumType: false,
-        message: "not an enum",
+        isEnumType: false,
+        message: "not an enum at all",
     },
     {
         moduleCode: `enum MyEnum{
@@ -94,10 +104,12 @@ export const testCases = [
             @ApiProperty({})
             public myProperty!:MyEnum
         }`,
-        needsEnumNameProperty: false,
+        needsEnumProperty: true,
+        needsEnumNameProperty: true,
         needsTypeRemoved: false,
         needsEnumNameToMatchEnumType: false,
-        message: "not an enum",
+        isEnumType: true,
+        message: "missing all but still has property",
     },
     {
         moduleCode: `enum MyEnum{
@@ -110,9 +122,11 @@ export const testCases = [
                 enum: MyEnum,})
             public myProperty!:MyEnum
         }`,
+        needsEnumProperty: false,
         needsEnumNameProperty: false,
         needsTypeRemoved: false,
         needsEnumNameToMatchEnumType: true,
+        isEnumType: true,
         message: "enum name doesn't match enum type",
     },
 ];

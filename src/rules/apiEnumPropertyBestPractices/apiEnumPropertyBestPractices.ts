@@ -1,42 +1,58 @@
+import {getParserServices} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
 import {TSESTree} from "@typescript-eslint/types";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {EnumTestResultModel} from "./enumTestResultModel";
+// eslint-disable-next-line unicorn/import-style
+//import util from "util";
+import * as tsutils from "tsutils";
+import {TypeFlags} from "typescript";
+
+const noChangesRequiredResult = new EnumTestResultModel({
+    needsEnumAdded: false,
+    needsEnumNameAdded: false,
+    needsEnumNameToMatchEnumType: false,
+    needsTypeRemoved: false,
+});
 
 export const hasEnumSpecifiedCorrectly = (
-    node: TSESTree.ClassProperty
+    node: TSESTree.Node,
+    isEnumType: boolean
 ): EnumTestResultModel => {
-    const decorators = typedTokenHelpers.getDecoratorsNamed(node, [
-        "ApiPropertyOptional",
-        "ApiProperty",
-    ]);
-
-    if (decorators.length === 0) {
-        return new EnumTestResultModel(false, false, false);
+    // is this an enum
+    if (!isEnumType) {
+        return noChangesRequiredResult;
     }
 
+    // is this decorated with api documentation
+    const decorators = typedTokenHelpers.getDecoratorsNamed(
+        node as TSESTree.PropertyDefinition,
+        ["ApiPropertyOptional", "ApiProperty"]
+    );
+
+    if (decorators.length === 0) {
+        return noChangesRequiredResult;
+    }
+
+    // check if there is an enum property in the provided options (enums should specify the enum property)
     const firstArgument = (decorators[0].expression as TSESTree.CallExpression)
         .arguments[0] as TSESTree.ObjectExpression;
     if (!firstArgument) {
-        return new EnumTestResultModel(false, false, false);
+        return new EnumTestResultModel({
+            needsEnumAdded: true,
+            needsEnumNameAdded: true,
+            needsEnumNameToMatchEnumType: false,
+            needsTypeRemoved: false,
+        });
     }
-    // is it an enum prop?
-    // OK so this could be changed later to actually parse the property's type for an enum
-    // and so check if enum: is needed too. However we don't do this yet so we depend on enum having
-    // been added already and this rule just recommends keeping it tidy. So, you will still have to at
-    // least remember to add "enum: Blah" to your api decorator.
+
     const enumProperty = firstArgument.properties.find(
         (p) =>
             ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
             "enum"
     );
 
-    if (enumProperty === undefined) {
-        return new EnumTestResultModel(false, false, false);
-    }
-
-    // now check the rules
-    // check if there is a type: property in the provided options
+    // check if there is a type: property in the provided options (enums shouldn't specify type)
     const hasTypeProperty =
         firstArgument.properties.find(
             (p) =>
@@ -44,21 +60,21 @@ export const hasEnumSpecifiedCorrectly = (
                 "type"
         ) !== undefined;
 
-    // check if there is an enumName: property in the provided options
+    // check if there is an enumName: property in the provided options (enums should specify a name)
     const enumNameProperty = firstArgument.properties.find(
         (p) =>
             ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
             "enumName"
     );
-
-    return new EnumTestResultModel(
-        hasTypeProperty,
-        enumNameProperty === undefined,
-        needsEnumNameMatchingEnumType(
+    return new EnumTestResultModel({
+        needsEnumAdded: enumProperty === undefined,
+        needsEnumNameAdded: enumNameProperty === undefined,
+        needsEnumNameToMatchEnumType: needsEnumNameMatchingEnumType(
             enumNameProperty as TSESTree.Property,
             enumProperty as TSESTree.Property
-        )
-    );
+        ),
+        needsTypeRemoved: hasTypeProperty,
+    });
 };
 
 export const needsEnumNameMatchingEnumType = (
@@ -83,7 +99,6 @@ const rule = createRule({
         docs: {
             description:
                 "Enums should use the best practices for api documentation",
-            category: "Best Practices",
             recommended: false,
             requiresTypeChecking: false,
         },
@@ -91,17 +106,32 @@ const rule = createRule({
             needsEnumNameAdded: `Properties with enum should also specify an enumName property to keep generated models clean`,
             needsTypeRemoved: `Properties with enum should not specify a type property`,
             enumNameShouldMatchType: `The enumName should match the enum type provided`,
+            randomTest: `FAIL: {{msgText}}`,
         },
         schema: [],
+        hasSuggestions: false,
         type: "suggestion",
     },
     defaultOptions: [],
 
     create(context) {
+        //const globalScope = context.getScope();
+        const parserServices = getParserServices(context);
+        const typeChecker = parserServices.program.getTypeChecker();
+
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassProperty(node: TSESTree.ClassProperty): void {
-                const result = hasEnumSpecifiedCorrectly(node);
+            ClassProperty(node: TSESTree.Node): void {
+                const mappedNode =
+                    parserServices.esTreeNodeToTSNodeMap.get(node);
+                const objectType = typeChecker.getTypeAtLocation(mappedNode);
+                const isEnumType = tsutils.isTypeFlagSet(
+                    objectType,
+                    TypeFlags.EnumLike
+                );
+
+                const result = hasEnumSpecifiedCorrectly(node, isEnumType);
+
                 if (result.needsEnumNameAdded) {
                     context.report({
                         node: node,
