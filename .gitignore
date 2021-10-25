@@ -72,3 +72,4 @@ _ts3.4
 # Files copied as part of the build
 packages/types/src/ast-spec.ts
 .jest_cache
+false

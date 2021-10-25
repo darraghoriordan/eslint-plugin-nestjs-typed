@@ -2,7 +2,9 @@ import {
     EslintFile,
     FileEnumerator,
     FilePath,
-} from "eslint/lib/cli-engine/file-enumerator";
+    // eslint-disable-next-line import/no-unresolved
+} from "eslint/use-at-your-own-risk";
+import IsFilteredPath from "./isFilteredPath";
 
 // eslint-disable-next-line unicorn/no-static-only-class
 class FileEnumeratorWrapper {
@@ -23,19 +25,6 @@ class FileEnumeratorWrapper {
         );
     };
 
-    static isFilteredPath = (
-        path: string | undefined,
-        filteredStrings: string[] | undefined
-    ): boolean => {
-        if (!path) {
-            return false;
-        }
-        const hasFoundFilter = filteredStrings?.some((setting: string) => {
-            return new RegExp(`(${setting})`).test(path);
-        });
-        return hasFoundFilter || false;
-    };
-
     static mapEnumeratedFiles = (
         paths: Array<EslintFile>,
         filterFromPaths: string[]
@@ -54,10 +43,7 @@ class FileEnumeratorWrapper {
                 })
             )
             .filter((file) => {
-                return !FileEnumeratorWrapper.isFilteredPath(
-                    file.filename,
-                    filterFromPaths
-                );
+                return !IsFilteredPath.test(file.filename, filterFromPaths);
             });
     };
 }

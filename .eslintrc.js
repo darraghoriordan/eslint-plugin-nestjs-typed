@@ -29,7 +29,6 @@ module.exports = {
                 },
             },
         ],
-        "unicorn/filename-case": ["off", {cases: ["camelCase"]}],
         "no-eval": "error",
         "@typescript-eslint/restrict-template-expressions": "off",
         "unicorn/no-fn-reference-in-iterator": "off",

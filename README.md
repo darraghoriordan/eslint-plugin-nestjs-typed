@@ -1,6 +1,14 @@
-# Some eslint rules for working with NestJs projects
-
 ## Why use this package?
+
+If you use NestJs (https://nestjs.com/) then these rules will help keep you usage of decorators consistent.
+
+## A note on versions
+
+Version 2.x supports Eslint version <=7.x and typescript eslint parser 4
+
+Version 3.x supports Eslint version >=8.x and typescript eslint parser 5+
+
+There were many breaking changes between these versions.
 
 ### 1. Detect Nest Dependency Injection issues
 

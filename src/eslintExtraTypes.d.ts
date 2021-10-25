@@ -1,4 +1,4 @@
-declare module "eslint/lib/cli-engine/file-enumerator" {
+declare module "eslint/use-at-your-own-risk" {
     export class FileEnumerator {
         constructor(options: {
             cwd?: string;

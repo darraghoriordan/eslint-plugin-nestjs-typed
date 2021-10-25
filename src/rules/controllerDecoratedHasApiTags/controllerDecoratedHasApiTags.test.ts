@@ -2,9 +2,9 @@ import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {
     fakeContext,
     fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.test-date";
+} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
 import {TSESTree} from "@typescript-eslint/types";
-import {testCases} from "./controllerDecoratedHasApiTags.test-data";
+import {testCases} from "./controllerDecoratedHasApiTags.testData";
 import {shouldUseApiTagDecorator} from "./controllerDecoratedHasApiTags";
 
 // should probably be split up into multiple tests
@@ -19,6 +19,7 @@ describe("controllerDecoratedHasApiTags", () => {
             const ast = typedTokenHelpers.parseStringToAst(
                 testCase.moduleCode,
                 fakeFilePath,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 fakeContext
             );
 

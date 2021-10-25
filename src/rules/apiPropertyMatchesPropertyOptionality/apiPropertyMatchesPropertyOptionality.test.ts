@@ -2,12 +2,12 @@ import {
     shouldUseOptionalDecorator,
     shouldUseRequiredDecorator,
 } from "./apiPropertyMatchesPropertyOptionality";
-import {testCases} from "./apiPropertyMatchesPropertyOptionality.test-data";
+import {testCases} from "./apiPropertyMatchesPropertyOptionality.testData";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {
     fakeContext,
     fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.test-date";
+} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
 import {TSESTree} from "@typescript-eslint/types";
 
 // should probably be split up into multiple tests
@@ -23,6 +23,7 @@ describe("apiPropertyMatchesPropertyOptionality", () => {
             const ast = typedTokenHelpers.parseStringToAst(
                 testCase.moduleCode,
                 fakeFilePath,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 fakeContext
             );
 

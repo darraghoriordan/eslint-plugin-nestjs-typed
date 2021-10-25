@@ -1,4 +1,4 @@
-import FileEnumeratorWrapper from "./fileEnumerationWrapper";
+import IsFilteredPath from "./isFilteredPath";
 
 describe("FileEnumerationWrapper", () => {
     test.each([
@@ -10,7 +10,7 @@ describe("FileEnumerationWrapper", () => {
     ])(
         "%s is filtered path",
         (testPath: string | undefined, expected: boolean) => {
-            const isFiltered = FileEnumeratorWrapper.isFilteredPath(testPath, [
+            const isFiltered = IsFilteredPath.test(testPath, [
                 "node_modules",
                 // prettier-ignore
                 // eslint-disable-next-line no-useless-escape
@@ -21,10 +21,7 @@ describe("FileEnumerationWrapper", () => {
     );
 
     it("handles undefined filters", () => {
-        const isFiltered = FileEnumeratorWrapper.isFilteredPath(
-            "path/path/blah.ts",
-            undefined
-        );
+        const isFiltered = IsFilteredPath.test("path/path/blah.ts", undefined);
         expect(isFiltered).toEqual(false);
     });
 });

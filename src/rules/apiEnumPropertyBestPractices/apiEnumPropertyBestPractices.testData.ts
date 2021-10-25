@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/filename-case */
 export const testCases = [
     {
         moduleCode: `enum MyEnum{

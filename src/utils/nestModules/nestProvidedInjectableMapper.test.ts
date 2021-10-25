@@ -7,13 +7,14 @@ import {
     fakeContext,
     fakeFilePath,
     moduleMappingTestData,
-} from "./nestProvidedInjectableMapper.test-date";
+} from "./nestProvidedInjectableMapper.testData";
 
 describe("nest module ast mapper", () => {
     it("Can parse typescript typings using the typescript parser", () => {
         const result = typedTokenHelpers.parseStringToAst(
             `let x:Date = new Date()`,
             fakeFilePath,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             {
                 parserOptions: {
                     ecmaVersion: 2019 as EcmaVersion,
@@ -46,6 +47,7 @@ describe("nest module ast mapper", () => {
             const ast = typedTokenHelpers.parseStringToAst(
                 testItem.moduleCode,
                 fakeFilePath,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 fakeContext
             );
 

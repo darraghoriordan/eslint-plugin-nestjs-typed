@@ -2,7 +2,8 @@ import {TSESTree} from "@typescript-eslint/experimental-utils";
 import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 
 import * as unambiguous from "eslint-module-utils/unambiguous";
-import {FilePath} from "eslint/lib/cli-engine/file-enumerator";
+// eslint-disable-next-line import/no-unresolved
+import {FilePath} from "eslint/use-at-your-own-risk";
 import fs from "fs";
 import {typedTokenHelpers} from "../typedTokenHelpers";
 // eslint-disable-next-line unicorn/import-style

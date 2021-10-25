@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 //import {TSESTree} from "@typescript-eslint/experimental-utils";
 import {
     fakeContext,
     fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.test-date";
+} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {hasMismatchedInjected} from "./ProviderInjectedShouldMatchFactory";
-import {testCases} from "./ProviderInjectedShouldMatchFactory.test-data";
+import {testCases} from "./ProviderInjectedShouldMatchFactory.testData";
 
 describe("ProviderInjectedShouldMatchFactory", () => {
     test.each(testCases)(
@@ -19,6 +20,7 @@ describe("ProviderInjectedShouldMatchFactory", () => {
             const ast = typedTokenHelpers.parseStringToAst(
                 testCase.moduleCode,
                 fakeFilePath,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 fakeContext
             );
             const hasMismatch = hasMismatchedInjected(
