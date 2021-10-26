@@ -106,7 +106,6 @@ const rule = createRule({
             needsEnumNameAdded: `Properties with enum should also specify an enumName property to keep generated models clean`,
             needsTypeRemoved: `Properties with enum should not specify a type property`,
             enumNameShouldMatchType: `The enumName should match the enum type provided`,
-            randomTest: `FAIL: {{msgText}}`,
         },
         schema: [],
         hasSuggestions: false,

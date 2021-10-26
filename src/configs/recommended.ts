@@ -20,5 +20,6 @@ export = {
         "@darraghor/nestjs-typed/api-enum-property-best-practices": "error",
         "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
             "error",
+        "@darraghor/nestjs-typed/should-specify-forbid-unknown-values": "error",
     },
 };

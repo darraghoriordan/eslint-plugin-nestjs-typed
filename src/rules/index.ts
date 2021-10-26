@@ -5,6 +5,7 @@ import controllerDecoratedHasApiTags from "./controllerDecoratedHasApiTags/contr
 import apiMethodsShouldSpecifyApiResponse from "./apiMethodsShouldSpecifyApiResponse/apiMethodsShouldSpecifyApiResponse";
 import apiEnumPropertyBestPractices from "./apiEnumPropertyBestPractices/apiEnumPropertyBestPractices";
 import apiPropertyReturningArrayShouldSetArray from "./apiPropertyReturningArrayShouldSetArray/apiPropertyReturningArrayShouldSetArray";
+import shouldSpecifyForbidUnknownValues from "./shouldSpecifyForbidUnknownValues/shouldSpecifyForbidUnknownValuesRule";
 
 const allRules = {
     "api-property-matches-property-optionality":
@@ -14,10 +15,11 @@ const allRules = {
         providedInjectedShouldMatchFactoryParameters,
     "controllers-should-supply-api-tags": controllerDecoratedHasApiTags,
     "api-method-should-specify-api-response":
-    apiMethodsShouldSpecifyApiResponse,
+        apiMethodsShouldSpecifyApiResponse,
     "api-enum-property-best-practices": apiEnumPropertyBestPractices,
     "api-property-returning-array-should-set-array":
         apiPropertyReturningArrayShouldSetArray,
+    "should-specify-forbid-unknown-values": shouldSpecifyForbidUnknownValues,
 };
 
 export default allRules;

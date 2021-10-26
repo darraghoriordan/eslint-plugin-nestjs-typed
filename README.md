@@ -30,6 +30,12 @@ I have a bunch of rules here that are mostly for strict typing with decorators f
 
 These rules are somewhat opinionated, but necessary for clean model generation if using an Open Api model generator.
 
+### 2. Some security and best practices
+
+There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
+https://github.com/typestack/class-validator/issues/438
+
 ## Available rule index (more details are available for each rule below)
 
 Nest Modules
@@ -82,6 +88,41 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
 ```
 
 ## Rule Details
+
+### Rule: should-specify-forbid-unknown-values
+
+This checks when if you are setting ValidationPipe parameters you set forbidUnknownValues to true.
+
+e.g. this passes
+
+```ts
+const validationPipeB = new ValidationPipe({
+    forbidNonWhitelisted: true,
+    forbidUnknownValues: true,
+});
+```
+
+this fails because property is not set
+
+```ts
+const validationPipeB = new ValidationPipe({
+    forbidNonWhitelisted: true,
+});
+```
+
+this fails because property is set to false
+
+```ts
+const validationPipeB = new ValidationPipe({
+    forbidNonWhitelisted: false,
+});
+```
+
+this passes because the default values seem to work ok
+
+```ts
+const validationPipeB = new ValidationPipe();
+```
 
 ### Rule: provided-injected-should-match-factory-parameters
 
