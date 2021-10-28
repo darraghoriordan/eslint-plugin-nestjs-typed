@@ -36,7 +36,9 @@ There is a CVE for class-transformer when using random javascript objects. You n
 https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
 https://github.com/typestack/class-validator/issues/438
 
-## Available rule index (more details are available for each rule below)
+## Index of Available rules
+
+Details for each rule are available in sections below.
 
 Nest Modules
 
@@ -50,6 +52,11 @@ Nest Swagger
 -   api-method-should-specify-api-response
 -   api-enum-property-best-practices
 -   api-property-returning-array-should-set-array
+
+Security and best practices
+
+-   should-specify-forbid-unknown-values
+-   param-decorator-name-matches-route-param
 
 ## To install
 
@@ -88,6 +95,82 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
 ```
 
 ## Rule Details
+
+### Rule: param-decorator-name-matches-route-param
+
+This rule will verify you have entered a `Param("name")` that has a matching url parameter in a controller or method decorator
+
+e.g. this passes because the uuid param is in the `Get()` method
+
+```ts
+@Controller("custom-bot")
+export class CustomBotController {
+    constructor() {}
+
+    @Get(":uuid")
+    @ApiOkResponse({type: CustomBot})
+    findOne(
+        @Param("uuid") uuid: string,
+        @Request() request: RequestWithUser
+    ): Promise<CustomBot> {
+        return this.customBotService.findOne(uuid, request.user.uuid);
+    }
+}
+```
+
+this passes because the uuid param is in the `Controller()` method
+
+```ts
+@Controller("custom-bot/:uuid")
+export class CustomBotController {
+    constructor() {}
+
+    @Get()
+    @ApiOkResponse({type: CustomBot})
+    findOne(
+        @Param("uuid") uuid: string,
+        @Request() request: RequestWithUser
+    ): Promise<CustomBot> {
+        return this.customBotService.findOne(uuid, request.user.uuid);
+    }
+}
+```
+
+this fails because you don't put the `:` in the param decorator
+
+```ts
+@Controller("custom-bot")
+export class CustomBotController {
+    constructor() {}
+
+    @Get(":uuid")
+    @ApiOkResponse({type: CustomBot})
+    findOne(
+        @Param(":uuid") uuid: string,
+        @Request() request: RequestWithUser
+    ): Promise<CustomBot> {
+        return this.customBotService.findOne(uuid, request.user.uuid);
+    }
+}
+```
+
+This fails because there is a typo in the param decorator
+
+```ts
+@Controller("custom-bot")
+export class CustomBotController {
+    constructor() {}
+
+    @Get(":uuid")
+    @ApiOkResponse({type: CustomBot})
+    findOne(
+        @Param("uui") uuid: string,
+        @Request() request: RequestWithUser
+    ): Promise<CustomBot> {
+        return this.customBotService.findOne(uuid, request.user.uuid);
+    }
+}
+```
 
 ### Rule: should-specify-forbid-unknown-values
 

@@ -21,5 +21,7 @@ export = {
         "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
             "error",
         "@darraghor/nestjs-typed/should-specify-forbid-unknown-values": "error",
+        "@darraghor/nestjs-typed/param-decorator-name-matches-route-param":
+            "error",
     },
 };

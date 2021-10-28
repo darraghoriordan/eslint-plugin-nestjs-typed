@@ -6,6 +6,7 @@ import apiMethodsShouldSpecifyApiResponse from "./apiMethodsShouldSpecifyApiResp
 import apiEnumPropertyBestPractices from "./apiEnumPropertyBestPractices/apiEnumPropertyBestPractices";
 import apiPropertyReturningArrayShouldSetArray from "./apiPropertyReturningArrayShouldSetArray/apiPropertyReturningArrayShouldSetArray";
 import shouldSpecifyForbidUnknownValues from "./shouldSpecifyForbidUnknownValues/shouldSpecifyForbidUnknownValuesRule";
+import parameterDecoratorNameMatchesRouteParam from "./paramDecoratorNameMatchesRouteParam/paramDecoratorNameMatchesRouteParam";
 
 const allRules = {
     "api-property-matches-property-optionality":
@@ -20,6 +21,8 @@ const allRules = {
     "api-property-returning-array-should-set-array":
         apiPropertyReturningArrayShouldSetArray,
     "should-specify-forbid-unknown-values": shouldSpecifyForbidUnknownValues,
+    "param-decorator-name-matches-route-param":
+        parameterDecoratorNameMatchesRouteParam,
 };
 
 export default allRules;
