@@ -6,36 +6,6 @@ Version 3.x supports Eslint version >=8.x and typescript eslint parser 5+
 
 There were many breaking changes between these versions.
 
-## Why use this package?
-
-If you use NestJs (https://nestjs.com/) then these rules will help keep you usage of decorators consistent.
-
-See the following summaries
-
-### 1. Detect Nest Dependency Injection issues
-
-There are some things you don't want to forget when working with Nest dependency injection.
-
-The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time. Nest is good at telling you where these are but sometimes it's not.
-
-In particular if you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get unexpected operation.
-
-These are described in the "Common Errors" section of the nest js docs.
-
-### 2. Using Open Api / Swagger decorators and automatically generating a clients
-
-When working with NestJS I generate my front end client and models using the swagger generated from the nest controllers and models.
-
-I have a bunch of rules here that are mostly for strict typing with decorators for those controllers and models.
-
-These rules are somewhat opinionated, but necessary for clean model generation if using an Open Api model generator.
-
-### 2. Some security and best practices
-
-There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
-https://github.com/typestack/class-validator/issues/438
-
 ## Index of Available rules
 
 Details for each rule are available in sections below.
@@ -53,10 +23,47 @@ Nest Swagger
 -   api-enum-property-best-practices
 -   api-property-returning-array-should-set-array
 
-Security and best practices
+Preventing bugs
+
+-   param-decorator-name-matches-route-param
+
+Security
 
 -   should-specify-forbid-unknown-values
--   param-decorator-name-matches-route-param
+
+## Why use this package?
+
+If you use NestJs (https://nestjs.com/) then these rules will help keep you usage of decorators consistent.
+
+See the following summaries
+
+### 1. Detect Nest Dependency Injection issues
+
+There are some things you don't want to forget when working with Nest dependency injection.
+
+The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time. Nest is good at telling you where these are but sometimes it's not.
+
+In particular if you're using custom providers the errors can be really tricky to figure out because they won't explicitly error about mismatched injected items, you will just get unexpected operation.
+
+These are described in the "Common Errors" section of the nest js docs.
+
+### 1. Using Open Api / Swagger decorators and automatically generating a clients
+
+When working with NestJS I generate my front end client and models using the swagger generated from the nest controllers and models.
+
+I have a bunch of rules here that are mostly for strict typing with decorators for those controllers and models.
+
+These rules are somewhat opinionated, but necessary for clean model generation if using an Open Api model generator.
+
+### 1. Helping prevent bugs
+
+There are some tightly coupled but untyped decorators and things like that in nest that will catch you out if your not careful. There are some rules to help prevent issues that have caught me out before.
+
+### 1. Security
+
+There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
+https://github.com/typestack/class-validator/issues/438
 
 ## To install
 
@@ -100,7 +107,7 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
 
 This rule will verify you have entered a `Param("name")` that has a matching url parameter in a controller or method decorator
 
-e.g. this passes because the uuid param is in the `Get()` method
+e.g. this passes because the uuid param is in the `Get()` decorator
 
 ```ts
 @Controller("custom-bot")
@@ -118,7 +125,7 @@ export class CustomBotController {
 }
 ```
 
-this passes because the uuid param is in the `Controller()` method
+this passes because the uuid param is in the `Controller()` decorator
 
 ```ts
 @Controller("custom-bot/:uuid")
@@ -129,24 +136,6 @@ export class CustomBotController {
     @ApiOkResponse({type: CustomBot})
     findOne(
         @Param("uuid") uuid: string,
-        @Request() request: RequestWithUser
-    ): Promise<CustomBot> {
-        return this.customBotService.findOne(uuid, request.user.uuid);
-    }
-}
-```
-
-this fails because you don't put the `:` in the param decorator
-
-```ts
-@Controller("custom-bot")
-export class CustomBotController {
-    constructor() {}
-
-    @Get(":uuid")
-    @ApiOkResponse({type: CustomBot})
-    findOne(
-        @Param(":uuid") uuid: string,
         @Request() request: RequestWithUser
     ): Promise<CustomBot> {
         return this.customBotService.findOne(uuid, request.user.uuid);
@@ -165,6 +154,24 @@ export class CustomBotController {
     @ApiOkResponse({type: CustomBot})
     findOne(
         @Param("uui") uuid: string,
+        @Request() request: RequestWithUser
+    ): Promise<CustomBot> {
+        return this.customBotService.findOne(uuid, request.user.uuid);
+    }
+}
+```
+
+this fails because you shouldn't put the `:` in the param decorator
+
+```ts
+@Controller("custom-bot")
+export class CustomBotController {
+    constructor() {}
+
+    @Get(":uuid")
+    @ApiOkResponse({type: CustomBot})
+    findOne(
+        @Param(":uuid") uuid: string,
         @Request() request: RequestWithUser
     ): Promise<CustomBot> {
         return this.customBotService.findOne(uuid, request.user.uuid);
