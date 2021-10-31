@@ -1,50 +1,133 @@
-import {hasEnumSpecifiedCorrectly} from "./apiEnumPropertyBestPractices";
-import {testCases} from "./apiEnumPropertyBestPractices.testData";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {
-    fakeContext,
-    fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
-import {TSESTree} from "@typescript-eslint/types";
+import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+import rule from "./apiEnumPropertyBestPractices";
 
-// should probably be split up into multiple tests
-describe("apiEnumPropertyBestPractices", () => {
-    test.each(testCases)(
-        "is an expected response for %#",
-        (testCase: {
-            moduleCode: string;
-            needsEnumProperty: boolean;
-            needsEnumNameProperty: boolean;
-            needsTypeRemoved: boolean;
-            needsEnumNameToMatchEnumType: boolean;
-            isEnumType: boolean;
-            message: string;
-        }) => {
-            const ast = typedTokenHelpers.parseStringToAst(
-                testCase.moduleCode,
-                fakeFilePath,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                fakeContext
-            );
+const tsRootDirectory = getFixturesRootDirectory();
+const ruleTester = new RuleTester({
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaVersion: 2015,
+        tsconfigRootDir: tsRootDirectory,
+        project: "./tsconfig.json",
+    },
+});
 
-            const hasValidEnumSpecResult = hasEnumSpecifiedCorrectly(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (ast.body[1] as TSESTree.ClassDeclaration).body
-                    .body[0] as TSESTree.PropertyDefinition,
-                testCase.isEnumType
-            );
-            expect(hasValidEnumSpecResult.needsEnumAdded).toEqual(
-                testCase.needsEnumProperty
-            );
-            expect(hasValidEnumSpecResult.needsEnumNameAdded).toEqual(
-                testCase.needsEnumNameProperty
-            );
-            expect(hasValidEnumSpecResult.needsTypeRemoved).toEqual(
-                testCase.needsTypeRemoved
-            );
-            expect(hasValidEnumSpecResult.needsEnumNameToMatchEnumType).toEqual(
-                testCase.needsEnumNameToMatchEnumType
-            );
-        }
-    );
+ruleTester.run("api-enum-property-best-practices", rule, {
+    valid: [
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({
+                    enumName: "MyEnum",
+                    enum: MyEnum,
+                })
+                public myProperty!:MyEnum
+            }`,
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty()
+                public myProperty!:Object
+            }`,
+        },
+    ],
+    invalid: [
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({
+                    type: MyEnum,
+                    enum: MyEnum,
+                })
+                public myProperty!:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+                {messageId: "needsTypeRemoved"},
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({})
+                public myProperty!:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({enumName: "MyEnumTYPO",
+                    enum: MyEnum,})
+                public myProperty!:MyEnum
+            }`,
+            errors: [{messageId: "enumNameShouldMatchType"}],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({
+                    enum: MyEnum,
+                })
+                public myProperty!:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({
+                    type: MyEnum,
+                })
+                public myProperty!:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+                {
+                    messageId: "needsTypeRemoved",
+                },
+            ],
+        },
+    ],
 });

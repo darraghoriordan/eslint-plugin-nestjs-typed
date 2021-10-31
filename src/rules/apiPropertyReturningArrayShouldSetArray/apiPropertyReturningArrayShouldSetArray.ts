@@ -15,21 +15,17 @@ export const shouldSetArrayProperty = (
         return new ArraySetResultModel(false, false);
     }
 
-    const firstArgument = (decorators[0].expression as TSESTree.CallExpression)
-        .arguments[0] as TSESTree.ObjectExpression;
-    let isArraySet = false;
-    if (firstArgument !== undefined) {
-        const isArrayProperty = firstArgument.properties.find(
-            (p) =>
-                ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
-                "isArray"
-        );
+    // There should only be one of these apiproperty decorators so we just grab the parameter to decorator at index 0
+    const firstArgumentToDecorator = (
+        decorators[0].expression as TSESTree.CallExpression
+    ).arguments[0] as TSESTree.ObjectExpression;
 
-        isArraySet =
-            isArrayProperty !== undefined &&
-            ((isArrayProperty as TSESTree.Property).value as TSESTree.Literal)
-                .value === true;
-    }
+    const hasIsArraySetInOptions =
+        typedTokenHelpers.getPropertyValueEqualsExpected(
+            firstArgumentToDecorator,
+            "isArray",
+            true
+        );
     // handle string[] or Array<string>
     const isArrayType =
         (
@@ -38,12 +34,11 @@ export const shouldSetArrayProperty = (
         )?.name === "Array";
     const isTypescriptArrayType =
         node.typeAnnotation?.typeAnnotation.type === AST_NODE_TYPES.TSArrayType;
-    const shouldArrayBeSet = isArrayType || isTypescriptArrayType;
+    const isAnArrayLikeType = isArrayType || isTypescriptArrayType;
 
-    // this is verbose but makes it easier to read imho
     return new ArraySetResultModel(
-        shouldArrayBeSet && isArraySet === false,
-        shouldArrayBeSet === false && isArraySet
+        isAnArrayLikeType && !hasIsArraySetInOptions,
+        !isAnArrayLikeType && hasIsArraySetInOptions
     );
 };
 
@@ -68,8 +63,11 @@ const rule = createRule({
     create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassProperty(node: TSESTree.PropertyDefinition): void {
-                const shouldSetArrayResults = shouldSetArrayProperty(node);
+            PropertyDefinition: (node: TSESTree.Node) => {
+                const shouldSetArrayResults = shouldSetArrayProperty(
+                    node as TSESTree.PropertyDefinition
+                );
+
                 if (shouldSetArrayResults.isArrayShouldBeSetFalse) {
                     context.report({
                         node: node,

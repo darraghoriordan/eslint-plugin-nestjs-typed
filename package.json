@@ -7,7 +7,7 @@
         "build:ci": "npm run build",
         "build": "npm run clean && mkdir ./dist && tsc --project tsconfig.build.json",
         "lint": "npx eslint -c .eslintrc.js --ext .ts './src/**/*.ts' './tests/**/*.ts' --no-error-on-unmatched-pattern",
-        "test": "export NODE_OPTIONS=\"--max-old-space-size=8192\" && npx jest --runInBand --color --reporters=default --no-cache --coverage=false",
+        "test": "export NODE_OPTIONS=\"--max-old-space-size=8192\" && npx jest --runInBand --color --reporters=default --no-cache --coverage=false --silent=false",
         "pre-commit": "npx lint-staged",
         "prettier": "prettier --write src/*",
         "prepare": "husky install",

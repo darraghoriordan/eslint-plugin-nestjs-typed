@@ -120,7 +120,7 @@ const rule = createRule({
 
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassProperty(node: TSESTree.Node): void {
+            PropertyDefinition(node: TSESTree.Node): void {
                 const mappedNode =
                     parserServices.esTreeNodeToTSNodeMap.get(node);
                 const objectType = typeChecker.getTypeAtLocation(mappedNode);

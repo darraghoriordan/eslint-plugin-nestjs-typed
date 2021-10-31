@@ -1,34 +1,73 @@
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {
-    fakeContext,
-    fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
-import {TSESTree} from "@typescript-eslint/types";
-import {testCases} from "./apiMethodsShouldSpecifyApiResponse.testData";
-import {shouldUseApiResponseDecorator} from "./apiMethodsShouldSpecifyApiResponse";
+import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+import rule from "./apiMethodsShouldSpecifyApiResponse";
 
-// should probably be split up into multiple tests
-describe("apiMethodsShouldSpecifyApiResponse", () => {
-    test.each(testCases)(
-        "is an expected response for %#",
-        (testCase: {
-            moduleCode: string;
-            shouldUseDecorator: boolean;
-            message: string;
-        }) => {
-            const ast = typedTokenHelpers.parseStringToAst(
-                testCase.moduleCode,
-                fakeFilePath,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                fakeContext
-            );
+const tsRootDirectory = getFixturesRootDirectory();
+const ruleTester = new RuleTester({
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaVersion: 2015,
+        tsconfigRootDir: tsRootDirectory,
+        project: "./tsconfig.json",
+    },
+});
 
-            const shouldUseOptional = shouldUseApiResponseDecorator(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (ast.body[0] as TSESTree.ClassDeclaration).body
-                    .body[0] as TSESTree.MethodDefinition
-            );
-            expect(shouldUseOptional).toEqual(testCase.shouldUseDecorator);
-        }
-    );
+ruleTester.run("api-method-should-specify-api-response", rule, {
+    valid: [
+        {
+            code: `class TestClass {
+                @Get()
+                @ApiOkResponse({ type: String, isArray: true })
+                @ApiBadRequestResponse({ description: "Bad Request" })
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+        },
+        {
+            code: `class TestClass {
+                @Get()
+                @ApiResponse({ status: 200, type: String })
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+        },
+        {
+            // not an api decorated class
+            code: `class TestClass {
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+        },
+    ],
+    invalid: [
+        {
+            code: `class TestClass {
+                @Get()
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+            errors: [
+                {
+                    messageId: "shouldSpecifyApiResponse",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @All()
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+            errors: [
+                {
+                    messageId: "shouldSpecifyApiResponse",
+                },
+            ],
+        },
+    ],
 });

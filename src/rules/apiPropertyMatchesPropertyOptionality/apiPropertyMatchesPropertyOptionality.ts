@@ -55,7 +55,7 @@ const rule = createRule({
     create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassProperty(node: TSESTree.PropertyDefinition): void {
+            PropertyDefinition(node: TSESTree.PropertyDefinition): void {
                 if (shouldUseOptionalDecorator(node)) {
                     context.report({
                         node: node,

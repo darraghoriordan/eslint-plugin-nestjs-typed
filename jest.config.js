@@ -8,6 +8,8 @@ module.exports = {
     moduleFileExtensions: ["ts", "js", "json"],
     setupFiles: ["./src/testing/preRun.ts"],
     collectCoverage: true,
+    silent: false,
+    verbose: true,
     collectCoverageFrom: [
         "**/src/**/*.ts",
         "!**/node_modules/**",
@@ -34,5 +36,4 @@ module.exports = {
         ".*test\\.data\\.ts$,migrations.*.ts$,(.*.(test|spec)).(jsx?|tsx?)$,(tests/.*.mock).(jsx?|tsx?)$",
     ],
     coverageReporters: ["json", "lcov", "text", "clover", "cobertura"],
-    verbose: true,
 };

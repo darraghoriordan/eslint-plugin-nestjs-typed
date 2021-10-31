@@ -1,49 +1,145 @@
-import {testCases} from "./rule.testData";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {
-    fakeContext,
-    fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
+import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+import rule from "./shouldSpecifyForbidUnknownValuesRule";
 
-import {
-    shouldTriggerForVariableDecleratorExpression,
-    shouldTriggerNewExpressionHasProperty,
-} from "./shouldSpecifyForbidUnknownValuesRule";
+const tsRootDirectory = getFixturesRootDirectory();
+const ruleTester = new RuleTester({
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaVersion: 2015,
+        tsconfigRootDir: tsRootDirectory,
+        project: "./tsconfig.json",
+    },
+});
 
-// should probably be split up into multiple tests
-describe("shouldUseForbidUnknownRule", () => {
-    test.each(testCases)(
-        "is an expected response for %#",
-        (testCase: {
-            moduleCode: string;
-            isNewExpressionTriggered: boolean;
-            isVariableExpressionTriggered: boolean;
-            message: string;
-        }) => {
-            const ast = typedTokenHelpers.parseStringToAst(
-                testCase.moduleCode,
-                fakeFilePath,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                fakeContext
-            );
-
-            const isNewExpressionTriggered =
-                shouldTriggerNewExpressionHasProperty(
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-explicit-any
-                    (ast as any).body[2].declarations[0].init
-                );
-            const isVariableExpressionTriggered =
-                shouldTriggerForVariableDecleratorExpression(
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-explicit-any
-                    (ast as any).body[0].declarations[0]
-                );
-
-            expect(isNewExpressionTriggered).toEqual(
-                testCase.isNewExpressionTriggered
-            );
-            expect(isVariableExpressionTriggered).toEqual(
-                testCase.isVariableExpressionTriggered
-            );
-        }
-    );
+ruleTester.run("validation-pipe-should-use-forbid-unknown", rule, {
+    valid: [
+        {
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            } as ValidationPipeOptions;
+    
+            const validationPipeA = new ValidationPipe(options);
+    
+            const validationPipeB = new ValidationPipe({
+                transform: true,
+                skipMissingProperties: false,
+                whitelist: true,
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            });   
+    `,
+        },
+        {
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+            } as ThisIsNotAValidationPipeOptionsClass;
+    
+            const validationPipeA = new ValidationPipe(options);
+    
+            const validationPipeB = new ValidationPipe({
+                transform: true,
+                skipMissingProperties: false,
+                whitelist: true,
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            });   
+    `,
+        },
+        {
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            } as ValidationPipeOptions;
+    
+            const validationPipeA = new ValidationPipe(options);
+    
+            const validationPipeB = new ThisIsNotAValidationPipeClass({
+                transform: true,
+                skipMissingProperties: false,
+                whitelist: true,
+                forbidNonWhitelisted: true
+            });   
+    `,
+        },
+        {
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            } as ValidationPipeOptions;
+    
+            const validationPipeA = new ValidationPipe(options);
+    
+            const validationPipeB = new ValidationPipe();   
+    `,
+        },
+    ],
+    invalid: [
+        {
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+            } as ValidationPipeOptions;
+    
+            const validationPipeA = new ValidationPipe(options);
+    
+            const validationPipeB = new ValidationPipe({
+                transform: true,
+                skipMissingProperties: false,
+                whitelist: true,
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            });   
+    `,
+            errors: [
+                {
+                    messageId: "shouldSpecifyForbidUnknownValues",
+                },
+            ],
+        },
+        {
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            } as ValidationPipeOptions;
+    
+            const validationPipeA = new ValidationPipe(options);
+    
+            const validationPipeB = new ValidationPipe({
+                transform: true,
+                skipMissingProperties: false,
+                whitelist: true,
+                forbidNonWhitelisted: true
+            });   
+    `,
+            errors: [
+                {
+                    messageId: "shouldSpecifyForbidUnknownValues",
+                },
+            ],
+        },
+        {
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            } as ValidationPipeOptions;
+    
+            const validationPipeA = new ValidationPipe(options);
+    
+            const validationPipeB = new ValidationPipe({});   
+    `,
+            errors: [
+                {
+                    messageId: "shouldSpecifyForbidUnknownValues",
+                },
+            ],
+        },
+    ],
 });

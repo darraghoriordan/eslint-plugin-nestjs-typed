@@ -1,35 +1,43 @@
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {
-    fakeContext,
-    fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
-import {TSESTree} from "@typescript-eslint/types";
-import {testCases} from "./controllerDecoratedHasApiTags.testData";
-import {shouldUseApiTagDecorator} from "./controllerDecoratedHasApiTags";
+import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+import rule from "./controllerDecoratedHasApiTags";
 
-// should probably be split up into multiple tests
-describe("controllerDecoratedHasApiTags", () => {
-    test.each(testCases)(
-        "is an expected response for %#",
-        (testCase: {
-            moduleCode: string;
-            shouldUseApiTagsDecorator: boolean;
-            message: string;
-        }) => {
-            const ast = typedTokenHelpers.parseStringToAst(
-                testCase.moduleCode,
-                fakeFilePath,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                fakeContext
-            );
+const tsRootDirectory = getFixturesRootDirectory();
+const ruleTester = new RuleTester({
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaVersion: 2015,
+        tsconfigRootDir: tsRootDirectory,
+        project: "./tsconfig.json",
+    },
+});
 
-            const shouldUseOptional = shouldUseApiTagDecorator(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ast.body[0] as TSESTree.ClassDeclaration
-            );
-            expect(shouldUseOptional).toEqual(
-                testCase.shouldUseApiTagsDecorator
-            );
-        }
-    );
+ruleTester.run("controllers-should-supply-api-tags", rule, {
+    valid: [
+        {
+            code: `
+            @ApiTags("my-tag")
+            @Controller("my-controller")
+            class TestClass {
+          }`,
+        },
+        {
+            code: `
+            class TestClass {
+          }`,
+        },
+    ],
+    invalid: [
+        {
+            code: `
+            @Controller("my-controller")
+            class TestClass {
+          }`,
+            errors: [
+                {
+                    messageId: "shouldUseApiTagDecorator",
+                },
+            ],
+        },
+    ],
 });

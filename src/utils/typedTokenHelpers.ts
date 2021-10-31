@@ -1,8 +1,84 @@
-import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/experimental-utils";
+import {
+    AST_NODE_TYPES,
+    ParserServices,
+    TSESTree,
+} from "@typescript-eslint/experimental-utils";
 import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import {parse} from "@typescript-eslint/parser";
+import * as ts from "typescript";
+import {unionTypeParts} from "tsutils";
 
 export const typedTokenHelpers = {
+    decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
+        "IsArray",
+        "ArrayMinSize",
+        "ArrayMinSize",
+        "ArrayContains",
+        "ArrayNotContains",
+        "ArrayNotEmpty",
+        "ArrayUnique",
+    ],
+    isTypeArrayTypeOrUnionOfArrayTypes(
+        node: TSESTree.Node,
+        parserService: ParserServices,
+        checker: ts.TypeChecker
+    ): boolean {
+        const nodeType = this.getNodeType(node, parserService, checker);
+        for (const t of unionTypeParts(nodeType)) {
+            if (!checker.isArrayType(t)) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+    getNodeType(
+        node: TSESTree.Node,
+        parserService: ParserServices,
+        checker: ts.TypeChecker
+    ): ts.Type {
+        const tsNode = parserService.esTreeNodeToTSNodeMap.get(node);
+        return typedTokenHelpers.getConstrainedTypeAtLocation(checker, tsNode);
+    },
+    expressionNodeIsArrayType(
+        node: TSESTree.Expression,
+        parserService: ParserServices,
+        checker: ts.TypeChecker
+    ): boolean {
+        const nodeType = this.getNodeType(node, parserService, checker);
+        return checker.isArrayType(nodeType);
+    },
+    getPropertyValueEqualsExpected(
+        firstArgument: TSESTree.ObjectExpression,
+        propertyName: string,
+        expectedValue: string | number | bigint | boolean | RegExp | null
+    ): boolean {
+        let didMatchExpectedValues = false;
+        if (firstArgument !== undefined) {
+            const foundPropertyOfName = firstArgument.properties.find(
+                (p) =>
+                    ((p as TSESTree.Property).key as TSESTree.Identifier)
+                        .name === propertyName
+            );
+
+            didMatchExpectedValues =
+                foundPropertyOfName !== undefined &&
+                (
+                    (foundPropertyOfName as TSESTree.Property)
+                        .value as TSESTree.Literal
+                ).value === expectedValue;
+        }
+        return didMatchExpectedValues;
+    },
+    getConstrainedTypeAtLocation(
+        checker: ts.TypeChecker,
+        node: ts.Node
+    ): ts.Type {
+        const nodeType = checker.getTypeAtLocation(node);
+        const constrained = checker.getBaseConstraintOfType(nodeType);
+
+        return constrained ?? nodeType;
+    },
     nodeHasDecoratorsNamed(
         n:
             | TSESTree.ClassDeclaration
