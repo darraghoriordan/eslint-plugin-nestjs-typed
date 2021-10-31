@@ -5,7 +5,7 @@ import {
 } from "@typescript-eslint/experimental-utils";
 import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import {parse} from "@typescript-eslint/parser";
-import * as ts from "typescript";
+import ts from "typescript";
 import {unionTypeParts} from "tsutils";
 
 export const typedTokenHelpers = {
