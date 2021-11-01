@@ -23,5 +23,9 @@ export = {
         "@darraghor/nestjs-typed/should-specify-forbid-unknown-values": "error",
         "@darraghor/nestjs-typed/param-decorator-name-matches-route-param":
             "error",
+        "@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator":
+            "error",
+        "@darraghor/nestjs-typed/validate-nested-of-array-should-set-each":
+            "error",
     },
 };

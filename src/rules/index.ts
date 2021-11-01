@@ -7,6 +7,8 @@ import apiEnumPropertyBestPractices from "./apiEnumPropertyBestPractices/apiEnum
 import apiPropertyReturningArrayShouldSetArray from "./apiPropertyReturningArrayShouldSetArray/apiPropertyReturningArrayShouldSetArray";
 import shouldSpecifyForbidUnknownValues from "./shouldSpecifyForbidUnknownValues/shouldSpecifyForbidUnknownValuesRule";
 import parameterDecoratorNameMatchesRouteParam from "./paramDecoratorNameMatchesRouteParam/paramDecoratorNameMatchesRouteParam";
+import validateNonPrimitiveNeedsDecorators from "./validate-non-primitves-needs-type-decorator/validateNonPrimitiveNeedsDecorators";
+import validateNestedOfArrayShouldSetEach from "./validateNestedOfArrayShouldSetEach/validateNestedOfArrayShouldSetEach";
 
 const allRules = {
     "api-property-matches-property-optionality":
@@ -23,6 +25,10 @@ const allRules = {
     "should-specify-forbid-unknown-values": shouldSpecifyForbidUnknownValues,
     "param-decorator-name-matches-route-param":
         parameterDecoratorNameMatchesRouteParam,
+    "validated-non-primitive-property-needs-type-decorator":
+        validateNonPrimitiveNeedsDecorators,
+    "validate-nested-of-array-should-set-each":
+        validateNestedOfArrayShouldSetEach,
 };
 
 export default allRules;

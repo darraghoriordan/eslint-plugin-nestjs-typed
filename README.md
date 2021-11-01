@@ -6,11 +6,11 @@ Version 3.x supports Eslint version >=8.x and typescript eslint parser 5+
 
 There were many breaking changes between these versions.
 
-## Index of Available rules
+## Index of available rules
 
-Details for each rule are available in sections below.
+(more details for each specific rule are available in sections below)
 
-Nest Modules
+Nest Modules and Dependency Injection
 
 -   provided-injected-should-match-factory-parameters
 -   injectable-should-be-provided
@@ -26,6 +26,8 @@ Nest Swagger
 Preventing bugs
 
 -   param-decorator-name-matches-route-param
+-   validate-nested-of-array-should-set-each
+-   validated-non-primitive-property-needs-type-decorator
 
 Security
 
@@ -33,7 +35,7 @@ Security
 
 ## Why use this package?
 
-If you use NestJs (https://nestjs.com/) then these rules will help keep you usage of decorators consistent.
+If you use NestJs (https://nestjs.com/) then these rules will help you to prevent common bugs and issues. They mostly check that you are using decorators correctly.
 
 See the following summaries
 
@@ -101,13 +103,123 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
     // more config
 ```
 
+Disable a single rule with the full name e.g. in your eslint configuration...
+
+```
+   rules: {
+   "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
+            "off",
+   }
+```
+
 ## Rule Details
+
+### Rule: validate-nested-of-array-should-set-each
+
+If you use the `@ValidateNested` decorator you should specify the `{each: true}` option if the property is an array.
+
+This PASSES because it's an array and each is set
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @ValidateNested({each: true})
+    members!: MyClass[];
+}
+```
+
+This PASSES because it's an array and each is set
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @ValidateNested({each: true})
+    members!: Array<MyClass>;
+}
+```
+
+This PASSES because it's not an array and each is not set
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @ValidateNested()
+    members!: MyClass;
+}
+```
+
+This FAILS because it's not an array and each is set
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @ValidateNested({each: true})
+    members!: MyClass;
+}
+```
+
+### Rule: validated-non-primitive-property-needs-type-decorator
+
+If you use any of the class validator decorators on a property that is not a primitive, you should tell class-transformer how to transform it into a class first.
+
+This PASSES because we're validating a Person class and we have added the @Type decorator.
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @IsDefined()
+    @Type(() => Person)
+    members!: Person;
+}
+```
+
+This PASSES because it is a primitive type (boolean, string, number). We don't need to tell class-transformer how to transform those.
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @ValidateNested({each: true})
+    @IsBoolean()
+    members!: boolean;
+}
+```
+
+This PASSES because we only check properties that have a class-validator decorator (e.g. `@IsDefined()`)
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    members!: Person | Date;
+}
+```
+
+This FAILS because you should always tell class-transformer the type for an array
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @ValidateNested({each: true})
+    @IsArray()
+    members!: (Person | Date)[];
+}
+```
+
+This FAILS because Date is not a primitive type (string, number, boolean)
+
+```ts
+export class CreateOrganisationDto {
+    @ApiProperty({type: Person, isArray: true})
+    @ValidateNested({each: true})
+    @IsDate()
+    members!: Date;
+}
+```
 
 ### Rule: param-decorator-name-matches-route-param
 
 This rule will verify you have entered a `Param("name")` that has a matching url parameter in a controller or method decorator
 
-e.g. this passes because the uuid param is in the `Get()` decorator
+this PASSES because the uuid param is in the `Get()` decorator
 
 ```ts
 @Controller("custom-bot")
@@ -125,7 +237,7 @@ export class CustomBotController {
 }
 ```
 
-this passes because the uuid param is in the `Controller()` decorator
+this PASSES because the uuid param is in the `Controller()` decorator
 
 ```ts
 @Controller("custom-bot/:uuid")
@@ -143,7 +255,7 @@ export class CustomBotController {
 }
 ```
 
-This fails because there is a typo in the param decorator
+This FAILS because there is a typo in the param decorator
 
 ```ts
 @Controller("custom-bot")
@@ -161,7 +273,7 @@ export class CustomBotController {
 }
 ```
 
-this fails because you shouldn't put the `:` in the param decorator
+this FAILS because you shouldn't put the `:` in the param decorator
 
 ```ts
 @Controller("custom-bot")
@@ -183,7 +295,7 @@ export class CustomBotController {
 
 This checks when if you are setting ValidationPipe parameters you set forbidUnknownValues to true.
 
-e.g. this passes
+e.g. this PASSES because the property is set
 
 ```ts
 const validationPipeB = new ValidationPipe({
@@ -192,7 +304,7 @@ const validationPipeB = new ValidationPipe({
 });
 ```
 
-this fails because property is not set
+this FAILS because property is not set
 
 ```ts
 const validationPipeB = new ValidationPipe({
@@ -200,7 +312,7 @@ const validationPipeB = new ValidationPipe({
 });
 ```
 
-this fails because property is set to false
+this FAILS because property is set to false
 
 ```ts
 const validationPipeB = new ValidationPipe({
@@ -208,7 +320,7 @@ const validationPipeB = new ValidationPipe({
 });
 ```
 
-this passes because the default values seem to work ok
+this PASSES because the default values seem to work ok
 
 ```ts
 const validationPipeB = new ValidationPipe();
@@ -218,7 +330,7 @@ const validationPipeB = new ValidationPipe();
 
 Checks that there are the same number of injected items in a Provider that are passed to the factory method
 
-Passes (Myservide injected and myservice used in factory params)
+PASSES because `Myservice` injected and `myservice` used in factory params
 
 ```ts
 export const MyOtherInjectableProvider: NotAProvider = {
