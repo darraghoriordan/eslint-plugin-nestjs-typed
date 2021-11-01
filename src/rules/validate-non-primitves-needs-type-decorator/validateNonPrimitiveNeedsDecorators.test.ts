@@ -60,6 +60,7 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     ],
     invalid: [
         {
+            // is an array
             code: `
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
@@ -75,6 +76,7 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
             ],
         },
         {
+            // is not a primitive type
             code: `
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })

@@ -49,7 +49,7 @@ In particular if you're using custom providers the errors can be really tricky t
 
 These are described in the "Common Errors" section of the nest js docs.
 
-### 1. Using Open Api / Swagger decorators and automatically generating a clients
+### 2. Using Open Api / Swagger decorators and automatically generating a clients
 
 When working with NestJS I generate my front end client and models using the swagger generated from the nest controllers and models.
 
@@ -57,11 +57,11 @@ I have a bunch of rules here that are mostly for strict typing with decorators f
 
 These rules are somewhat opinionated, but necessary for clean model generation if using an Open Api model generator.
 
-### 1. Helping prevent bugs
+### 3. Helping prevent bugs
 
 There are some tightly coupled but untyped decorators and things like that in nest that will catch you out if your not careful. There are some rules to help prevent issues that have caught me out before.
 
-### 1. Security
+### 4. Security
 
 There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See
 https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
@@ -295,6 +295,10 @@ export class CustomBotController {
 
 This checks when if you are setting ValidationPipe parameters you set forbidUnknownValues to true.
 
+There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
+https://github.com/typestack/class-validator/issues/438
+
 e.g. this PASSES because the property is set
 
 ```ts
@@ -342,7 +346,7 @@ export const MyOtherInjectableProvider: NotAProvider = {
 };
 ```
 
-Fails (SecondService is not used in the factory)
+FAILS because SecondService is not used in the factory - this is probably a developer error where they meant to inject the second service.
 
 ```ts
 export const MyOtherInjectableProvider: Provider = {
@@ -354,9 +358,28 @@ export const MyOtherInjectableProvider: Provider = {
 };
 ```
 
+FAILS because SecondService isn't injected in the factory - this is probably a developer error where they meant to inject the second service.
+
+Of course you can ignore this warning if SecondService is `@Global()`
+
+```ts
+export const MyOtherInjectableProvider: Provider = {
+    provide: MyOtherInjectable,
+    useFactory: async (
+        config: MyService,
+        secondService: SecondService
+    ): Promise<MyOtherInjectable> => {
+        return new MyOtherInjectable();
+    },
+    inject: [MyService],
+};
+```
+
 ### Rule: injectable-should-be-provided
 
-Checks that a class marked with `@Injectable` is injected somewhere or used in a provider.
+Checks that a class marked with `@Injectable` is injected somewhere in a module or used in a provider.
+
+NestJS will catch these at runtime but I prefer to get a nudge during development in my IDE. This will only check if the service is injected once. It won't check that the correct things are injected to the correct modules. So you might still get occasional runtime issues if you forget to import a module.
 
 Fails if a thing marked as `@Injectable` is not in the `providers` of a module or `provides` in a provider.
 
@@ -376,7 +399,9 @@ There is some additional configuration you can provide for this rule. This is th
 
 This checks that you have added the correct api property decorator for your swagger documents.
 
-There are specific decorators for optional properties and using the correct one affects Open Api generation.
+There are specific, distinct decorators for optional properties and mandatory properties.
+
+Using the correct one affects Open Api doc generation.
 
 The following FAILS because this is an optional property and should have `@ApiPropertyOptional`
 
@@ -388,7 +413,17 @@ class TestClass {
 }
 ```
 
-The following FAILS because this is a required property and should have `@ApiProperty`
+The following FAILS because this is an optional property and should have `@ApiPropertyOptional`
+
+```ts
+class TestClass {
+    @Expose()
+    @ApiProperty()
+    thisIsAStringProp: string | undefined;
+}
+```
+
+The following FAILS because this is a required property and should have `@ApiProperty`. It's not really an optional property but it is from an api DTO transformation perspective.
 
 ```ts
 class TestClass {
@@ -401,6 +436,8 @@ class TestClass {
 ### Rule: controllers-should-supply-api-tags
 
 If you have more than a handful of api methods the swagger UI is difficult to navigate. It's easier to group api methods by using tags.
+
+This enforces api tags on controllers.
 
 This PASSES because it has api tags
 
@@ -419,7 +456,9 @@ class TestClass {}
 
 ### Rule: api-method-should-specify-api-response
 
-If you have an api method like @Get() you should specify the return status code (and type!) by using @ApiResponse and the other expected responses. I often leave out 400s and 500s because it's kind of assumed but they should be used if the return type changes!
+If you have an api method like @Get() you should specify the return status code (and type!) by using @ApiResponse and the other expected responses.
+
+Note: I often leave out 400s and 500s because it's kind of assumed, but these decorators should be used if the return type changes in your api for 400/500 etc!
 
 This PASSES
 
@@ -451,13 +490,13 @@ If you use enums on properties you should set the correct open api properties in
 
 If you don't use `enum` open api won't use the enum correctly.
 
-If you don't use `enumName` then Open api will create a new enum for each api method. This is awful to use in a generated client.
+If you don't use `enumName` then Open api will create a new enum for each api method. e.g. `ControllerNameEnumName`, This is awful to use as a consumer of a generated client.
 
 You don't need to use `type:` any more. This used to be necessary in old versions to get enum strings correctly output.
 
 The enumName should match the enum type you specify. It's easier to match them up when working on BE and FE. And it reduces chance for typos resulting in duplicate enums.
 
-This is a perfect enum description
+PASSES - This is a perfect enum description
 
 ```ts
 class TestClass {
@@ -466,7 +505,7 @@ class TestClass {
 }
 ```
 
-Fails - you don't need type
+FAILS - you don't need type
 
 ```ts
 class TestClass {
@@ -475,7 +514,7 @@ class TestClass {
 }
 ```
 
-Fails - you need to add a name
+FAILS - you need to add a name
 
 ```ts
 class TestClass {
@@ -484,7 +523,7 @@ class TestClass {
 }
 ```
 
-Fails - the enumName doesn't match the enumType
+FAILS - the enumName doesn't match the enumType
 
 ```ts
 class MyClass {
@@ -499,9 +538,9 @@ If you return an array you should indicate this in the api property. There are t
 
 `ApiProperty({type:[String]}) OR ApiProperty({type:String, isArray:true})`
 
-I enforce the second long way! You can turn this off if you prefer the shorthand way but you won't get warned if you missed the array specification.
+I enforce the second long way! You can turn this rule off if you prefer the shorthand way, but you won't get warned if you missed the array specification.
 
-This passes
+This PASSES - property is array and specifies isArray
 
 ```ts
 class TestClass {
@@ -510,7 +549,7 @@ class TestClass {
 }
 ```
 
-This passes
+This PASSES - property is array and specifies isArray
 
 ```ts
 class TestClass {

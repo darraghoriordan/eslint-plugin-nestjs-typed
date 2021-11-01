@@ -19,7 +19,11 @@ module.exports = {
         project: ["./tsconfig.json"],
         sourceType: "module",
     },
+    settings: {
+        "import/extensions": [".ts"],
+    },
     rules: {
+        "import/namespace": "off", // this is very slow
         "unicorn/filename-case": [
             "warn",
             {
