@@ -51,6 +51,52 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             `,
         },
         {
+            //mixed quotes shouldn't matter
+            code: `
+            @ApiTags("Custom Bot")
+            @ApiBearerAuth()
+            @UseGuards(DefaultAuthGuard)
+            @Controller("custom-bot")
+            export class CustomBotController {
+                constructor(
+                ) {}
+            
+                @Get(':uuid')
+                @ApiOkResponse({ type: CustomBot })
+                findOne(
+                    @Param("uuid") uuid: string,
+                    @Request() request: RequestWithUser
+                ): Promise<CustomBot> {
+                    return this.customBotService.findOne(uuid, request.user.uuid);
+                }
+            
+            }
+            `,
+        },
+        {
+            // single quotes shouldn't matter
+            code: `
+            @ApiTags("Custom Bot")
+            @ApiBearerAuth()
+            @UseGuards(DefaultAuthGuard)
+            @Controller("custom-bot")
+            export class CustomBotController {
+                constructor(
+                ) {}
+            
+                @Get(':uuid')
+                @ApiOkResponse({ type: CustomBot })
+                findOne(
+                    @Param('uuid') uuid: string,
+                    @Request() request: RequestWithUser
+                ): Promise<CustomBot> {
+                    return this.customBotService.findOne(uuid, request.user.uuid);
+                }
+            
+            }
+            `,
+        },
+        {
             code: `
             @ApiTags("Custom Bot")
             @ApiBearerAuth()

@@ -50,7 +50,9 @@ export const isParameterNameIncludedInAPathPart = (
 ): boolean => {
     return pathPartsToCheck.some((pathPart) => {
         return (
+            // note to reader: this might be better as a regex. feel free to open a pr!
             pathPart === `":${paramName}"` ||
+            pathPart === `':${paramName}'` ||
             pathPart.includes(`/:${paramName}/`) ||
             pathPart.includes(`/:${paramName}"`) ||
             pathPart.includes(`":${paramName}/`)
