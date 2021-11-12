@@ -219,6 +219,8 @@ export class CreateOrganisationDto {
 
 This rule will verify you have entered a `Param("name")` that has a matching url parameter in a controller or method decorator
 
+NOTE: nestjs allows for fuzzy matching params in paths with `_+?()*` as regex params. This rule doesn't support parsing paths with regex so we will ignore any routes with these characters in them.
+
 this PASSES because the uuid param is in the `Get()` decorator
 
 ```ts

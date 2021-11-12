@@ -44,6 +44,28 @@ export const parsePathParts = (decorator: TSESTree.Decorator): string[] => {
     return [];
 };
 
+/**
+ * nestjs allows for paths with _+?()*
+ * this rule doesn't support parsing those so we'll just pass
+ */
+export const hasPathPartsAnyRegexParams = (
+    pathPartsToCheck: string[]
+): boolean => {
+    // prettier-ignore
+    // eslint-disable-next-line no-useless-escape
+    const specialCharacterRegex = new RegExp("([\?\+\*\_\(\)])")
+
+    return pathPartsToCheck.some((pathPart) => {
+        return specialCharacterRegex.test(pathPart);
+    });
+};
+
+/**
+ * Checks if there is a matching path part for the paramName
+ * @param paramName
+ * @param pathPartsToCheck
+ * @returns
+ */
 export const isParameterNameIncludedInAPathPart = (
     paramName: string,
     pathPartsToCheck: string[]
@@ -121,7 +143,14 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     }) as TSESTree.Decorator;
 
     pathPartsToCheck = pathPartsToCheck.concat(parsePathParts(methodDecorator));
-
+    const shouldIgnoreThisSetOfRoutes =
+        hasPathPartsAnyRegexParams(pathPartsToCheck);
+    if (shouldIgnoreThisSetOfRoutes) {
+        return {
+            hasColonInName: false,
+            paramNameNotMatchedInPath: false,
+        };
+    }
     // check that the param name is in one path part
     return {
         hasColonInName: false,
