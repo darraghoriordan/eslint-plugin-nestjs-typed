@@ -2,18 +2,9 @@
 import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/types";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {getParserServices} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
 import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
 
-// const nestRequestMethodDecoratorNames = new Set([
-//     "Get",
-//     "Post",
-//     "Put",
-//     "Delete",
-//     "Patch",
-//     "Options",
-//     "Head",
-//     "All",
-// ]);
 const primitiveTypes = new Set([
     AST_NODE_TYPES.TSStringKeyword,
     AST_NODE_TYPES.TSBooleanKeyword,
@@ -43,6 +34,8 @@ const rule = createRule({
     defaultOptions: [],
 
     create(context) {
+        const parserServices = getParserServices(context);
+        const typeChecker = parserServices.program.getTypeChecker();
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition(node: TSESTree.PropertyDefinition): void {
@@ -64,6 +57,14 @@ const rule = createRule({
                         primitiveTypes.has(x.type)
                     );
                 if (isNodeAUnionWithAPrimitive) {
+                    return;
+                }
+                // if this is an enum we don't need a type
+                const mappedNode =
+                    parserServices.esTreeNodeToTSNodeMap.get(node);
+                const objectType = typeChecker.getTypeAtLocation(mappedNode);
+
+                if (typedTokenHelpers.isEnumType(objectType)) {
                     return;
                 }
                 // We have to make an assumption here. We assume that if there is a validation decorator on the property, this is an input DTO.

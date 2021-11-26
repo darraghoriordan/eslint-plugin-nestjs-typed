@@ -57,6 +57,20 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
             }
     `,
         },
+        {
+            // is not a primitive type so skip
+            code: `
+            enum Foo {
+                BAR
+             }
+
+            export class CreateOrganisationDto {
+                @ApiProperty({ enum: Foo, enumName: 'Foo' })
+                @Allow()
+                members!: Foo
+            }
+    `,
+        },
     ],
     invalid: [
         {

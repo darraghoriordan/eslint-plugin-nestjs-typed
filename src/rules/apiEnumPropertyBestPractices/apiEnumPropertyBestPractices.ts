@@ -3,10 +3,6 @@ import {TSESTree} from "@typescript-eslint/types";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {EnumTestResultModel} from "./enumTestResultModel";
-// eslint-disable-next-line unicorn/import-style
-//import util from "util";
-import * as tsutils from "tsutils";
-import {TypeFlags} from "typescript";
 
 const noChangesRequiredResult = new EnumTestResultModel({
     needsEnumAdded: false,
@@ -124,10 +120,7 @@ const rule = createRule({
                 const mappedNode =
                     parserServices.esTreeNodeToTSNodeMap.get(node);
                 const objectType = typeChecker.getTypeAtLocation(mappedNode);
-                const isEnumType = tsutils.isTypeFlagSet(
-                    objectType,
-                    TypeFlags.EnumLike
-                );
+                const isEnumType = typedTokenHelpers.isEnumType(objectType);
 
                 const result = hasEnumSpecifiedCorrectly(node, isEnumType);
 

@@ -7,7 +7,7 @@ import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint"
 import {parse} from "@typescript-eslint/parser";
 import ts from "typescript";
 import {unionTypeParts} from "tsutils";
-
+import * as tsutils from "tsutils";
 export const typedTokenHelpers = {
     decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
         "IsArray",
@@ -120,6 +120,28 @@ export const typedTokenHelpers = {
             loc: true,
             ...context.parserOptions,
         });
+    },
+    isEnumType(type: ts.Type) {
+        // if for some reason this returns true...
+        if (tsutils.isTypeFlagSet(type, ts.TypeFlags.Enum)) return true;
+        if (tsutils.isTypeFlagSet(type, ts.TypeFlags.EnumLike)) return true;
+
+        // it's not an enum type if it's an enum literal type
+        if (
+            tsutils.isTypeFlagSet(type, ts.TypeFlags.EnumLiteral) &&
+            !type.isUnion()
+        )
+            return false;
+
+        // get the symbol and check if its value declaration is an enum declaration
+        const symbol = type.getSymbol();
+        if (symbol == null) return false;
+
+        const {valueDeclaration} = symbol;
+        return (
+            valueDeclaration != null &&
+            valueDeclaration.kind === ts.SyntaxKind.EnumDeclaration
+        );
     },
     isOptionalPropertyValue(node: TSESTree.PropertyDefinition): boolean {
         const isUndefinedType =
