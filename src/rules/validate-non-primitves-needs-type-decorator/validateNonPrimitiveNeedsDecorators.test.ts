@@ -28,61 +28,87 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // no validation decorator
             code: `
-            export class CreateOrganisationDto {
-                @ApiProperty({ type: Person, isArray: true })
-                members!: (Person|Date);
-            }
-    `,
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    members!: (Person|Date);
+                }
+        `,
         },
         {
             // has the type decorator already
             code: `
-            export class CreateOrganisationDto {
-                @ApiProperty({ type: Person, isArray: true })
-                @ValidateNested({each:true})
-                @IsArray()
-                @Type(()=>Boolean)
-                members!: boolean[]
-            }
-    `,
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsArray()
+                    @Type(()=>Boolean)
+                    members!: boolean[]
+                }
+        `,
         },
         {
             // is a primitive type
             code: `
-            export class CreateOrganisationDto {
-                @ApiProperty({ type: Person, isArray: true })
-                @ValidateNested({each:true})
-                @IsBoolean()
-                members!: boolean
-            }
-    `,
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsBoolean()
+                    members!: boolean
+                }
+        `,
         },
         {
             // is not a primitive type so skip
             code: `
-            enum Foo {
-                BAR
-             }
+                enum Foo {
+                    BAR
+                 }
 
+                export class CreateOrganisationDto {
+                    @ApiProperty({ enum: Foo, enumName: 'Foo' })
+                    @Allow()
+                    members!: Foo
+                }
+        `,
+        },
+        {
+            // is an array - should have type
+            code: `
             export class CreateOrganisationDto {
-                @ApiProperty({ enum: Foo, enumName: 'Foo' })
-                @Allow()
-                members!: Foo
+                @ApiProperty({ type: Person, isArray: true })
+                @ValidateNested({each:true})
+                @Type(()=> Foo)
+                members!: Foo[];
             }
     `,
         },
     ],
     invalid: [
         {
-            // is an array
+            // is an array - should have type
             code: `
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
                 @ValidateNested({each:true})
-                @IsArray()
-                members!: (Person|Date)[];
+                members!: Foo[];
             }
     `,
+            errors: [
+                {
+                    messageId: "shouldUseTypeDecorator",
+                },
+            ],
+        },
+        {
+            // is an array with union - should have type
+            code: `
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsArray()
+                    members!: (Person|Date)[];
+                }
+        `,
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",
@@ -92,13 +118,13 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is not a primitive type
             code: `
-            export class CreateOrganisationDto {
-                @ApiProperty({ type: Person, isArray: true })
-                @ValidateNested({each:true})
-                @IsDate()
-                members!: Date;
-            }
-    `,
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsDate()
+                    members!: Date;
+                }
+        `,
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",
@@ -106,14 +132,15 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
             ],
         },
         {
+            // is a custom class
             code: `
-            export class CreateOrganisationDto {
-                @ApiProperty({ type: Person, isArray: true })
-                @ValidateNested({each:true})
-                @IsDefined()
-                members!: CustomClass;
-            }
-    `,
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsDefined()
+                    members!: CustomClass;
+                }
+        `,
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",

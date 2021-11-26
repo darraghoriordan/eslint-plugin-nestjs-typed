@@ -4,6 +4,7 @@ import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {getParserServices} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
 import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
+//import util from "util";
 
 const primitiveTypes = new Set([
     AST_NODE_TYPES.TSStringKeyword,
@@ -39,27 +40,46 @@ const rule = createRule({
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition(node: TSESTree.PropertyDefinition): void {
-                // property is not a primitive type
-
-                const isNodeTypePrimitive =
-                    node.typeAnnotation?.typeAnnotation?.type &&
-                    primitiveTypes.has(
-                        node.typeAnnotation?.typeAnnotation?.type
+                // if it's an array get the element type
+                let mainType: AST_NODE_TYPES | undefined;
+                const isAnArray =
+                    typedTokenHelpers.isTypeArrayTypeOrUnionOfArrayTypes(
+                        node,
+                        parserServices,
+                        typeChecker
                     );
+                if (isAnArray) {
+                    mainType = (
+                        node.typeAnnotation
+                            ?.typeAnnotation as TSESTree.TSArrayType
+                    )?.elementType.type;
+                } else {
+                    mainType = node.typeAnnotation?.typeAnnotation?.type;
+                }
+
+                // if this couldn't be found we don't understand the AST
+                if (!mainType) {
+                    return;
+                }
+
+                // property is a primitive type - no need to validate
+                const isNodeTypePrimitive = primitiveTypes.has(mainType);
                 if (isNodeTypePrimitive) {
                     return;
                 }
 
+                // property is a union with primitive type - no need to validate
                 const isNodeAUnionWithAPrimitive =
-                    node.typeAnnotation?.typeAnnotation?.type ===
-                        AST_NODE_TYPES.TSUnionType &&
-                    node.typeAnnotation?.typeAnnotation?.types.some((x) =>
-                        primitiveTypes.has(x.type)
-                    );
+                    mainType === AST_NODE_TYPES.TSUnionType &&
+                    (
+                        node.typeAnnotation
+                            ?.typeAnnotation as TSESTree.TSUnionType
+                    ).types?.some((x) => primitiveTypes.has(x.type));
                 if (isNodeAUnionWithAPrimitive) {
                     return;
                 }
-                // if this is an enum we don't need a type
+
+                // if this is an enum we don't need a type decorator
                 const mappedNode =
                     parserServices.esTreeNodeToTSNodeMap.get(node);
                 const objectType = typeChecker.getTypeAtLocation(mappedNode);
@@ -67,9 +87,12 @@ const rule = createRule({
                 if (typedTokenHelpers.isEnumType(objectType)) {
                     return;
                 }
-                // We have to make an assumption here. We assume that if there is a validation decorator on the property, this is an input DTO.
+
+                // We have to make an assumption here. We assume that
+                // if there is a validation decorator on the property, this is an input DTO.
                 // And for input DTOs they should specify types.
-                // property has a validation decorator but not IsEnum (we don't care about un-validated properties and enums don't need Type())
+                // property has a validation decorator but not IsEnum
+                // (we don't care about un-validated properties and enums don't need Type())
                 const foundClassValidatorDecorators =
                     typedTokenHelpers.getDecoratorsNamed(
                         node,

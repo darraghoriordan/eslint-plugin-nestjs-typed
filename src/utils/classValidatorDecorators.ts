@@ -96,4 +96,5 @@ export const classValidatorDecorators = [
     "IsPassportNumber",
     "IsPostalCode",
     "IsSemVer",
+    "ValidateNested",
 ];
