@@ -52,7 +52,7 @@
         "@semantic-release/exec": "5.0.0",
         "@types/eslint": "7.28.2",
         "@types/jest": "26.0.23",
-        "@types/node": "^15.6.1",
+        "@types/node": "15.6.1",
         "@typescript-eslint/eslint-plugin": "5.1.0",
         "@typescript-eslint/parser": "5.1.0",
         "eslint": "8.1.0",

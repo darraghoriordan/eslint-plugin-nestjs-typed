@@ -73,3 +73,4 @@ _ts3.4
 packages/types/src/ast-spec.ts
 .jest_cache
 false
+.npmrc
