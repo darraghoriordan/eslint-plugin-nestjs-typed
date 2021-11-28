@@ -1,5 +1,3 @@
-process.env.SAUCE_CORE_CONFIG_FOLDER_PATH = "/tests/config";
-
 module.exports = {
     cacheDirectory: __dirname + "/.jest_cache",
     roots: ["<rootDir>/src"],

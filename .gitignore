@@ -74,3 +74,4 @@ packages/types/src/ast-spec.ts
 .jest_cache
 false
 .npmrc
+junit-TEST.xml
