@@ -23,6 +23,9 @@ module.exports = {
         "import/extensions": [".ts"],
     },
     rules: {
+        "import/default": "off",
+        "import/no-named-as-default": "off",
+        "import/no-named-as-default-member": "off",
         "import/namespace": "off", // this is very slow
         "unicorn/filename-case": [
             "warn",
