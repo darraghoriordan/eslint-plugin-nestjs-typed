@@ -11,9 +11,9 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: "14"
-            - run: npm ci
-            - run: npm run test
-            - run: npm run build
+            - run: yarn
+            - run: yarn test
+            - run: yarn build
             - name: Release
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
