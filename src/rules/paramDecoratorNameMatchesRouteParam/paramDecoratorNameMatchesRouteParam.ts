@@ -77,7 +77,9 @@ export const isParameterNameIncludedInAPathPart = (
             pathPart === `':${paramName}'` ||
             pathPart.includes(`/:${paramName}/`) ||
             pathPart.includes(`/:${paramName}"`) ||
-            pathPart.includes(`":${paramName}/`)
+            pathPart.includes(`":${paramName}/`) ||
+            pathPart.includes(`/:${paramName}'`) ||
+            pathPart.includes(`':${paramName}/`)
         );
     });
 };
