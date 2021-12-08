@@ -55,6 +55,7 @@
         "@types/node": "16.11.11",
         "@typescript-eslint/eslint-plugin": "5.5.0",
         "@typescript-eslint/parser": "5.5.0",
+        "class-validator": "^0.13.2",
         "eslint": "8.3.0",
         "eslint-config-prettier": "8.3.0",
         "eslint-plugin-import": "2.25.3",
@@ -73,6 +74,7 @@
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^5.0.0",
+        "class-validator": "*",
         "eslint": "^8.0.0"
     },
     "keywords": [
