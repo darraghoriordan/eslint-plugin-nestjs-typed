@@ -1,11 +1,11 @@
 import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
-import rule from "./noWhitelistedProperties";
+import rule from "./allPropertiesAreWhitelisted";
 
 const ruleTester = new RuleTester({
     parser: "@typescript-eslint/parser",
 });
 
-ruleTester.run("no-whitelisted-properties", rule, {
+ruleTester.run("all-properties-are-whitelisted", rule, {
     valid: [
         {
             code: `

@@ -9,7 +9,7 @@ import shouldSpecifyForbidUnknownValues from "./shouldSpecifyForbidUnknownValues
 import parameterDecoratorNameMatchesRouteParam from "./paramDecoratorNameMatchesRouteParam/paramDecoratorNameMatchesRouteParam";
 import validateNonPrimitiveNeedsDecorators from "./validate-non-primitves-needs-type-decorator/validateNonPrimitiveNeedsDecorators";
 import validateNestedOfArrayShouldSetEach from "./validateNestedOfArrayShouldSetEach/validateNestedOfArrayShouldSetEach";
-import noWhitelistedProperties from "./noWhitelistedProperties/noWhitelistedProperties";
+import allPropertiesAreWhitelisted from "./allPropertiesAreWhitelisted/allPropertiesAreWhitelisted";
 
 const allRules = {
     "api-property-matches-property-optionality":
@@ -30,7 +30,7 @@ const allRules = {
         validateNonPrimitiveNeedsDecorators,
     "validate-nested-of-array-should-set-each":
         validateNestedOfArrayShouldSetEach,
-    "no-whitelisted-properties": noWhitelistedProperties,
+    "all-properties-are-whitelisted": allPropertiesAreWhitelisted,
 };
 
 export default allRules;

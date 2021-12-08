@@ -27,5 +27,6 @@ export = {
             "error",
         "@darraghor/nestjs-typed/validate-nested-of-array-should-set-each":
             "error",
+        "@darraghor/nestjs-typed/all-properties-are-whitelisted": "error",
     },
 };

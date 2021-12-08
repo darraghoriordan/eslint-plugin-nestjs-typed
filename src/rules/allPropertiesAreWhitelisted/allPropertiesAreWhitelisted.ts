@@ -8,16 +8,16 @@ const CLASS_VALIDATOR_DECORATOR_NAMES = new Set(
 );
 
 const rule = createRule({
-    name: "no-whitelisted-properties",
+    name: "all-properties-are-whitelisted",
     meta: {
         docs: {
-            description: "Enforce no properties are whitelisted",
+            description: "Enforce all properties are whitelisted",
             recommended: "error",
             requiresTypeChecking: false,
         },
         messages: {
             "missing-property-decorator":
-                "Property has no class-validator decorator (use @Allow so it would not be whitelisted)",
+                "Property has no class-validator decorator (use @Allow() if you don't need a validation)",
         },
         type: "problem",
         schema: {},
