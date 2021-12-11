@@ -48,11 +48,24 @@ const rule = createRule({
                         parserServices,
                         typeChecker
                     );
+                // this is getting very messy
                 if (isAnArray) {
-                    mainType = (
+                    const mainTypeInShortArray = (
                         node.typeAnnotation
                             ?.typeAnnotation as TSESTree.TSArrayType
-                    )?.elementType.type;
+                    )?.elementType?.type;
+                    if (!mainTypeInShortArray) {
+                        // try to get the type of Array<type> syntax
+                        const foundParams = (
+                            node.typeAnnotation
+                                ?.typeAnnotation as TSESTree.TSTypeReference
+                        )?.typeParameters?.params;
+                        if (foundParams && foundParams.length === 1) {
+                            mainType = foundParams[0].type;
+                        }
+                    } else {
+                        mainType = mainTypeInShortArray;
+                    }
                 } else {
                     mainType = node.typeAnnotation?.typeAnnotation?.type;
                 }

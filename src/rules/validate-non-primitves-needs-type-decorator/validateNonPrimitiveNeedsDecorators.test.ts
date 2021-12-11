@@ -15,6 +15,17 @@ const ruleTester = new RuleTester({
 ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     valid: [
         {
+            // scenario from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/21
+            code: `
+            class ExampleDto {
+                @ApiProperty({ isArray: true })
+                @Allow()
+                @Type(() => Array)
+                events!: Array<string>;
+              }
+    `,
+        },
+        {
             // no validation decorator
             code: `
             export class CreateOrganisationDto {
