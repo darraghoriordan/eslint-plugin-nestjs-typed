@@ -233,6 +233,18 @@ export class CreateOrganisationDto {
 }
 ```
 
+This PASSES because it is a primitive array. These don't need `@Type()` decorators.
+
+````ts
+class ExampleDto {
+    @ApiProperty({
+      isArray: true,
+    })
+    @Allow()
+   exampleProperty!: string[];
+  }
+    ```
+
 This FAILS because you should always tell class-transformer the type for an array
 
 ```ts
@@ -242,7 +254,7 @@ export class CreateOrganisationDto {
     @IsArray()
     members!: (Person | Date)[];
 }
-```
+````
 
 This FAILS because Date is not a primitive type (string, number, boolean)
 
