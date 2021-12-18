@@ -4,7 +4,6 @@ import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {getParserServices} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
 import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
-//import util from "util";
 
 const primitiveTypes = new Set([
     AST_NODE_TYPES.TSStringKeyword,

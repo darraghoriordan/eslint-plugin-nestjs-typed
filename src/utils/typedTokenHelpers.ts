@@ -23,7 +23,17 @@ export const typedTokenHelpers = {
         parserService: ParserServices,
         checker: ts.TypeChecker
     ): boolean {
+        if (
+            (node as TSESTree.PropertyDefinition)?.typeAnnotation
+                ?.typeAnnotation?.type === TSESTree.AST_NODE_TYPES.TSArrayType
+        ) {
+            return true;
+        }
+
         const nodeType = this.getNodeType(node, parserService, checker);
+        if (checker.isArrayType(nodeType)) {
+            return true;
+        }
         for (const t of unionTypeParts(nodeType)) {
             if (!checker.isArrayType(t)) {
                 return false;

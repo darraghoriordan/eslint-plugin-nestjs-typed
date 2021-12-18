@@ -15,6 +15,30 @@ const ruleTester = new RuleTester({
 ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     valid: [
         {
+            // is a primitive type array - doesn't need type (from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/22)
+            code: `
+            class ExampleDto {
+                @ApiProperty({
+                  isArray: true,
+                })
+                @Allow()
+               exampleProperty!: string[];
+              }
+    `,
+        },
+        {
+            // is an OPTIONAL primitive type array - doesn't need type (from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/22)
+            code: `
+            class ExampleDto {
+                @ApiPropertyOptional({
+                  isArray: true,
+                })
+                @Allow()
+               exampleProperty?: string[];
+              }
+    `,
+        },
+        {
             // scenario from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/21
             code: `
             class ExampleDto {
@@ -83,7 +107,7 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         `,
         },
         {
-            // is an array - should have type
+            // is an array - should have type and has it so pass!
             code: `
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
@@ -102,6 +126,23 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
                 @ApiProperty({ type: Person, isArray: true })
                 @ValidateNested({each:true})
                 members!: Foo[];
+            }
+    `,
+            errors: [
+                {
+                    messageId: "shouldUseTypeDecorator",
+                },
+            ],
+        },
+        {
+            // is an OPTIONAL array - should have type
+            code: `
+            export class Foo {}
+            
+            export class CreateOrganisationDto {
+                @ApiProperty({ type: Person, isArray: true })
+                @ValidateNested({each:true})
+                members?: Foo[];
             }
     `,
             errors: [
