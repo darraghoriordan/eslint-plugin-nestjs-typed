@@ -1,4 +1,4 @@
-import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {RuleTester} from "@typescript-eslint/utils/dist/eslint-utils";
 import rule from "./allPropertiesAreWhitelisted";
 
 const ruleTester = new RuleTester({
