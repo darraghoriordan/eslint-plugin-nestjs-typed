@@ -26,6 +26,12 @@ ruleTester.run("api-property-returning-array-should-set-array", rule, {
                 @ApiPropertyOptional({isArray:true})
                 thisIsAStringProp?: Array<string>;}`,
         },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiPropertyOptional()
+                thisIsABooleanProp = false}`,
+        },
     ],
     invalid: [
         {
