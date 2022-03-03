@@ -26,14 +26,16 @@ export const shouldSetArrayProperty = (
             "isArray",
             true
         );
+
+    const typeAnnotation = node.typeAnnotation?.typeAnnotation;
     // handle string[] or Array<string>
     const isArrayType =
         (
-            (node.typeAnnotation?.typeAnnotation as TSESTree.TSTypeReference)
-                .typeName as TSESTree.Identifier
+            (typeAnnotation as TSESTree.TSTypeReference | undefined)
+                ?.typeName as TSESTree.Identifier
         )?.name === "Array";
     const isTypescriptArrayType =
-        node.typeAnnotation?.typeAnnotation.type === AST_NODE_TYPES.TSArrayType;
+        typeAnnotation?.type === AST_NODE_TYPES.TSArrayType;
     const isAnArrayLikeType = isArrayType || isTypescriptArrayType;
 
     return new ArraySetResultModel(
