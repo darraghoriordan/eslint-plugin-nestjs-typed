@@ -1,4 +1,4 @@
-import {TSESTree} from "@typescript-eslint/experimental-utils";
+import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 // eslint-disable-next-line unicorn/import-style
 //import util from "util";

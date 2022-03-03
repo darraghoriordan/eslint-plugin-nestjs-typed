@@ -1,5 +1,5 @@
-import {TSESTree} from "@typescript-eslint/experimental-utils";
-import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import {TSESTree} from "@typescript-eslint/utils";
+import {RuleContext} from "@typescript-eslint/utils/dist/ts-eslint";
 import {createRule} from "../../utils/createRule";
 import FileEnumeratorWrapper from "../../utils/files/fileEnumerationWrapper";
 import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper";

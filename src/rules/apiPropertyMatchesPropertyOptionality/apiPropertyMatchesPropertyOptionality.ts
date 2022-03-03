@@ -1,6 +1,6 @@
-// Import { getParserServices } from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+// Import { getParserServices } from "@typescript-eslint/utils/dist/eslint-utils";
 // import * as tsutils from "tsutils";
-// import { getParserServices } from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+// import { getParserServices } from "@typescript-eslint/utils/dist/eslint-utils";
 import {TSESTree} from "@typescript-eslint/types";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";

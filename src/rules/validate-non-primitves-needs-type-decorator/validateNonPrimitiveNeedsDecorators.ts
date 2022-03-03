@@ -2,7 +2,7 @@
 import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/types";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {getParserServices} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {getParserServices} from "@typescript-eslint/utils/dist/eslint-utils";
 import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
 
 const primitiveTypes = new Set([

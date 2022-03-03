@@ -10,8 +10,10 @@ import parameterDecoratorNameMatchesRouteParam from "./paramDecoratorNameMatches
 import validateNonPrimitiveNeedsDecorators from "./validate-non-primitves-needs-type-decorator/validateNonPrimitiveNeedsDecorators";
 import validateNestedOfArrayShouldSetEach from "./validateNestedOfArrayShouldSetEach/validateNestedOfArrayShouldSetEach";
 import allPropertiesAreWhitelisted from "./allPropertiesAreWhitelisted/allPropertiesAreWhitelisted";
+import allPropertiesHaveExplicitDefined from "./allPropertiesHaveExplicitDefined/allPropertiesHaveExplicitDefined";
 
 const allRules = {
+    "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
         apiPropertyMatchesPropertyOptionality,
     "injectable-should-be-provided": injectableShouldBeProvided,

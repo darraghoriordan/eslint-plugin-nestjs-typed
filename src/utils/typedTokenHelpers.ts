@@ -2,8 +2,8 @@ import {
     AST_NODE_TYPES,
     ParserServices,
     TSESTree,
-} from "@typescript-eslint/experimental-utils";
-import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+} from "@typescript-eslint/utils";
+import {RuleContext} from "@typescript-eslint/utils/dist/ts-eslint";
 import {parse} from "@typescript-eslint/parser";
 import ts from "typescript";
 import {unionTypeParts} from "tsutils";

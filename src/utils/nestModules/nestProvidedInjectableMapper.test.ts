@@ -1,4 +1,4 @@
-import {TSESTree} from "@typescript-eslint/experimental-utils";
+import {TSESTree} from "@typescript-eslint/utils";
 import {EcmaVersion, ParserOptions} from "@typescript-eslint/types";
 import {typedTokenHelpers} from "../typedTokenHelpers";
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";

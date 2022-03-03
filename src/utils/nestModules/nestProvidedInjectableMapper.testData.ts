@@ -1,7 +1,7 @@
 import {
     EcmaVersion,
     ParserOptions,
-} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+} from "@typescript-eslint/utils/dist/ts-eslint";
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
 export const fakeFilePath = "fake/path.ts";
 export const fakeContext = {
