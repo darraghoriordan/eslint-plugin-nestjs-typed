@@ -12,11 +12,11 @@ import rule, {
     parsePathParts,
 } from "./paramDecoratorNameMatchesRouteParam";
 
-import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {ESLintUtils} from "@typescript-eslint/utils";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new RuleTester({
+const ruleTester = new ESLintUtils.RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,

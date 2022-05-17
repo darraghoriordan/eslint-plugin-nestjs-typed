@@ -1,10 +1,5 @@
-import {
-    AST_NODE_TYPES,
-    ParserServices,
-    TSESTree,
-} from "@typescript-eslint/experimental-utils";
-import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
-import {parse} from "@typescript-eslint/parser";
+import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {parse, ParserServices} from "@typescript-eslint/parser";
 import ts from "typescript";
 import {unionTypeParts} from "tsutils";
 import * as tsutils from "tsutils";
@@ -121,7 +116,7 @@ export const typedTokenHelpers = {
     parseStringToAst(
         code: string,
         path: string,
-        context: Readonly<RuleContext<never, never[]>>
+        context: Readonly<TSESLint.RuleContext<never, never[]>>
     ): TSESTree.Program {
         return parse(code, {
             filePath: path,

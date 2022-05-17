@@ -1,7 +1,7 @@
-import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {ESLintUtils} from "@typescript-eslint/utils";
 import rule from "./allPropertiesAreWhitelisted";
 
-const ruleTester = new RuleTester({
+const ruleTester = new ESLintUtils.RuleTester({
     parser: "@typescript-eslint/parser",
 });
 

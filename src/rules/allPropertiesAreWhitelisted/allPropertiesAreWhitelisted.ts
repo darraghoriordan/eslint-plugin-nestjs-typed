@@ -1,5 +1,4 @@
-import {AST_NODE_TYPES} from "@typescript-eslint/experimental-utils";
-import {PropertyDefinition} from "@typescript-eslint/types/dist/ast-spec";
+import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
 import * as classValidator from "class-validator";
 import {createRule} from "../../utils/createRule";
 
@@ -16,6 +15,7 @@ const rule = createRule({
             requiresTypeChecking: false,
         },
         messages: {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             "missing-property-decorator":
                 "Property has no class-validator decorator (use @Allow() if you don't need a validation)",
         },
@@ -27,8 +27,8 @@ const rule = createRule({
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node) {
-                const withDecorator: PropertyDefinition[] = [];
-                const withoutDecorator: PropertyDefinition[] = [];
+                const withDecorator: TSESTree.PropertyDefinition[] = [];
+                const withoutDecorator: TSESTree.PropertyDefinition[] = [];
                 for (const element of node.body.body) {
                     if (element.type !== AST_NODE_TYPES.PropertyDefinition) {
                         continue;

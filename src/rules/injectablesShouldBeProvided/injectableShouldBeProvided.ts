@@ -1,9 +1,7 @@
-import {TSESTree} from "@typescript-eslint/experimental-utils";
-import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import FileEnumeratorWrapper from "../../utils/files/fileEnumerationWrapper";
 import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper";
-
 import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
@@ -30,7 +28,10 @@ const checkNode = (
     propertyName: "controllers" | "providers",
     messageId: "injectableInModule" | "controllersInModule",
     context: Readonly<
-        RuleContext<"injectableInModule" | "controllersInModule", never[]>
+        TSESLint.RuleContext<
+            "injectableInModule" | "controllersInModule",
+            never[]
+        >
     >
 ) => {
     if (
@@ -58,7 +59,7 @@ const checkNode = (
 function initialiseModuleMappings(
     sourcePath: string,
     filterFromPaths: string[],
-    context: Readonly<RuleContext<never, never[]>>
+    context: Readonly<TSESLint.RuleContext<never, never[]>>
 ) {
     const mappedSource = NestProvidedInjectableMapper.mapDefaultSource(
         sourcePath,
