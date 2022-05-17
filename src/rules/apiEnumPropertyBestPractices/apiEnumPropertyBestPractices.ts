@@ -1,5 +1,4 @@
-import {TSESTree} from "@typescript-eslint/types";
-import {ESLintUtils} from "@typescript-eslint/utils";
+import {ESLintUtils, TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {EnumTestResultModel} from "./enumTestResultModel";
@@ -109,7 +108,16 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<
+                | "needsEnumNameAdded"
+                | "needsTypeRemoved"
+                | "enumNameShouldMatchType",
+                never[]
+            >
+        >
+    ) {
         //const globalScope = context.getScope();
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();

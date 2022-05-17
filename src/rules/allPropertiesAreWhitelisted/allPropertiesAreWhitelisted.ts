@@ -1,4 +1,4 @@
-import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
 import * as classValidator from "class-validator";
 import {createRule} from "../../utils/createRule";
 
@@ -23,7 +23,11 @@ const rule = createRule({
         schema: {},
     },
     defaultOptions: [],
-    create: function (context) {
+    create: function (
+        context: Readonly<
+            TSESLint.RuleContext<"missing-property-decorator", never[]>
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node) {

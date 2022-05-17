@@ -1,4 +1,4 @@
-import {TSESTree} from "@typescript-eslint/utils";
+import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 // eslint-disable-next-line unicorn/import-style
 //import util from "util";
@@ -60,7 +60,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(context: Readonly<TSESLint.RuleContext<"mainMessage", never[]>>) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             VariableDeclarator(node: TSESTree.VariableDeclarator): void {

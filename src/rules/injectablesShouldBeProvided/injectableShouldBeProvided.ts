@@ -119,7 +119,14 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<
+                "injectableInModule" | "controllersInModule",
+                never[]
+            >
+        >
+    ) {
         const {
             src,
             filterFromPaths,
