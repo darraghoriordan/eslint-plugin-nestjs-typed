@@ -1,4 +1,4 @@
-import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/types";
+import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import ArraySetResultModel from "./arraySetResultModel";
@@ -62,7 +62,14 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<
+                "shouldSetArrayPropertyTrue" | "shouldSetArrayPropertyFalse",
+                never[]
+            >
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition: (node: TSESTree.Node) => {

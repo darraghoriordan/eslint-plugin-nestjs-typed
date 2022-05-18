@@ -65,7 +65,7 @@ module.exports = {
             "error",
             {
                 selector: "default",
-                format: ["camelCase"],
+                format: null,
             },
             {
                 selector: "variable",

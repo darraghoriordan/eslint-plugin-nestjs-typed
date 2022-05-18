@@ -1,9 +1,9 @@
-import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {ESLintUtils} from "@typescript-eslint/utils";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import rule from "./apiMethodsShouldSpecifyApiResponse";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new RuleTester({
+const ruleTester = new ESLintUtils.RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,

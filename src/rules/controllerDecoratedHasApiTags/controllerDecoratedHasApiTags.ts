@@ -1,7 +1,7 @@
 // Import { getParserServices } from "@typescript-eslint/experimental-utils/dist/eslint-utils";
 // import * as tsutils from "tsutils";
 // import { getParserServices } from "@typescript-eslint/experimental-utils/dist/eslint-utils";
-import {TSESTree} from "@typescript-eslint/types";
+import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
@@ -38,7 +38,11 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<"shouldUseApiTagDecorator", never[]>
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node: TSESTree.ClassDeclaration): void {

@@ -1,5 +1,4 @@
-import {TSESTree} from "@typescript-eslint/experimental-utils";
-import {RuleContext} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import {TSESLint, TSESTree} from "@typescript-eslint/utils";
 
 import * as unambiguous from "eslint-module-utils/unambiguous";
 // eslint-disable-next-line import/no-unresolved
@@ -35,7 +34,7 @@ const NestProvidedInjectableMapper = {
     },
     parseFileList(
         files: Array<FilePath>,
-        context: Readonly<RuleContext<never, never[]>>
+        context: Readonly<TSESLint.RuleContext<never, never[]>>
     ): Map<string, NestProvidedInjectablesMap> {
         const moduleMaps = new Map<string, NestProvidedInjectablesMap>();
         files

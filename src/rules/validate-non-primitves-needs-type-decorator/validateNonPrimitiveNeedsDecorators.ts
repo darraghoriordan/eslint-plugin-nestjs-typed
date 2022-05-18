@@ -1,8 +1,12 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/types";
+import {
+    AST_NODE_TYPES,
+    TSESTree,
+    ESLintUtils,
+    TSESLint,
+} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {getParserServices} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
 import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
 
 const primitiveTypes = new Set([
@@ -33,8 +37,12 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
-        const parserServices = getParserServices(context);
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<"shouldUseTypeDecorator", never[]>
+        >
+    ) {
+        const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
