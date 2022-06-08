@@ -3,7 +3,7 @@
 // Theres some issue with the loader here. it can't see the eslint use-at-your-own-risk tools
 
 import rule from "./injectableShouldBeProvided";
-import {RuleTester} from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {RuleTester} from "@typescript-eslint/utils/dist/eslint-utils";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 
 const tsRootDirectory = getFixturesRootDirectory();
