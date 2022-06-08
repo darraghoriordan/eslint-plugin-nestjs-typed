@@ -11,6 +11,8 @@ import validateNonPrimitiveNeedsDecorators from "./validate-non-primitves-needs-
 import validateNestedOfArrayShouldSetEach from "./validateNestedOfArrayShouldSetEach/validateNestedOfArrayShouldSetEach";
 import allPropertiesAreWhitelisted from "./allPropertiesAreWhitelisted/allPropertiesAreWhitelisted";
 import noConflictingDecorators from "./noConflictingDecorators/noConflictingDecorators";
+import allDefinedPropertyMustBeDecored from "./allDefinedPropertyMustBeDecored/allDefinedPropertyMustBeDecored";
+import allOptionnalPropertyMustBeDecored from "./allOptionnalPropertyMustBeDecored/allOptionnalPropertyMustBeDecored";
 
 const allRules = {
     "no-conflicting-decorators": noConflictingDecorators,
@@ -33,6 +35,8 @@ const allRules = {
     "validate-nested-of-array-should-set-each":
         validateNestedOfArrayShouldSetEach,
     "all-properties-are-whitelisted": allPropertiesAreWhitelisted,
+    "all-defined-property-must-be-decored": allDefinedPropertyMustBeDecored,
+    "all-optionnal-property-must-be-decored": allOptionnalPropertyMustBeDecored,
 };
 
 export default allRules;

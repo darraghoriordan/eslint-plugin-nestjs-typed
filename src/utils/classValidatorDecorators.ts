@@ -1,5 +1,4 @@
-export const classValidatorDecorators = [
-    "Allow",
+export const typeCheckingDecorator = [
     "ArrayContains",
     "ArrayMaxSize",
     "ArrayMinSize",
@@ -25,7 +24,6 @@ export const classValidatorDecorators = [
     "IsDate",
     "IsDateString",
     "IsDecimal",
-    "IsDefined",
     "IsDivisibleBy",
     "IsEAN",
     "IsEmail",
@@ -75,7 +73,6 @@ export const classValidatorDecorators = [
     "IsNumberString",
     "IsObject",
     "IsOctal",
-    "IsOptional",
     "IsPassportNumber",
     "IsPhoneNumber",
     "IsPort",
@@ -104,6 +101,14 @@ export const classValidatorDecorators = [
     "ValidateBy",
     "ValidateIf",
     "ValidateNested",
+    "ValidatePromise",
+];
+
+export const classValidatorDecorators = [
+    ...typeCheckingDecorator,
+    "Allow",
+    "IsDefined",
+    "IsOptional",
 ];
 
 type ClassValidatorDecorators = typeof classValidatorDecorators[number];

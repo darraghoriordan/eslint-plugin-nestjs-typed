@@ -1,6 +1,6 @@
 import {RuleTester} from "@typescript-eslint/utils/dist/eslint-utils";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
-import rule from "./allPropertiesHaveExplicitDefined";
+import rule from "./allDefinedPropertyMustBeDecored";
 
 const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({
@@ -12,27 +12,12 @@ const ruleTester = new RuleTester({
     },
 });
 
-ruleTester.run("all-properties-have-explicit-defined", rule, {
+ruleTester.run("all-defined-property-must-be-decored", rule, {
     valid: [
         {
             code: `
 class A {
-  @A
-  b: string
-}
-        `,
-        },
-        {
-            code: `
-class A {
-  @A()
-  b: string
-}
-        `,
-        },
-        {
-            code: `
-class A {
+  @IsDefined()
   b: string
 }
     `,
@@ -80,23 +65,8 @@ class A {
         {
             code: `
 class A {
-  @IsInt()
-  @IsOptional()
-  b?: number
   @IsString()
   c: string
-}
-    `,
-        },
-        {
-            code: `
-class A {
-  @IsInt()
-  @IsOptional()
-  b?: number
-  @IsString()
-  @IsOptional()
-  c?: string
 }
     `,
         },
@@ -105,25 +75,10 @@ class A {
         {
             code: `
 class A {
-  @IsDefined()
+  @A
   b: string
-  c?: string
 }
-    `,
-            errors: [
-                {
-                    messageId: "missing-is-optional-decorator",
-                },
-            ],
-        },
-        {
-            code: `
-class A {
-  @IsOptional()
-  b?: string
-  c: string
-}
-    `,
+        `,
             errors: [
                 {
                     messageId: "missing-is-defined-decorator",
@@ -133,7 +88,19 @@ class A {
         {
             code: `
 class A {
-  @IsOptional()
+  @A()
+  b: string
+}
+        `,
+            errors: [
+                {
+                    messageId: "missing-is-defined-decorator",
+                },
+            ],
+        },
+        {
+            code: `
+class A {
   b: string
 }
     `,
@@ -146,40 +113,13 @@ class A {
         {
             code: `
 class A {
-  @IsDefined()
-  b?: string
-}
-    `,
-            errors: [
-                {
-                    messageId: "missing-is-optional-decorator",
-                },
-            ],
-        },
-        {
-            code: `
-class A {
-  @IsInt()
-  b?: string
-}
-    `,
-            errors: [
-                {
-                    messageId: "missing-is-optional-decorator",
-                },
-            ],
-        },
-        {
-            code: `
-class A {
-  @IsDefined()
   @IsOptional()
-  b?: string
+  b: string
 }
     `,
             errors: [
                 {
-                    messageId: "conflicting-defined-decorators",
+                    messageId: "missing-is-defined-decorator",
                 },
             ],
         },
