@@ -1,6 +1,5 @@
-import {AST_NODE_TYPES} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESLint} from "@typescript-eslint/utils";
 import {PropertyDefinition} from "@typescript-eslint/types/dist/generated/ast-spec";
-import {getPropertiesDefinitions} from "../../utils/ast";
 import {createRule} from "../../utils/createRule";
 import {typeCheckingDecorator} from "../../utils/classValidatorDecorators";
 
@@ -21,19 +20,21 @@ const rule = createRule({
         schema: {},
     },
     defaultOptions: [],
-    create: function (context) {
+    create: function (
+        context: Readonly<
+            TSESLint.RuleContext<"missing-is-defined-decorator", never[]>
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassDeclaration(node) {
-                const propertyDefinitions = getPropertiesDefinitions(node);
-                for (const propertyDefinition of propertyDefinitions) {
-                    if (propertyDefinition.optional) continue;
-                    if (!hasValidDecorator(propertyDefinition))
-                        context.report({
-                            messageId: "missing-is-defined-decorator",
-                            node: propertyDefinition.key,
-                        });
-                }
+            PropertyDefinition(propertyDefinition) {
+                if (propertyDefinition.optional) return;
+                if (!hasValidDecorator(propertyDefinition))
+                    context.report({
+                        messageId: "missing-is-defined-decorator",
+                        node: propertyDefinition.key,
+                    });
+                return;
             },
         };
     },
