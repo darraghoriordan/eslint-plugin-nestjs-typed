@@ -17,6 +17,7 @@ const rule = createRule({
         },
         type: "problem",
         schema: {},
+        fixable: "code",
     },
     defaultOptions: [],
     create: function (
@@ -32,6 +33,11 @@ const rule = createRule({
                     context.report({
                         messageId: "missing-is-optional-decorator",
                         node: propertyDefinition.key,
+                        fix: (fixer: TSESLint.RuleFixer) =>
+                            fixer.insertTextBefore(
+                                propertyDefinition,
+                                "@IsOptional() "
+                            ),
                     });
                 return;
             },
