@@ -3,7 +3,6 @@ import {
     Decorator,
 } from "@typescript-eslint/types/dist/generated/ast-spec";
 import {AST_NODE_TYPES, TSESLint} from "@typescript-eslint/utils";
-import {getPropertiesDefinitions} from "../../utils/ast";
 import {classValidatorDecoratorsConflicts} from "../../utils/classValidatorDecorators";
 import {createRule} from "../../utils/createRule";
 
@@ -11,13 +10,13 @@ const rule = createRule({
     name: "no-conflicting-decorators",
     meta: {
         docs: {
-            description:
-                "Enforce all properties have an explicit defined status decorator",
+            description: "Error when two decorators are colliding",
             recommended: "error",
             requiresTypeChecking: true,
         },
         messages: {
-            "conflicting-defined-decorators":
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            "conflicting-decorators":
                 "Two or more decorators are conflicting with each other.",
         },
         type: "problem",
@@ -26,19 +25,17 @@ const rule = createRule({
     defaultOptions: [],
     create: function (
         context: Readonly<
-            TSESLint.RuleContext<"conflicting-defined-decorators", never[]>
+            TSESLint.RuleContext<"conflicting-decorators", never[]>
         >
     ) {
         return {
-            ClassDeclaration(node) {
-                const propertyDefinitions = getPropertiesDefinitions(node);
-                for (const propertyDefinition of propertyDefinitions) {
-                    if (isConflicting(propertyDefinition)) {
-                        context.report({
-                            node: propertyDefinition,
-                            messageId: "conflicting-defined-decorators",
-                        });
-                    }
+            PropertyDefinition(propertyDefinition) {
+                if (isConflicting(propertyDefinition)) {
+                    context.report({
+                        node: propertyDefinition,
+                        messageId: "conflicting-decorators",
+                    });
+                    return;
                 }
             },
         };

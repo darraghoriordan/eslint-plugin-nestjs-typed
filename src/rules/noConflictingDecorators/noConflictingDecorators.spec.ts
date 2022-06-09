@@ -12,7 +12,7 @@ const ruleTester = new RuleTester({
     },
 });
 
-ruleTester.run("all-properties-have-explicit-defined", rule, {
+ruleTester.run("no-conflicting-decorators", rule, {
     valid: [
         {
             code: `
@@ -67,7 +67,7 @@ b?: string
   `,
             errors: [
                 {
-                    messageId: "conflicting-defined-decorators",
+                    messageId: "conflicting-decorators",
                 },
             ],
         },
