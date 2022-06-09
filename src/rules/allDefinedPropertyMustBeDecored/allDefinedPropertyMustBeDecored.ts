@@ -8,13 +8,13 @@ const rule = createRule({
     meta: {
         docs: {
             description:
-                "Enforce all properties have an explicit IsDefined decorator",
+                "Enforce all properties have an explicit IsDefined decorator or type checking decorator",
             recommended: "error",
             requiresTypeChecking: true,
         },
         messages: {
             "missing-is-defined-decorator":
-                "Non-optional properties must have a decorator that checks the value is defined (for example: @IsDefined())",
+                "Defined properties must have @IsDefined() decorator or a type checking decorator",
         },
         type: "problem",
         schema: {},
