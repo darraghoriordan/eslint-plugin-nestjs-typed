@@ -28,5 +28,9 @@ export = {
         "@darraghor/nestjs-typed/validate-nested-of-array-should-set-each":
             "error",
         "@darraghor/nestjs-typed/all-properties-are-whitelisted": "error",
+        "@darraghor/nestjs-typed/no-conflicting-decorators": "error",
+        "@darraghor/nestjs-typed/all-defined-property-must-be-decored": "error",
+        "@darraghor/nestjs-typed/all-optionnal-property-must-be-decored":
+            "error",
     },
 };
