@@ -15,7 +15,6 @@ import allDefinedPropertyMustBeDecored from "./allDefinedPropertyMustBeDecored/a
 import allOptionnalPropertyMustBeDecored from "./allOptionnalPropertyMustBeDecored/allOptionnalPropertyMustBeDecored";
 
 const allRules = {
-    "no-conflicting-decorators": noConflictingDecorators,
     "api-property-matches-property-optionality":
         apiPropertyMatchesPropertyOptionality,
     "injectable-should-be-provided": injectableShouldBeProvided,
@@ -35,6 +34,7 @@ const allRules = {
     "validate-nested-of-array-should-set-each":
         validateNestedOfArrayShouldSetEach,
     "all-properties-are-whitelisted": allPropertiesAreWhitelisted,
+    "no-conflicting-decorators": noConflictingDecorators,
     "all-defined-property-must-be-decored": allDefinedPropertyMustBeDecored,
     "all-optionnal-property-must-be-decored": allOptionnalPropertyMustBeDecored,
 };
