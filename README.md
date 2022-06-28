@@ -29,10 +29,13 @@ Preventing bugs
 -   validate-nested-of-array-should-set-each
 -   validated-non-primitive-property-needs-type-decorator
 -   all-properties-are-whitelisted
+-   no-conflicting-decorators
 
 Security
 
 -   should-specify-forbid-unknown-values
+-   all-defined-property-must-be-decored
+-   all-optionnal-property-must-be-decored
 
 ## Why use this package?
 

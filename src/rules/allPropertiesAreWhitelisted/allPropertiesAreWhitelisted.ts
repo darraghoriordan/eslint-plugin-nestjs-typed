@@ -1,5 +1,6 @@
 import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
 import * as classValidator from "class-validator";
+import {getPropertiesDefinitions} from "../../utils/ast";
 import {createRule} from "../../utils/createRule";
 
 const CLASS_VALIDATOR_DECORATOR_NAMES = new Set(
@@ -33,11 +34,9 @@ const rule = createRule({
             ClassDeclaration(node) {
                 const withDecorator: TSESTree.PropertyDefinition[] = [];
                 const withoutDecorator: TSESTree.PropertyDefinition[] = [];
-                for (const element of node.body.body) {
-                    if (element.type !== AST_NODE_TYPES.PropertyDefinition) {
-                        continue;
-                    }
-                    const hasDecorator = element.decorators?.some(
+                const propertyDefinitions = getPropertiesDefinitions(node);
+                for (const propertyDefinition of propertyDefinitions) {
+                    const hasDecorator = propertyDefinition.decorators?.some(
                         (decorator) =>
                             decorator.expression.type ===
                                 AST_NODE_TYPES.CallExpression &&
@@ -48,9 +47,9 @@ const rule = createRule({
                             )
                     );
                     if (hasDecorator) {
-                        withDecorator.push(element);
+                        withDecorator.push(propertyDefinition);
                     } else {
-                        withoutDecorator.push(element);
+                        withoutDecorator.push(propertyDefinition);
                     }
                 }
                 if (withDecorator.length > 0 && withoutDecorator.length > 0) {

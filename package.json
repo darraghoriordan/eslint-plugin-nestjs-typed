@@ -41,6 +41,7 @@
     "types": "index.d.ts",
     "dependencies": {
         "@typescript-eslint/scope-manager": "5.25.0",
+        "@typescript-eslint/type-utils": "^5.27.1",
         "@typescript-eslint/utils": "5.25.0",
         "eslint-module-utils": "2.7.3",
         "reflect-metadata": "0.1.13"
