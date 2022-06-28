@@ -33,11 +33,35 @@ const rule = createRule({
                     context.report({
                         messageId: "missing-is-optional-decorator",
                         node: propertyDefinition.key,
-                        fix: (fixer: TSESLint.RuleFixer) =>
-                            fixer.insertTextBefore(
+                        *fix(fixer: TSESLint.RuleFixer) {
+                            const isDefinedDecorator =
+                                propertyDefinition.decorators?.find(
+                                    (d) =>
+                                        d.expression.type ===
+                                            AST_NODE_TYPES.CallExpression &&
+                                        d.expression.callee.type ===
+                                            AST_NODE_TYPES.Identifier &&
+                                        d.expression.callee.name === "IsDefined"
+                                );
+                            if (isDefinedDecorator) {
+                                console.log(
+                                    "isDefinedDecorator",
+                                    isDefinedDecorator
+                                );
+                                yield fixer.removeRange(
+                                    isDefinedDecorator.range
+                                );
+                                yield fixer.insertTextBefore(
+                                    propertyDefinition,
+                                    "@IsOptional()"
+                                );
+                                return;
+                            }
+                            yield fixer.insertTextBefore(
                                 propertyDefinition,
                                 "@IsOptional() "
-                            ),
+                            );
+                        },
                     });
                 return;
             },

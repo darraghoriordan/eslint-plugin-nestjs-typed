@@ -39,6 +39,11 @@ class A {
   c?: string
 }
     `,
+            output: `
+class A {
+  @IsOptional() c?: string
+}
+    `,
             errors: [
                 {
                     messageId: "missing-is-optional-decorator",
@@ -52,6 +57,12 @@ class A {
   b?: string
 }
     `,
+            output: `
+class A {
+  @IsOptional()
+  b?: string
+}
+    `,
             errors: [
                 {
                     messageId: "missing-is-optional-decorator",
@@ -62,6 +73,12 @@ class A {
             code: `
 class A {
   @IsInt()
+  b?: string
+}
+    `,
+            output: `
+class A {
+  @IsOptional() @IsInt()
   b?: string
 }
     `,
