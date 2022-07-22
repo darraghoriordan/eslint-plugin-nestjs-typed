@@ -2,18 +2,16 @@
 
 import rule from "./injectableShouldBeProvided";
 import {ESLintUtils} from "@typescript-eslint/utils";
-import path from "path";
-//import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 
-//const tsRootDirectory = getFixturesRootDirectory();
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+
+const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new ESLintUtils.RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
-        project: ["tsconfig.test.json"],
-        sourceType: "module",
-        ecmaVersion: 2021,
-        // eslint-disable-next-line unicorn/prefer-module
-        tsconfigRootDir: path.join(__dirname, "../../../"),
+        ecmaVersion: 2015,
+        tsconfigRootDir: tsRootDirectory,
+        project: "./tsconfig.json",
     },
 });
 
