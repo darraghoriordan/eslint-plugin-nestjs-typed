@@ -18,6 +18,9 @@
     },
     "include": [
         "file.ts",
-        "react.tsx"
+    ],
+    "exclude": [
+        "dist",
+        "src"
     ]
 }

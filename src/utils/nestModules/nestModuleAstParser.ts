@@ -36,7 +36,7 @@ export const nestModuleAstParser = {
                 (
                     (d.expression as TSESTree.CallExpression)
                         .callee as TSESTree.Identifier
-                ).name === "Module"
+                )?.name === "Module"
         );
         if (moduleDecorator) {
             const mappedControllerElements =
@@ -77,11 +77,18 @@ export const nestModuleAstParser = {
         );
 
         if (optionProperty) {
-            return new Set(
+            // a property can be an array expression e.g. myProp = []
+            // or a variable e.g. myProp = someArray
+            // - this only supports array expressions for now!
+
+            const propertyAsArrayExpressionElements =
                 (
                     (optionProperty as unknown as TSESTree.Property)
                         .value as TSESTree.ArrayExpression
-                ).elements.map(
+                )?.elements || [];
+
+            return new Set(
+                propertyAsArrayExpressionElements.map(
                     (element) => (element as TSESTree.Identifier).name
                 )
             );

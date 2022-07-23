@@ -5,8 +5,7 @@ import * as unambiguous from "eslint-module-utils/unambiguous";
 import {FilePath} from "eslint/use-at-your-own-risk";
 import fs from "fs";
 import {typedTokenHelpers} from "../typedTokenHelpers";
-// eslint-disable-next-line unicorn/import-style
-//import util from "util";
+
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
 import {nestModuleAstParser} from "./nestModuleAstParser";
 import {nestProviderAstParser} from "./nestProviderAstParser";
@@ -33,8 +32,10 @@ const NestProvidedInjectableMapper = {
         return [currentWorkingDirectory];
     },
     parseFileList(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         files: Array<FilePath>,
-        context: Readonly<TSESLint.RuleContext<never, never[]>>
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+        context: Readonly<TSESLint.RuleContext<never, any>>
     ): Map<string, NestProvidedInjectablesMap> {
         const moduleMaps = new Map<string, NestProvidedInjectablesMap>();
         files
@@ -92,7 +93,10 @@ const NestProvidedInjectableMapper = {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-            if (!unambiguous.isModule(ast)) {
+            if (
+                // eslint-disable-next-line no-constant-condition
+                !unambiguous.isModule(ast)
+            ) {
                 return null;
             }
             let nestModuleMap = null;

@@ -8,6 +8,13 @@ import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 let listFilesToProcess;
 let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
 
+type Options = [
+    {
+        src: string[];
+        filterFromPaths: string[];
+    }
+];
+
 const findModuleMapping = (
     classNAme: string,
     propertyName: "controllers" | "providers",
@@ -30,7 +37,7 @@ const checkNode = (
     context: Readonly<
         TSESLint.RuleContext<
             "injectableInModule" | "controllersInModule",
-            never[]
+            Options
         >
     >
 ) => {
@@ -59,7 +66,7 @@ const checkNode = (
 function initialiseModuleMappings(
     sourcePath: string,
     filterFromPaths: string[],
-    context: Readonly<TSESLint.RuleContext<never, never[]>>
+    context: Readonly<TSESLint.RuleContext<never, Options>>
 ) {
     const mappedSource = NestProvidedInjectableMapper.mapDefaultSource(
         sourcePath,
@@ -70,6 +77,7 @@ function initialiseModuleMappings(
         [".ts"],
         filterFromPaths
     );
+    console.debug("Parsing module files", listFilesToProcess);
 
     nestModuleMap = NestProvidedInjectableMapper.parseFileList(
         listFilesToProcess,
@@ -117,13 +125,18 @@ const rule = createRule({
         ],
         type: "problem",
     },
-    defaultOptions: [],
+    defaultOptions: [
+        {
+            src: ["src/**/*.ts"],
+            filterFromPaths: ["dist", "node_modules", ".test.", ".spec."],
+        },
+    ],
 
     create(
         context: Readonly<
             TSESLint.RuleContext<
                 "injectableInModule" | "controllersInModule",
-                never[]
+                Options
             >
         >
     ) {
@@ -136,7 +149,7 @@ const rule = createRule({
         } = context.options[0] || {};
 
         if (nestModuleMap === undefined || nestModuleMap.size === 0) {
-            initialiseModuleMappings(src, filterFromPaths, context);
+            initialiseModuleMappings(src[0], filterFromPaths, context);
         }
 
         return {
