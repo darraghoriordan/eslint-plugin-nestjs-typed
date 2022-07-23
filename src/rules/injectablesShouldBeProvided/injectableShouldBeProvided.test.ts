@@ -4,8 +4,11 @@ import rule from "./injectableShouldBeProvided";
 import {ESLintUtils} from "@typescript-eslint/utils";
 
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+import path from "path";
 
 const tsRootDirectory = getFixturesRootDirectory();
+console.debug("Using tsrootdirectory", {tsRootDirectory});
+
 const ruleTester = new ESLintUtils.RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
@@ -30,6 +33,13 @@ ruleTester.run("injectable-should-be-provided", rule, {
                 senderName: process.env.EMAIL_SENDER_NAME,
             }));
             `,
+            options: [
+                {
+                    // eslint-disable-next-line unicorn/prefer-module
+                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    filterFromPaths: ["node_modules", ".test.", ".spec."],
+                },
+            ],
         },
     ],
     invalid: [],
