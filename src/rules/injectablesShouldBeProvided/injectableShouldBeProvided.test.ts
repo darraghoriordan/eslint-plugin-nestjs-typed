@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 /* eslint-disable unicorn/prevent-abbreviations */
 
 import rule from "./injectableShouldBeProvided";
@@ -14,33 +15,59 @@ const ruleTester = new ESLintUtils.RuleTester({
     parserOptions: {
         ecmaVersion: 2015,
         tsconfigRootDir: tsRootDirectory,
-        project: "./tsconfig.json",
+        project: "tsconfig-withMeta.json",
     },
 });
 
 ruleTester.run("injectable-should-be-provided", rule, {
     valid: [
         {
-            //no param name provided - can't check anything
+            // I've added a reference to this provider in the /fixtures/example.module.ts file so
+            // it should not error
             code: `
-            import { registerAs} from "@nestjs/config";
-            export default registerAs("email", () => ({
-                isEmailSyncSendEnabled: process.env.EMAIL_SYNC_SEND_ENABLED,
-                emailBcc: process.env.EMAIL_BCC,
-                emailPassword: process.env.EMAIL_PASSWORD,
-                emailUsername: process.env.EMAIL_USERNAME,
-                senderEmailAddress: process.env.EMAIL_SENDER_ADDRESS,
-                senderName: process.env.EMAIL_SENDER_NAME,
-            }));
+            import {Injectable} from "./Injectable.stub";
+
+            @Injectable()
+            class ExampleProviderIncludedInModule {}
+            
+            export default ExampleProviderIncludedInModule;
             `,
             options: [
                 {
-                    // eslint-disable-next-line unicorn/prefer-module
                     src: [path.join(__dirname + "../../../fixtures", "*.ts")],
-                    filterFromPaths: ["node_modules", ".test.", ".spec."],
+                    filterFromPaths: [
+                        "node_modules",
+                        ".test.",
+                        ".spec.",
+                        "file.ts",
+                    ],
                 },
             ],
         },
     ],
-    invalid: [],
+    invalid: [
+        {
+            // this provider is not included in the module's providers located in /fixtures
+            code: `
+        import {Injectable} from "./Injectable.stub";
+
+        @Injectable()
+        class ExampleProviderNOTInModule {}
+        
+        export default ExampleProviderNOTInModule;
+        `,
+            errors: [{messageId: "injectableInModule"}],
+            options: [
+                {
+                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    filterFromPaths: [
+                        "node_modules",
+                        ".test.",
+                        ".spec.",
+                        "file.ts",
+                    ],
+                },
+            ],
+        },
+    ],
 });

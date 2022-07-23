@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+    },
+    "include": [
+        "Injectable.stub.ts",
+        "Module.stub.ts",
+        "example.module.ts",
+        "example.provider.ts",
+        "NonFactoryDecorator.stub.ts",
+        "file.ts"
+    ],
+}
