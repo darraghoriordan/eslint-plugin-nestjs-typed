@@ -72,6 +72,19 @@ https://github.com/typestack/class-validator/issues/438
 
 ```
 npm install --save-dev @darraghor/eslint-plugin-nestjs-typed
+
+// or
+
+yarn add -D @darraghor/eslint-plugin-nestjs-typed
+```
+
+If you don't already have `class-validator` you should install that
+
+```
+npm install class-validator
+
+// or
+yarn add class-validator
 ```
 
 Then update your eslint with the plugin import and add the recommended rule set

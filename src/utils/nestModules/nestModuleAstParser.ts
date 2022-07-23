@@ -49,7 +49,10 @@ export const nestModuleAstParser = {
                     moduleDecorator,
                     "providers"
                 );
-
+            console.log("mapped results", {
+                mappedControllerElements,
+                mappedProviderElements,
+            });
             const nestModuleMap = [
                 path,
                 new NestProvidedInjectablesMap(

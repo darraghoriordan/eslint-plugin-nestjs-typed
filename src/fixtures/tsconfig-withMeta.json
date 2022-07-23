@@ -10,6 +10,7 @@
         "example.provider.ts",
         "NonFactoryDecorator.stub.ts",
         "providerArray.module.ts",
+        "example.controller.ts",
         "file.ts"
     ],
 }

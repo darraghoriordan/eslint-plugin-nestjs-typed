@@ -30,7 +30,7 @@ const rule = createRule({
             requiresTypeChecking: false,
         },
         messages: {
-            shouldUseApiTagDecorator: `Controllers should use @ApiTags decorator. This makes it much easier to navigate swagger UI.`,
+            shouldUseApiTagDecorator: `Controllers should use @ApiTags decorator. This makes it much easier to navigate swagger UI. This ApiTags decorator is in the @nestjs/swagger package on npm.`,
         },
         schema: [],
         hasSuggestions: false,

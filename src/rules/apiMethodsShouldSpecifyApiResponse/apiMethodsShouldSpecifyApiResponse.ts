@@ -59,7 +59,7 @@ const rule = createRule({
             requiresTypeChecking: false,
         },
         messages: {
-            shouldSpecifyApiResponse: `A method decorated with @Get, @Post etc. should specify the expected ApiResponse e.g. @ApiOkResponse(type: MyType)`,
+            shouldSpecifyApiResponse: `A method decorated with @Get, @Post etc. should specify the expected ApiResponse e.g. @ApiOkResponse(type: MyType). These decorators are in the @nestjs/swagger npm package.`,
         },
         schema: [],
         hasSuggestions: false,

@@ -45,6 +45,27 @@ ruleTester.run("injectable-should-be-provided", rule, {
             ],
         },
         {
+            // I've added a reference to this controller in the /fixtures/example.module.ts file so
+            // it should not error
+            code: `
+            import {Controller} from "./Controller.stub";
+
+            @Controller()
+            export class ExampleController {}
+            `,
+            options: [
+                {
+                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    filterFromPaths: [
+                        "node_modules",
+                        ".test.",
+                        ".spec.",
+                        "file.ts",
+                    ],
+                },
+            ],
+        },
+        {
             // The code should support decorators that do not use a factory
             // for people using libraries and custom decorators outside of nestjs
             code: `
@@ -82,6 +103,29 @@ ruleTester.run("injectable-should-be-provided", rule, {
         export default ExampleProviderNOTInModule;
         `,
             errors: [{messageId: "injectableInModule"}],
+            options: [
+                {
+                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    filterFromPaths: [
+                        "node_modules",
+                        ".test.",
+                        ".spec.",
+                        "file.ts",
+                    ],
+                },
+            ],
+        },
+        {
+            // this provider is not included in the module's providers located in /fixtures
+            code: `
+            import {Controller} from "./Controller.stub";
+
+            @Controller()
+        class BadController {}
+        
+        export default BadController;
+        `,
+            errors: [{messageId: "controllersInModule"}],
             options: [
                 {
                     src: [path.join(__dirname + "../../../fixtures", "*.ts")],
