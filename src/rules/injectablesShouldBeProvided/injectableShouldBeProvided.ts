@@ -77,7 +77,6 @@ function initialiseModuleMappings(
         [".ts"],
         filterFromPaths
     );
-    console.debug("Parsing module files", listFilesToProcess);
 
     nestModuleMap = NestProvidedInjectableMapper.parseFileList(
         listFilesToProcess,
