@@ -44,6 +44,31 @@ ruleTester.run("injectable-should-be-provided", rule, {
                 },
             ],
         },
+        {
+            // The code should support decorators that do not use a factory
+            // for people using libraries and custom decorators outside of nestjs
+            code: `
+            import {Injectable} from "./Injectable.stub";
+            import {NonFactoryDecorator} from "./NonFactoryDecorator.stub";
+
+            @NonFactoryDecorator
+            @Injectable()
+            class ExampleProviderIncludedInModule {}
+            
+            export default ExampleProviderIncludedInModule;
+            `,
+            options: [
+                {
+                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    filterFromPaths: [
+                        "node_modules",
+                        ".test.",
+                        ".spec.",
+                        "file.ts",
+                    ],
+                },
+            ],
+        },
     ],
     invalid: [
         {

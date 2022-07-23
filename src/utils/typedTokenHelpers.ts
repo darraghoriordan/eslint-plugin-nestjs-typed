@@ -102,14 +102,17 @@ export const typedTokenHelpers = {
             | TSESTree.MethodDefinition,
         decoratorNames: string[]
     ): TSESTree.Decorator[] {
-        const decorators = n.decorators?.filter((d) =>
-            decoratorNames.includes(
-                (
-                    (d.expression as TSESTree.CallExpression)
-                        .callee as TSESTree.Identifier
-                ).name
-            )
-        );
+        const decorators = n.decorators?.filter((d) => {
+            const factoryMethodDecoratorIdentifier = (
+                (d.expression as TSESTree.CallExpression)
+                    .callee as TSESTree.Identifier
+            )?.name;
+            const decoratorIdentifier = (d.expression as TSESTree.Identifier)
+                ?.name;
+            return decoratorNames.includes(
+                factoryMethodDecoratorIdentifier ?? decoratorIdentifier ?? ""
+            );
+        });
 
         return decorators || [];
     },
