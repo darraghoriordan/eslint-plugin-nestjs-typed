@@ -45,6 +45,26 @@ ruleTester.run("injectable-should-be-provided", rule, {
             ],
         },
         {
+            // This one has a custom provider which should be detected by the rule
+            code: `
+            @Injectable()
+            class ShouldBeProvided {}
+
+            export default ShouldBeProvided;
+            `,
+            options: [
+                {
+                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    filterFromPaths: [
+                        "node_modules",
+                        ".test.",
+                        ".spec.",
+                        "file.ts",
+                    ],
+                },
+            ],
+        },
+        {
             // I've added a reference to this controller in the /fixtures/example.module.ts file so
             // it should not error
             code: `

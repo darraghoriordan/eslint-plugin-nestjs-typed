@@ -4,8 +4,10 @@ import FileEnumeratorWrapper from "../../utils/files/fileEnumerationWrapper";
 import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper";
 import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-
-let listFilesToProcess;
+// eslint-disable-next-line import/no-unresolved
+import {FilePath} from "eslint/use-at-your-own-risk";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let listOfPotentialNestModuleFiles: FilePath[];
 let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
 
 type Options = [
@@ -68,18 +70,19 @@ function initialiseModuleMappings(
     filterFromPaths: string[],
     context: Readonly<TSESLint.RuleContext<never, Options>>
 ) {
-    const mappedSource = NestProvidedInjectableMapper.mapDefaultSource(
-        sourcePath,
-        process.cwd()
-    );
-    listFilesToProcess = FileEnumeratorWrapper.enumerateFiles(
-        mappedSource,
+    const mappedSourceDirectory =
+        NestProvidedInjectableMapper.detectDirectoryToScanForFiles(
+            sourcePath,
+            process.cwd()
+        );
+    listOfPotentialNestModuleFiles = FileEnumeratorWrapper.enumerateFiles(
+        mappedSourceDirectory,
         [".ts"],
         filterFromPaths
     );
 
     nestModuleMap = NestProvidedInjectableMapper.parseFileList(
-        listFilesToProcess,
+        listOfPotentialNestModuleFiles,
         context
     );
 }

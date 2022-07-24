@@ -19,7 +19,7 @@ export const nestProviderAstParser = {
         }
         return null;
     },
-    findNestProviderObjectsProperty(
+    findProvideProperty(
         providerDeclaration: TSESTree.VariableDeclarator | undefined,
         propertyName: string
     ): TSESTree.Property | null {
@@ -36,7 +36,7 @@ export const nestProviderAstParser = {
         }
         return null;
     },
-    findNestProviderObject(
+    findNestProviderVariableDeclaration(
         ast: TSESTree.Program
     ): TSESTree.VariableDeclarator | undefined {
         for (const n of ast.body) {
@@ -46,17 +46,34 @@ export const nestProviderAstParser = {
                 n.declaration?.type === AST_NODE_TYPES.VariableDeclaration
             ) {
                 const providerDeclaration = n.declaration.declarations.find(
-                    (d) =>
-                        d.type === AST_NODE_TYPES.VariableDeclarator &&
-                        (
+                    (d) => {
+                        const isObjectExpression =
+                            (d.type === AST_NODE_TYPES.VariableDeclarator &&
+                                // has property "provide" and that property is an identifier
+                                d.init?.type ===
+                                    AST_NODE_TYPES.ObjectExpression) ||
+                            false;
+
+                        const hasProvideProperty: boolean =
+                            isObjectExpression &&
                             (
-                                d.id.typeAnnotation
-                                    ?.typeAnnotation as TSESTree.TSTypeReference
-                        // prettier-ignore
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            )?.typeName as TSESTree.Identifier
-                        )?.name === "Provider"
+                                d.init as TSESTree.ObjectExpression
+                            ).properties.some((property) => {
+                                return (
+                                    (property.type ===
+                                        AST_NODE_TYPES.Property &&
+                                        property.key.type ===
+                                            AST_NODE_TYPES.Identifier &&
+                                        property.key.name === "provide" &&
+                                        property.value.type ===
+                                            AST_NODE_TYPES.Identifier) ||
+                                    false
+                                );
+                            });
+                        return hasProvideProperty;
+                    }
                 );
+
                 return providerDeclaration;
             }
         }

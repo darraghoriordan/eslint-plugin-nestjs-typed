@@ -24,16 +24,15 @@ export const hasMismatchedInjected = (
 
     // count number of factory params
     const factoryParameterCount = (
-        nestProviderAstParser.findNestProviderObjectsProperty(
-            node,
-            "useFactory"
-        )?.value as TSESTree.ArrowFunctionExpression
+        nestProviderAstParser.findProvideProperty(node, "useFactory")
+            ?.value as TSESTree.ArrowFunctionExpression
     ).params?.length;
 
     // Count number of injected params
-    const injectedParameter =
-        nestProviderAstParser.findNestProviderObjectsProperty(node, "inject")
-            ?.value as unknown as TSESTree.ArrayExpression;
+    const injectedParameter = nestProviderAstParser.findProvideProperty(
+        node,
+        "inject"
+    )?.value as unknown as TSESTree.ArrayExpression;
 
     const injectedParameterCount = injectedParameter
         ? injectedParameter.elements.length

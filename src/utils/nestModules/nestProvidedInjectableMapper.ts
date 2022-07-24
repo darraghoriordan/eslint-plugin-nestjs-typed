@@ -17,7 +17,7 @@ const implementsForInjectablesThatAreNotProvided = new Set([
     "NestMiddleware", //(isMiddleware)
 ]);
 const NestProvidedInjectableMapper = {
-    mapDefaultSource(
+    detectDirectoryToScanForFiles(
         sourceGlob: string | string[] | undefined,
         currentWorkingDirectory: string
     ): string[] {
@@ -28,29 +28,34 @@ const NestProvidedInjectableMapper = {
         if (sourceGlob && Array.isArray(sourceGlob)) {
             return sourceGlob;
         }
-
+        console.debug(
+            "Injectables should be provided is using cwd for scanning. Consider configuring it in eslintrc.",
+            {currentWorkingDirectory}
+        );
         return [currentWorkingDirectory];
     },
     parseFileList(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         files: Array<FilePath>,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         context: Readonly<TSESLint.RuleContext<never, any>>
     ): Map<string, NestProvidedInjectablesMap> {
         const moduleMaps = new Map<string, NestProvidedInjectablesMap>();
         files
-            .map((f) =>
-                NestProvidedInjectableMapper.mapAllProvidedInjectables(
-                    typedTokenHelpers.parseStringToAst(
-                        NestProvidedInjectableMapper.readFileContents(
-                            f.filename
-                        ),
-                        f.filename,
-                        context
-                    ),
+            .map((f) => {
+                const fileContents =
+                    NestProvidedInjectableMapper.readFileContents(f.filename);
+
+                const fileAstString = typedTokenHelpers.parseStringToAst(
+                    fileContents,
+                    f.filename,
+                    context
+                );
+
+                return NestProvidedInjectableMapper.mapAllProvidedInjectables(
+                    fileAstString,
                     f.filename
-                )
-            )
+                );
+            })
             // eslint-disable-next-line @typescript-eslint/unbound-method
             .filter(NestProvidedInjectableMapper.notEmpty)
             .forEach((m) =>
@@ -99,28 +104,43 @@ const NestProvidedInjectableMapper = {
             ) {
                 return null;
             }
-            let nestModuleMap = null;
+            // This does too much and should probably be split up
+            // i also assume you would never have multiple of providers, controllers or modules in a file
+            // dangerous assumption i guess. i have never seen this done before though.
 
+            // set up the response model
+            let nestModuleMap: (string | NestProvidedInjectablesMap)[] | null =
+                null;
+
+            // Is this a module?
             const foundNestModuleClass =
                 nestModuleAstParser.findNestModuleClass(ast);
+
             if (foundNestModuleClass) {
                 nestModuleMap = nestModuleAstParser.mapNestModuleDecorator(
                     foundNestModuleClass,
                     path
                 );
+                return nestModuleMap;
             }
-            const foundProviderObject =
-                nestProviderAstParser.findNestProviderObjectsProperty(
-                    nestProviderAstParser.findNestProviderObject(ast),
-                    "provide"
-                );
-            if (foundProviderObject) {
+
+            // or is this a custom provider that would provide an instance of the class?
+            // if it is we map the itentifier it "provide"s. This will only work if it's an identifier
+            // it can't be provider for a string literal "provide".
+
+            const foundProviderDeclaration =
+                nestProviderAstParser.findNestProviderVariableDeclaration(ast);
+
+            const provideProperty = nestProviderAstParser.findProvideProperty(
+                foundProviderDeclaration,
+                "provide"
+            );
+            if (provideProperty) {
                 nestModuleMap = nestProviderAstParser.mapNestProviderObject(
-                    foundProviderObject,
+                    provideProperty,
                     path
                 );
             }
-
             return nestModuleMap;
         } catch (error) {
             console.error("parse error:", path, error);
