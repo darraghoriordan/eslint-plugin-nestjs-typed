@@ -14,6 +14,11 @@ const primitiveTypes = new Set([
     AST_NODE_TYPES.TSBooleanKeyword,
     AST_NODE_TYPES.TSNumberKeyword,
 ]);
+export type ValidateNonPrimitivePropertyTypeDecoratorOptions = [
+    {
+        additionalTypeDecorators: string[];
+    }
+];
 export const shouldTrigger = (): boolean => {
     return true;
 };
@@ -31,17 +36,39 @@ const rule = createRule({
             shouldUseTypeDecorator:
                 "A non-primitve property with validation should probably use a @Type decorator",
         },
-        schema: [],
+        schema: [
+            {
+                properties: {
+                    additionalTypeDecorators: {
+                        description:
+                            "A list of custom type decorators that this rule will use to validate",
+                        type: "array",
+                        minItems: 0,
+                        items: {
+                            type: "string",
+                            minLength: 1,
+                        },
+                    },
+                },
+            },
+        ],
         hasSuggestions: false,
         type: "suggestion",
     },
-    defaultOptions: [],
+    defaultOptions: [{additionalTypeDecorators: new Array<string>()}],
 
     create(
         context: Readonly<
-            TSESLint.RuleContext<"shouldUseTypeDecorator", never[]>
+            TSESLint.RuleContext<
+                "shouldUseTypeDecorator",
+                ValidateNonPrimitivePropertyTypeDecoratorOptions
+            >
         >
     ) {
+        const {additionalTypeDecorators} = context.options[0] || {
+            additionalTypeDecorators: [],
+        };
+
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
         return {
@@ -122,10 +149,18 @@ const rule = createRule({
                     return;
                 }
 
-                // ok so does the property have Type decorator? it probably should
+                // we add the supplied extra decorators from settings to the type decorators
+
+                console.log(`deccc ${additionalTypeDecorators.flat(1)}`);
+                const typeDecorators = new Array<string>().concat(
+                    additionalTypeDecorators, // these are user-specified extra type decorators, unique to user's project
+                    ["Type"] //this is the default type decorator
+                );
+
+                // ok so does the property have Type decorator or custom type decorator? it probably should
                 const foundTypeDecorator = typedTokenHelpers.getDecoratorsNamed(
                     node,
-                    ["Type"]
+                    typeDecorators
                 );
 
                 if (foundTypeDecorator.length === 0) {

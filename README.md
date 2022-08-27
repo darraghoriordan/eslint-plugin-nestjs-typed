@@ -6,6 +6,10 @@ Version 3.x supports Eslint version >=8.x and typescript eslint parser 5+
 
 There were many breaking changes between these versions.
 
+typescript eslint parser supports a range of typescript versions but there can be a delay in supporting the latest versions. 
+
+This plugin only supports typescript up to the version typescript eslint parser supports. See https://github.com/typescript-eslint/typescript-eslint#supported-typescript-version for the versions.
+
 ## Index of available rules
 
 (more details for each specific rule are available in sections below)
@@ -214,6 +218,15 @@ export class CreateOrganisationDto {
 ### Rule: validated-non-primitive-property-needs-type-decorator
 
 If you use any of the class validator decorators on a property that is not a primitive, you should tell class-transformer how to transform it into a class first.
+
+This rule accepts an optional list of custom type decorators that will be counted as valid for the rule test. e.g.
+
+```ts
+"@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator": [
+        "error",
+        {additionalTypeDecorators: ["TransformDate"]},
+    ],
+```
 
 This PASSES because we're validating a Person class and we have added the @Type decorator.
 

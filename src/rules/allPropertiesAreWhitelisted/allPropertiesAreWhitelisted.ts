@@ -1,10 +1,8 @@
 import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
-import * as classValidator from "class-validator";
 import {createRule} from "../../utils/createRule";
+import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
 
-const CLASS_VALIDATOR_DECORATOR_NAMES = new Set(
-    Object.keys(classValidator as object)
-);
+const CLASS_VALIDATOR_DECORATOR_NAMES = new Set(classValidatorDecorators);
 
 const rule = createRule({
     name: "all-properties-are-whitelisted",

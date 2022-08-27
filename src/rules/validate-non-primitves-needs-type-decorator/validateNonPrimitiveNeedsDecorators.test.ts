@@ -15,6 +15,26 @@ const ruleTester = new ESLintUtils.RuleTester({
 ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     valid: [
         {
+            // is a primitive type date with custom transform - https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/32
+            options: [{additionalTypeDecorators: ["TransformDate"]}],
+            code: `
+            class ExampleDto {
+                @ApiPropertyOptional(
+                    {
+                        description: "Filter by date",
+                        required: false,
+                        writeOnly: true,
+                    }
+                )
+                @Expose()
+                @IsOptional()
+                @TransformDate()
+                @IsDate()
+               exampleProperty!: Date;
+              }
+    `,
+        },
+        {
             // is a primitive type array - doesn't need type (from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/22)
             code: `
             class ExampleDto {
