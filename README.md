@@ -46,7 +46,7 @@ See the following summaries
 
 ### 1. Detect Nest Dependency Injection issues
 
-There are some things you don't want to forget when working with Nest dependency injection.
+There are some things you don't want to forget when working with Nest dependency injection...
 
 The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time. Nest is good at telling you where these are but sometimes it's not.
 
