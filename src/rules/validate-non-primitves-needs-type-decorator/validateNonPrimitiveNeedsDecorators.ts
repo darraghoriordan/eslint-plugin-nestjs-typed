@@ -150,8 +150,6 @@ const rule = createRule({
                 }
 
                 // we add the supplied extra decorators from settings to the type decorators
-
-                console.log(`deccc ${additionalTypeDecorators.flat(1)}`);
                 const typeDecorators = new Array<string>().concat(
                     additionalTypeDecorators, // these are user-specified extra type decorators, unique to user's project
                     ["Type"] //this is the default type decorator
