@@ -1,3 +1,9 @@
+![commit](https://badgen.net/github/last-commit/darraghoriordan/eslint-plugin-nestjs-typed/main)
+![npm](https://img.shields.io/npm/v/@darraghor/eslint-plugin-nestjs-typed.svg?color=red)
+![npm-tag](https://badgen.net/github/tag/darraghoriordan/eslint-plugin-nestjs-typed)
+![size](https://badgen.net/bundlephobia/minzip/@darraghor/eslint-plugin-nestjs-typed?color=cyan)
+![types](https://badgen.net/npm/types/@darraghor/eslint-plugin-nestjs-typed?color=blue)
+
 ## A note on versions
 
 Version 2.x supports Eslint version <=7.x and typescript eslint parser 4
@@ -6,7 +12,7 @@ Version 3.x supports Eslint version >=8.x and typescript eslint parser 5+
 
 There were many breaking changes between these versions.
 
-typescript eslint parser supports a range of typescript versions but there can be a delay in supporting the latest versions. 
+typescript eslint parser supports a range of typescript versions but there can be a delay in supporting the latest versions.
 
 This plugin only supports typescript up to the version typescript eslint parser supports. See https://github.com/typescript-eslint/typescript-eslint#supported-typescript-version for the versions.
 
