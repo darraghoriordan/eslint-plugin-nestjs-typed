@@ -139,8 +139,16 @@ const rule = createRule({
                 // And for input DTOs they should specify types.
                 // property has a validation decorator but not IsEnum
                 // (we don't care about un-validated properties and enums don't need Type())
-                const foundClassValidatorDecorators =
-                    typedTokenHelpers.getImportedClassValidatorDecorators(node);
+                const foundClassValidatorDecorators = typedTokenHelpers
+                    .getImportedClassValidatorDecorators(node)
+                    .filter(
+                        (decorator) =>
+                            (
+                                (
+                                    decorator.expression as TSESTree.CallExpression
+                                ).callee as TSESTree.Identifier
+                            ).name !== "IsEnum"
+                    );
                 // const foundClassValidatorDecorators =
                 //     typedTokenHelpers.getDecoratorsNamed(
                 //         node,
