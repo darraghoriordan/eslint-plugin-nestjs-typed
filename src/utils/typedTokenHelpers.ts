@@ -3,7 +3,6 @@ import {parse, ParserServices} from "@typescript-eslint/parser";
 import ts from "typescript";
 import * as tsutils from "tsutils";
 import {unionTypeParts} from "tsutils";
-import {classValidatorDecorators} from "./classValidatorDecorators";
 
 export const typedTokenHelpers = {
     decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
@@ -207,10 +206,8 @@ export const typedTokenHelpers = {
 
         const decoratorName = decorator.expression.callee.name;
 
-        return (
-            imports.some((imp) =>
-                typedTokenHelpers.importIsDecorator(imp, decoratorName)
-            ) && classValidatorDecorators.includes(decoratorName)
+        return imports.some((imp) =>
+            typedTokenHelpers.importIsDecorator(imp, decoratorName)
         );
     },
     /**
