@@ -1,8 +1,10 @@
-import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
 import {parse, ParserServices} from "@typescript-eslint/parser";
 import ts from "typescript";
-import {unionTypeParts} from "tsutils";
 import * as tsutils from "tsutils";
+import {unionTypeParts} from "tsutils";
+import {classValidatorDecorators} from "./classValidatorDecorators";
+
 export const typedTokenHelpers = {
     decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
         "IsArray",
@@ -109,6 +111,7 @@ export const typedTokenHelpers = {
             )?.name;
             const decoratorIdentifier = (d.expression as TSESTree.Identifier)
                 ?.name;
+
             return decoratorNames.includes(
                 factoryMethodDecoratorIdentifier ?? decoratorIdentifier ?? ""
             );
@@ -162,5 +165,112 @@ export const typedTokenHelpers = {
         const isOptionalPropertyValue =
             node.optional || isUndefinedType || false;
         return isOptionalPropertyValue;
+    },
+    /**
+     * Checks if an import is an import of the given decorator name
+     * @param imp
+     * @param decoratorName
+     */
+    importIsDecorator(
+        imp: TSESTree.ImportDeclaration,
+        decoratorName: string
+    ): boolean {
+        const isFromClassValidator =
+            imp.source.value.startsWith("class-validator");
+        const isDecoratorImport = imp.specifiers.some(
+            (specifier) => specifier.local.name === decoratorName
+        );
+
+        return isFromClassValidator && isDecoratorImport;
+    },
+    /**
+     * Checks if decorator is in imports of a node
+     * @param imports
+     * @param decorator
+     */
+    decoratorIsImportedFromClassValidator(
+        imports: TSESTree.ImportDeclaration[],
+        decorator: TSESTree.Decorator
+    ): boolean {
+        if (
+            decorator.expression.type !== TSESTree.AST_NODE_TYPES.CallExpression
+        ) {
+            return false;
+        }
+
+        if (
+            decorator.expression.callee.type !==
+            TSESTree.AST_NODE_TYPES.Identifier
+        ) {
+            return false;
+        }
+
+        const decoratorName = decorator.expression.callee.name;
+
+        return (
+            imports.some((imp) =>
+                typedTokenHelpers.importIsDecorator(imp, decoratorName)
+            ) && classValidatorDecorators.includes(decoratorName)
+        );
+    },
+    /**
+     * Checks whether a decorator is a class validator decorator
+     * @param program The root program node
+     * @param decorator The decorator node
+     */
+    decoratorIsClassValidatorDecorator(
+        program: TSESTree.Program | null,
+        decorator: TSESTree.Decorator
+    ): boolean {
+        if (!program) {
+            return false;
+        }
+
+        const imports = program.body.filter(
+            (node): node is TSESTree.ImportDeclaration =>
+                node.type === TSESTree.AST_NODE_TYPES.ImportDeclaration
+        );
+
+        return typedTokenHelpers.decoratorIsImportedFromClassValidator(
+            imports,
+            decorator
+        );
+    },
+    /**
+     * Gets the root program of a node
+     * @param node
+     */
+    getRootProgram(node: TSESTree.BaseNode): TSESTree.Program | null {
+        let root = node;
+
+        while (root.parent) {
+            if (root.parent.type === TSESTree.AST_NODE_TYPES.Program) {
+                return root.parent;
+            }
+
+            root = root.parent;
+        }
+
+        return null;
+    },
+    /**
+     * Gets all the decorators actually imported from class-validator lib
+     * @param node PropertyDefinition node
+     */
+    getImportedClassValidatorDecorators(
+        node: TSESTree.PropertyDefinition
+    ): TSESTree.Decorator[] {
+        const program = typedTokenHelpers.getRootProgram(node);
+
+        const {decorators} = node;
+
+        return (
+            decorators?.filter((decorator): decorator is TSESTree.Decorator => {
+                return typedTokenHelpers.decoratorIsClassValidatorDecorator(
+                    program,
+                    decorator
+                );
+            }) ?? []
+        );
     },
 };

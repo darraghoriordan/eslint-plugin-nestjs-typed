@@ -7,7 +7,6 @@ import {
 } from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
 
 const primitiveTypes = new Set([
     AST_NODE_TYPES.TSStringKeyword,
@@ -141,10 +140,12 @@ const rule = createRule({
                 // property has a validation decorator but not IsEnum
                 // (we don't care about un-validated properties and enums don't need Type())
                 const foundClassValidatorDecorators =
-                    typedTokenHelpers.getDecoratorsNamed(
-                        node,
-                        classValidatorDecorators.filter((x) => x !== "IsEnum")
-                    );
+                    typedTokenHelpers.getImportedClassValidatorDecorators(node);
+                // const foundClassValidatorDecorators =
+                //     typedTokenHelpers.getDecoratorsNamed(
+                //         node,
+                //         classValidatorDecorators.filter((x) => x !== "IsEnum")
+                //     );
                 if (foundClassValidatorDecorators.length === 0) {
                     return;
                 }
