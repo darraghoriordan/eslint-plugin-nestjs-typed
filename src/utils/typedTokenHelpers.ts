@@ -270,4 +270,20 @@ export const typedTokenHelpers = {
             }) ?? []
         );
     },
+    decoratorIsIsEnum(decorator: TSESTree.Decorator): boolean {
+        if (
+            decorator.expression.type !== TSESTree.AST_NODE_TYPES.CallExpression
+        ) {
+            return false;
+        }
+
+        if (
+            decorator.expression.callee.type !==
+            TSESTree.AST_NODE_TYPES.Identifier
+        ) {
+            return false;
+        }
+
+        return decorator.expression.callee.name === "IsEnum";
+    },
 };
