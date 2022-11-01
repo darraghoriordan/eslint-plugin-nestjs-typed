@@ -191,20 +191,11 @@ export const typedTokenHelpers = {
         imports: TSESTree.ImportDeclaration[],
         decorator: TSESTree.Decorator
     ): boolean {
-        if (
-            decorator.expression.type !== TSESTree.AST_NODE_TYPES.CallExpression
-        ) {
+        const decoratorName = this.getDecoratorName(decorator);
+
+        if (!decoratorName) {
             return false;
         }
-
-        if (
-            decorator.expression.callee.type !==
-            TSESTree.AST_NODE_TYPES.Identifier
-        ) {
-            return false;
-        }
-
-        const decoratorName = decorator.expression.callee.name;
 
         return imports.some((imp) =>
             typedTokenHelpers.importIsDecorator(imp, decoratorName)
@@ -270,20 +261,34 @@ export const typedTokenHelpers = {
             }) ?? []
         );
     },
+    /**
+     * Checks if the decorator is the IsEnum decorator
+     * @param decorator
+     */
     decoratorIsIsEnum(decorator: TSESTree.Decorator): boolean {
+        const decoratorName = this.getDecoratorName(decorator);
+
+        return decoratorName === "IsEnum";
+    },
+    /**
+     * Gets the name of a decorator
+     * Returns null if no name is found
+     * @param decorator
+     */
+    getDecoratorName(decorator: TSESTree.Decorator): string | null {
         if (
             decorator.expression.type !== TSESTree.AST_NODE_TYPES.CallExpression
         ) {
-            return false;
+            return null;
         }
 
         if (
             decorator.expression.callee.type !==
             TSESTree.AST_NODE_TYPES.Identifier
         ) {
-            return false;
+            return null;
         }
 
-        return decorator.expression.callee.name === "IsEnum";
+        return decorator.expression.callee.name;
     },
 };
