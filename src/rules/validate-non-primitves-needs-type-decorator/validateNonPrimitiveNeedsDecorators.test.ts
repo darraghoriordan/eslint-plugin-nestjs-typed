@@ -74,6 +74,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // no validation decorator
             code: `
+            import { IsDefined } from 'class-validator';
+            
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
                 @IsDefined()
@@ -83,7 +85,7 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     `,
         },
         {
-            // sequelize-typescript validator
+            // sequelize-typescript validator with class-validator name conflict
             code: `
             import { IsInt } from 'sequelize-typescript'
             
