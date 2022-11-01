@@ -109,6 +109,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // has the type decorator already
             code: `
+                import { IsArray } from 'class-validator';
+                
                 export class CreateOrganisationDto {
                     @ApiProperty({ type: Person, isArray: true })
                     @ValidateNested({each:true})
@@ -121,6 +123,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is a primitive type
             code: `
+                import { IsBoolean } from 'class-validator';
+                
                 export class CreateOrganisationDto {
                     @ApiProperty({ type: Person, isArray: true })
                     @ValidateNested({each:true})
@@ -132,6 +136,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is not a primitive type so skip
             code: `
+                import { Allow } from 'class-validator';
+                
                 enum Foo {
                     BAR
                  }
@@ -146,6 +152,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is an array - should have type and has it so pass!
             code: `
+            import { ValidateNested } from 'class-validator';
+            
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
                 @ValidateNested({each:true})
