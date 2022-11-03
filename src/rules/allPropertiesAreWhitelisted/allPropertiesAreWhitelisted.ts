@@ -1,8 +1,6 @@
-import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
-import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
-
-const CLASS_VALIDATOR_DECORATOR_NAMES = new Set(classValidatorDecorators);
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
 const rule = createRule({
     name: "all-properties-are-whitelisted",
@@ -29,6 +27,7 @@ const rule = createRule({
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node) {
+                const program = typedTokenHelpers.getRootProgram(node);
                 const withDecorator: TSESTree.PropertyDefinition[] = [];
                 const withoutDecorator: TSESTree.PropertyDefinition[] = [];
                 for (const element of node.body.body) {
@@ -41,8 +40,9 @@ const rule = createRule({
                                 AST_NODE_TYPES.CallExpression &&
                             decorator.expression.callee.type ===
                                 AST_NODE_TYPES.Identifier &&
-                            CLASS_VALIDATOR_DECORATOR_NAMES.has(
-                                decorator.expression.callee.name
+                            typedTokenHelpers.decoratorIsClassValidatorDecorator(
+                                program,
+                                decorator
                             )
                     );
                     if (hasDecorator) {
