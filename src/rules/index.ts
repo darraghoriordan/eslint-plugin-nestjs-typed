@@ -7,11 +7,13 @@ import apiEnumPropertyBestPractices from "./apiEnumPropertyBestPractices/apiEnum
 import apiPropertyReturningArrayShouldSetArray from "./apiPropertyReturningArrayShouldSetArray/apiPropertyReturningArrayShouldSetArray";
 import shouldSpecifyForbidUnknownValues from "./shouldSpecifyForbidUnknownValues/shouldSpecifyForbidUnknownValuesRule";
 import parameterDecoratorNameMatchesRouteParam from "./paramDecoratorNameMatchesRouteParam/paramDecoratorNameMatchesRouteParam";
-import validateNonPrimitiveNeedsDecorators from "./validate-non-primitves-needs-type-decorator/validateNonPrimitiveNeedsDecorators";
+import validateNonPrimitiveNeedsDecorators from "./validateNonPrimitvesNeedsTypeDecorator/validateNonPrimitiveNeedsDecorators";
 import validateNestedOfArrayShouldSetEach from "./validateNestedOfArrayShouldSetEach/validateNestedOfArrayShouldSetEach";
 import allPropertiesAreWhitelisted from "./allPropertiesAreWhitelisted/allPropertiesAreWhitelisted";
+import allPropertiesHaveExplicitDefined from "./allPropertiesHaveExplicitDefined/allPropertiesHaveExplicitDefined";
 
 const allRules = {
+    "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
         apiPropertyMatchesPropertyOptionality,
     "injectable-should-be-provided": injectableShouldBeProvided,
