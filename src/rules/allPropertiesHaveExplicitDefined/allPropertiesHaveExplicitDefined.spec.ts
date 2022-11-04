@@ -39,6 +39,7 @@ class A {
         },
         {
             code: `
+            import { IsDefined } from 'class-validator';
 class A {
   @IsDefined()
   b: string
@@ -50,6 +51,7 @@ class A {
         },
         {
             code: `
+            import { IsInt, IsDefined } from 'class-validator';
 class A {
   @IsInt()
   b: number
@@ -61,6 +63,7 @@ class A {
         },
         {
             code: `
+            import { IsInt } from 'class-validator';
 class A {
   @IsInt()
   b: number
@@ -69,6 +72,7 @@ class A {
         },
         {
             code: `
+            import { IsInt, IsString } from 'class-validator';
 class A {
   @IsInt()
   b: number
@@ -80,6 +84,7 @@ class A {
         },
         {
             code: `
+            import { IsInt, IsOptional,IsString } from 'class-validator';
 class A {
   @IsInt()
   @IsOptional()
@@ -92,6 +97,7 @@ class A {
         },
         {
             code: `
+            import { IsInt, IsOptional,IsString } from 'class-validator';
 class A {
   @IsInt()
   @IsOptional()
@@ -107,6 +113,7 @@ class A {
     invalid: [
         {
             code: `
+            import { IsDefined } from 'class-validator';
 class A {
   @IsDefined()
   b: string
@@ -122,6 +129,7 @@ class A {
         },
         {
             code: `
+            import { IsOptional } from 'class-validator';
 class A {
   @IsOptional()
   b?: string
@@ -137,6 +145,7 @@ class A {
         },
         {
             code: `
+            import { IsOptional } from 'class-validator';
 class A {
   @IsOptional()
   b: string
@@ -150,6 +159,7 @@ class A {
         },
         {
             code: `
+            import { IsDefined } from 'class-validator';
 class A {
   @IsDefined()
   b?: string
@@ -163,6 +173,7 @@ class A {
         },
         {
             code: `
+            import { IsInt} from 'class-validator';
 class A {
   @IsInt()
   b?: string
@@ -176,6 +187,7 @@ class A {
         },
         {
             code: `
+            import { IsOptional, IsDefined } from 'class-validator';
 class A {
   @IsDefined()
   @IsOptional()

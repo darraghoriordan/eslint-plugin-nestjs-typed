@@ -5,6 +5,7 @@ import {createRule} from "../../utils/createRule";
 import {getParserServices} from "@typescript-eslint/utils/dist/eslint-utils";
 import {Type, TypeChecker} from "typescript";
 import {ParserWeakMapESTreeToTSNode} from "@typescript-eslint/typescript-estree/dist/parser-options";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
 const rule = createRule({
     name: "all-properties-have-explicit-defined",
@@ -39,26 +40,31 @@ const rule = createRule({
                 > = [];
                 let withDecoratorCount = 0;
                 const propertyDefinitions = getPropertiesDefinitions(node);
+                // for each property in the class
                 for (const propertyDefinition of propertyDefinitions) {
+                    // check for the optional or defined decorators, or any class-validator decorator
                     const decoratorsStatus =
                         getDecoratorsStatus(propertyDefinition);
                     propertyDefinitionsWithDecoratorsStatus.push([
                         propertyDefinition,
                         decoratorsStatus,
                     ]);
+
+                    // It doesn't make sense to have both @IsDefined and @IsOptional decorators
                     if (
-                        decoratorsStatus.isDefined &&
-                        decoratorsStatus.isOptional
+                        decoratorsStatus.hasIsDefinedDecorator &&
+                        decoratorsStatus.hasIsOptionalDecorator
                     ) {
                         context.report({
                             node: propertyDefinition,
                             messageId: "conflicting-defined-decorators",
                         });
                     }
+
                     if (
-                        decoratorsStatus.isDefined ||
+                        decoratorsStatus.hasIsDefinedDecorator ||
                         decoratorsStatus.hasTypeCheckingDecorator ||
-                        decoratorsStatus.isOptional
+                        decoratorsStatus.hasIsOptionalDecorator
                     ) {
                         withDecoratorCount++;
                     }
@@ -68,19 +74,23 @@ const rule = createRule({
                         propertyDefinition,
                         decoratorsStatus,
                     ] of propertyDefinitionsWithDecoratorsStatus) {
+                        // if there's no type available we can't check if it's optional
                         if (!propertyDefinition.typeAnnotation) {
                             continue;
                         }
+                        // get the type of the property
                         const type = getType(
                             propertyDefinition.typeAnnotation.typeAnnotation,
                             esTreeNodeToTSNodeMap,
                             checker
                         );
+
+                        // if the type is nullable, it should be optional
                         if (
                             propertyDefinition.optional ||
                             isNullableType(type)
                         ) {
-                            if (!decoratorsStatus.isOptional) {
+                            if (!decoratorsStatus.hasIsOptionalDecorator) {
                                 context.report({
                                     node: propertyDefinition,
                                     messageId: "missing-is-optional-decorator",
@@ -88,7 +98,7 @@ const rule = createRule({
                             }
                         } else {
                             if (
-                                !decoratorsStatus.isDefined &&
+                                !decoratorsStatus.hasIsDefinedDecorator &&
                                 !decoratorsStatus.hasTypeCheckingDecorator
                             ) {
                                 context.report({
@@ -107,9 +117,9 @@ const rule = createRule({
 export default rule;
 
 type DecoratorsStatus = {
-    isDefined: boolean;
+    hasIsDefinedDecorator: boolean;
     hasTypeCheckingDecorator: boolean;
-    isOptional: boolean;
+    hasIsOptionalDecorator: boolean;
 };
 
 function getType(
@@ -125,134 +135,47 @@ function getType(
 function getDecoratorsStatus(
     propertyDefinition: TSESTree.PropertyDefinition
 ): DecoratorsStatus {
-    let isDefined = false;
+    let hasIsDefinedDecorator = false;
     let hasTypeCheckingDecorator = false;
-    let isOptional = false;
+    let hasIsOptionalDecorator = false;
+    const program = typedTokenHelpers.getRootProgram(propertyDefinition);
+
     if (propertyDefinition.decorators) {
         for (const decorator of propertyDefinition.decorators) {
             if (
                 decorator.expression.type === AST_NODE_TYPES.CallExpression &&
                 decorator.expression.callee.type === AST_NODE_TYPES.Identifier
             ) {
-                if (decorator.expression.callee.name === "IsDefined") {
-                    isDefined = true;
-                }
+                // if this is not a class-validator decorator, skip it (this avoids name conflicts with decorators from other libraries)
                 if (
-                    TYPE_CHECKING_DECORATOR.has(
-                        decorator.expression.callee.name
+                    !typedTokenHelpers.decoratorIsClassValidatorDecorator(
+                        program,
+                        decorator
                     )
+                ) {
+                    continue;
+                }
+                // We care if the decorator is a validation decorator like IsString etc for checks later
+                if (
+                    decorator.expression.callee.name !== "IsDefined" &&
+                    decorator.expression.callee.name !== "IsOptional"
                 ) {
                     hasTypeCheckingDecorator = true;
                 }
+                // otherwise check if it is isDefined or isOptional, we will use this later
+                if (decorator.expression.callee.name === "IsDefined") {
+                    hasIsDefinedDecorator = true;
+                }
+
                 if (decorator.expression.callee.name === "IsOptional") {
-                    isOptional = true;
+                    hasIsOptionalDecorator = true;
                 }
             }
         }
     }
-    return {isDefined, hasTypeCheckingDecorator, isOptional};
+    return {
+        hasIsDefinedDecorator,
+        hasTypeCheckingDecorator,
+        hasIsOptionalDecorator,
+    };
 }
-
-const TYPE_CHECKING_DECORATOR = new Set([
-    "Validate",
-    "ValidateBy",
-    "ValidateIf",
-    "ValidateNested",
-    "ValidatePromise",
-    "IsLatLong",
-    "IsLatitude",
-    "IsLongitude",
-    "Equals",
-    "NotEquals",
-    "IsEmpty",
-    "IsNotEmpty",
-    "IsIn",
-    "IsNotIn",
-    "IsDivisibleBy",
-    "IsPositive",
-    "IsNegative",
-    "MinDate",
-    "MaxDate",
-    "Contains",
-    "NotContains",
-    "IsAlpha",
-    "IsAlphanumeric",
-    "IsDecimal",
-    "IsAscii",
-    "IsBase64",
-    "IsByteLength",
-    "IsCreditCard",
-    "IsCurrency",
-    "IsEmail",
-    "IsFQDN",
-    "IsFullWidth",
-    "IsHalfWidth",
-    "IsVariableWidth",
-    "IsHexColor",
-    "IsHexadecimal",
-    "IsMacAddress",
-    "IsIP",
-    "IsPort",
-    "IsISBN",
-    "IsISIN",
-    "IsISO8601",
-    "IsJSON",
-    "IsJWT",
-    "IsLowercase",
-    "IsMobilePhone",
-    "IsISO31661Alpha2",
-    "IsISO31661Alpha3",
-    "IsMongoId",
-    "IsMultibyte",
-    "IsSurrogatePair",
-    "IsUrl",
-    "IsUUID",
-    "IsFirebasePushId",
-    "IsUppercase",
-    "Length",
-    "MaxLength",
-    "MinLength",
-    "Matches",
-    "IsPhoneNumber",
-    "IsMilitaryTime",
-    "IsHash",
-    "IsISSN",
-    "IsDateString",
-    "IsBooleanString",
-    "IsNumberString",
-    "IsBase32",
-    "IsBIC",
-    "IsBtcAddress",
-    "IsDataURI",
-    "IsEAN",
-    "IsEthereumAddress",
-    "IsHSL",
-    "IsIBAN",
-    "IsIdentityCard",
-    "IsISRC",
-    "IsLocale",
-    "IsMagnetURI",
-    "IsMimeType",
-    "IsOctal",
-    "IsPassportNumber",
-    "IsPostalCode",
-    "IsRFC3339",
-    "IsRgbColor",
-    "IsSemVer",
-    "IsBoolean",
-    "IsDate",
-    "IsNumber",
-    "IsEnum",
-    "IsInt",
-    "IsString",
-    "IsArray",
-    "IsObject",
-    "ArrayContains",
-    "ArrayNotContains",
-    "ArrayNotEmpty",
-    "ArrayMinSize",
-    "ArrayMaxSize",
-    "ArrayUnique",
-    "IsNotEmptyObject",
-    "IsInstance",
-]);
