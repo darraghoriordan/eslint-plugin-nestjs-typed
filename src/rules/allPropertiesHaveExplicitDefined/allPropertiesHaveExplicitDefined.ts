@@ -1,9 +1,5 @@
-import {AST_NODE_TYPES} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
 import {isNullableType} from "@typescript-eslint/type-utils";
-import {
-    PropertyDefinition,
-    TypeNode,
-} from "@typescript-eslint/types/dist/ast-spec";
 import {getPropertiesDefinitions} from "../../utils/ast";
 import {createRule} from "../../utils/createRule";
 import {getParserServices} from "@typescript-eslint/utils/dist/eslint-utils";
@@ -39,7 +35,7 @@ const rule = createRule({
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node) {
                 const propertyDefinitionsWithDecoratorsStatus: Array<
-                    [PropertyDefinition, DecoratorsStatus]
+                    [TSESTree.PropertyDefinition, DecoratorsStatus]
                 > = [];
                 let withDecoratorCount = 0;
                 const propertyDefinitions = getPropertiesDefinitions(node);
@@ -117,7 +113,7 @@ type DecoratorsStatus = {
 };
 
 function getType(
-    typeNode: TypeNode,
+    typeNode: TSESTree.Node,
     esTreeNodeToTSNodeMap: ParserWeakMapESTreeToTSNode,
     checker: TypeChecker
 ): Type {
@@ -127,7 +123,7 @@ function getType(
 }
 
 function getDecoratorsStatus(
-    propertyDefinition: PropertyDefinition
+    propertyDefinition: TSESTree.PropertyDefinition
 ): DecoratorsStatus {
     let isDefined = false;
     let hasTypeCheckingDecorator = false;
