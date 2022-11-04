@@ -1,5 +1,5 @@
 import {VariableDeclarator} from "@babel/types";
-import {TSESTree} from "@typescript-eslint/types";
+import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 
 export const isValidationPipeNewExpression = (node: TSESTree.Node): boolean => {
@@ -93,7 +93,11 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<"shouldSpecifyForbidUnknownValues", never[]>
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             NewExpression(node: TSESTree.Node): void {

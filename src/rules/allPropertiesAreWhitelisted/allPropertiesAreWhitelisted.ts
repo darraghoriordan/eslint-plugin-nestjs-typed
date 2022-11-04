@@ -1,12 +1,6 @@
-import {AST_NODE_TYPES} from "@typescript-eslint/utils";
-import {PropertyDefinition} from "@typescript-eslint/types/dist/ast-spec";
-import * as classValidator from "class-validator";
-import {getPropertiesDefinitions} from "../../utils/ast";
+import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
-
-const CLASS_VALIDATOR_DECORATOR_NAMES = new Set(
-    Object.keys(classValidator as object)
-);
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
 const rule = createRule({
     name: "all-properties-are-whitelisted",
@@ -17,6 +11,7 @@ const rule = createRule({
             requiresTypeChecking: false,
         },
         messages: {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             "missing-property-decorator":
                 "Property has no class-validator decorator (use @Allow() if you don't need a validation)",
         },
@@ -24,28 +19,36 @@ const rule = createRule({
         schema: {},
     },
     defaultOptions: [],
-    create: function (context) {
+    create: function (
+        context: Readonly<
+            TSESLint.RuleContext<"missing-property-decorator", never[]>
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node) {
-                const withDecorator: PropertyDefinition[] = [];
-                const withoutDecorator: PropertyDefinition[] = [];
-                const propertyDefinitions = getPropertiesDefinitions(node);
-                for (const propertyDefinition of propertyDefinitions) {
-                    const hasDecorator = propertyDefinition.decorators?.some(
+                const program = typedTokenHelpers.getRootProgram(node);
+                const withDecorator: TSESTree.PropertyDefinition[] = [];
+                const withoutDecorator: TSESTree.PropertyDefinition[] = [];
+                for (const element of node.body.body) {
+                    if (element.type !== AST_NODE_TYPES.PropertyDefinition) {
+                        continue;
+                    }
+                    const hasDecorator = element.decorators?.some(
                         (decorator) =>
                             decorator.expression.type ===
                                 AST_NODE_TYPES.CallExpression &&
                             decorator.expression.callee.type ===
                                 AST_NODE_TYPES.Identifier &&
-                            CLASS_VALIDATOR_DECORATOR_NAMES.has(
-                                decorator.expression.callee.name
+                            typedTokenHelpers.decoratorIsClassValidatorDecorator(
+                                program,
+                                decorator
                             )
                     );
                     if (hasDecorator) {
-                        withDecorator.push(propertyDefinition);
+                        withDecorator.push(element);
                     } else {
-                        withoutDecorator.push(propertyDefinition);
+                        withoutDecorator.push(element);
                     }
                 }
                 if (withDecorator.length > 0 && withoutDecorator.length > 0) {

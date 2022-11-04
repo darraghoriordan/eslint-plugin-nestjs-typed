@@ -1,3 +1,9 @@
+![commit](https://badgen.net/github/last-commit/darraghoriordan/eslint-plugin-nestjs-typed/main)
+![npm](https://img.shields.io/npm/v/@darraghor/eslint-plugin-nestjs-typed.svg?color=red)
+![npm-tag](https://badgen.net/github/tag/darraghoriordan/eslint-plugin-nestjs-typed)
+![size](https://badgen.net/bundlephobia/minzip/@darraghor/eslint-plugin-nestjs-typed?color=cyan)
+![types](https://badgen.net/npm/types/@darraghor/eslint-plugin-nestjs-typed?color=blue)
+
 ## A note on versions
 
 Version 2.x supports Eslint version <=7.x and typescript eslint parser 4
@@ -5,6 +11,10 @@ Version 2.x supports Eslint version <=7.x and typescript eslint parser 4
 Version 3.x supports Eslint version >=8.x and typescript eslint parser 5+
 
 There were many breaking changes between these versions.
+
+typescript eslint parser supports a range of typescript versions but there can be a delay in supporting the latest versions.
+
+This plugin only supports typescript up to the version typescript eslint parser supports. See https://github.com/typescript-eslint/typescript-eslint#supported-typescript-version for the versions.
 
 ## Index of available rules
 
@@ -42,7 +52,7 @@ See the following summaries
 
 ### 1. Detect Nest Dependency Injection issues
 
-There are some things you don't want to forget when working with Nest dependency injection.
+There are some things you don't want to forget when working with Nest dependency injection...
 
 The Nest DI is declarative and if you forget to provide an injectable you wont see an error until run time. Nest is good at telling you where these are but sometimes it's not.
 
@@ -72,6 +82,19 @@ https://github.com/typestack/class-validator/issues/438
 
 ```
 npm install --save-dev @darraghor/eslint-plugin-nestjs-typed
+
+// or
+
+yarn add -D @darraghor/eslint-plugin-nestjs-typed
+```
+
+If you don't already have `class-validator` you should install that
+
+```
+npm install class-validator
+
+// or
+yarn add class-validator
 ```
 
 Then update your eslint with the plugin import and add the recommended rule set
@@ -201,6 +224,15 @@ export class CreateOrganisationDto {
 ### Rule: validated-non-primitive-property-needs-type-decorator
 
 If you use any of the class validator decorators on a property that is not a primitive, you should tell class-transformer how to transform it into a class first.
+
+This rule accepts an optional list of custom type decorators that will be counted as valid for the rule test. e.g.
+
+```ts
+"@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator": [
+        "error",
+        {additionalTypeDecorators: ["TransformDate"]},
+    ],
+```
 
 This PASSES because we're validating a Person class and we have added the @Type decorator.
 
@@ -437,7 +469,31 @@ NestJS will catch these at runtime but I prefer to get a nudge during developmen
 
 Fails if a thing marked as `@Injectable` is not in the `providers` of a module or `provides` in a provider.
 
-There is some additional configuration you can provide for this rule. This is the default setting. You should overrride this with your src directory and any strings to filter out from paths (note that the filterFromPaths are NOT globs - just matched strings).
+This rule only works with ArrayExpression assignment for the lists of providers. e.g.
+
+```
+// This works ok. We assign an array directly to the providers
+
+@Module({
+    imports: [],
+    providers: [MyProvider],
+})
+export class ProviderArrayModule {}
+```
+
+```
+// the rule will not follow this type of assignment with a variable or import to check which providers are in the variable reference.
+
+const providers = [ExampleProviderIncludedInModule];
+
+@Module({
+    imports: [],
+    providers: providers,
+})
+export class ProviderArrayModule {}
+```
+
+There is some additional configuration you can (and should!) provide for this rule. This is the default setting. You should over ride this with your src directory and any strings to filter out from paths (note that the `filterFromPaths` are NOT globs - just matched strings).
 
 ```ts
     "@darraghor/nestjs-typed/injectable-should-be-provided": [

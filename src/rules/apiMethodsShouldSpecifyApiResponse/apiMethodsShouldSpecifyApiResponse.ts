@@ -1,7 +1,7 @@
-// Import { getParserServices } from "@typescript-eslint/utils/dist/eslint-utils";
+// Import { getParserServices } from "@typescript-eslint/experimental-utils/dist/eslint-utils";
 // import * as tsutils from "tsutils";
-// import { getParserServices } from "@typescript-eslint/utils/dist/eslint-utils";
-import {TSESTree} from "@typescript-eslint/types";
+// import { getParserServices } from "@typescript-eslint/experimental-utils/dist/eslint-utils";
+import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
@@ -59,7 +59,7 @@ const rule = createRule({
             requiresTypeChecking: false,
         },
         messages: {
-            shouldSpecifyApiResponse: `A method decorated with @Get, @Post etc. should specify the expected ApiResponse e.g. @ApiOkResponse(type: MyType)`,
+            shouldSpecifyApiResponse: `A method decorated with @Get, @Post etc. should specify the expected ApiResponse e.g. @ApiOkResponse(type: MyType). These decorators are in the @nestjs/swagger npm package.`,
         },
         schema: [],
         hasSuggestions: false,
@@ -67,7 +67,11 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<"shouldSpecifyApiResponse", never[]>
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             MethodDefinition(node: TSESTree.MethodDefinition): void {

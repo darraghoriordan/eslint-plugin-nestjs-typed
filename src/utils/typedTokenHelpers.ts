@@ -1,13 +1,9 @@
-import {
-    AST_NODE_TYPES,
-    ParserServices,
-    TSESTree,
-} from "@typescript-eslint/utils";
-import {RuleContext} from "@typescript-eslint/utils/dist/ts-eslint";
-import {parse} from "@typescript-eslint/parser";
+import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
+import {parse, ParserServices} from "@typescript-eslint/parser";
 import ts from "typescript";
-import {unionTypeParts} from "tsutils";
 import * as tsutils from "tsutils";
+import {unionTypeParts} from "tsutils";
+
 export const typedTokenHelpers = {
     decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
         "IsArray",
@@ -107,21 +103,25 @@ export const typedTokenHelpers = {
             | TSESTree.MethodDefinition,
         decoratorNames: string[]
     ): TSESTree.Decorator[] {
-        const decorators = n.decorators?.filter((d) =>
-            decoratorNames.includes(
-                (
-                    (d.expression as TSESTree.CallExpression)
-                        .callee as TSESTree.Identifier
-                ).name
-            )
-        );
+        const decorators = n.decorators?.filter((d) => {
+            const factoryMethodDecoratorIdentifier = (
+                (d.expression as TSESTree.CallExpression)
+                    .callee as TSESTree.Identifier
+            )?.name;
+            const decoratorIdentifier = (d.expression as TSESTree.Identifier)
+                ?.name;
+
+            return decoratorNames.includes(
+                factoryMethodDecoratorIdentifier ?? decoratorIdentifier ?? ""
+            );
+        });
 
         return decorators || [];
     },
     parseStringToAst(
         code: string,
         path: string,
-        context: Readonly<RuleContext<never, never[]>>
+        context: Readonly<TSESLint.RuleContext<never, never[]>>
     ): TSESTree.Program {
         return parse(code, {
             filePath: path,
@@ -164,5 +164,131 @@ export const typedTokenHelpers = {
         const isOptionalPropertyValue =
             node.optional || isUndefinedType || false;
         return isOptionalPropertyValue;
+    },
+    /**
+     * Checks if an import is an import of the given decorator name
+     * @param imp
+     * @param decoratorName
+     */
+    importIsDecorator(
+        imp: TSESTree.ImportDeclaration,
+        decoratorName: string
+    ): boolean {
+        const isFromClassValidator =
+            imp.source.value.startsWith("class-validator");
+        const isDecoratorImport = imp.specifiers.some(
+            (specifier) => specifier.local.name === decoratorName
+        );
+
+        return isFromClassValidator && isDecoratorImport;
+    },
+    /**
+     * Checks if decorator is in imports of a node
+     * @param imports
+     * @param decorator
+     */
+    decoratorIsImportedFromClassValidator(
+        imports: TSESTree.ImportDeclaration[],
+        decorator: TSESTree.Decorator
+    ): boolean {
+        const decoratorName = this.getDecoratorName(decorator);
+
+        if (!decoratorName) {
+            return false;
+        }
+
+        return imports.some((imp) =>
+            typedTokenHelpers.importIsDecorator(imp, decoratorName)
+        );
+    },
+    /**
+     * Checks whether a decorator is a class validator decorator
+     * @param program The root program node
+     * @param decorator The decorator node
+     */
+    decoratorIsClassValidatorDecorator(
+        program: TSESTree.Program | null,
+        decorator: TSESTree.Decorator
+    ): boolean {
+        if (!program) {
+            return false;
+        }
+
+        const imports = program.body.filter(
+            (node): node is TSESTree.ImportDeclaration =>
+                node.type === TSESTree.AST_NODE_TYPES.ImportDeclaration
+        );
+
+        return typedTokenHelpers.decoratorIsImportedFromClassValidator(
+            imports,
+            decorator
+        );
+    },
+    /**
+     * Gets the root program of a node
+     * @param node
+     */
+    getRootProgram(node: TSESTree.BaseNode): TSESTree.Program | null {
+        let root = node;
+
+        while (root.parent) {
+            if (root.parent.type === TSESTree.AST_NODE_TYPES.Program) {
+                return root.parent;
+            }
+
+            root = root.parent;
+        }
+
+        return null;
+    },
+    /**
+     * Gets all the decorators actually imported from class-validator lib
+     * @param node PropertyDefinition node
+     */
+    getImportedClassValidatorDecorators(
+        node: TSESTree.PropertyDefinition
+    ): TSESTree.Decorator[] {
+        const program = typedTokenHelpers.getRootProgram(node);
+
+        const {decorators} = node;
+
+        return (
+            decorators?.filter((decorator): decorator is TSESTree.Decorator => {
+                return typedTokenHelpers.decoratorIsClassValidatorDecorator(
+                    program,
+                    decorator
+                );
+            }) ?? []
+        );
+    },
+    /**
+     * Checks if the decorator is the IsEnum decorator
+     * @param decorator
+     */
+    decoratorIsIsEnum(decorator: TSESTree.Decorator): boolean {
+        const decoratorName = this.getDecoratorName(decorator);
+
+        return decoratorName === "IsEnum";
+    },
+    /**
+     * Gets the name of a decorator
+     * Returns null if no name is found
+     * @param decorator
+     */
+    getDecoratorName(decorator: TSESTree.Decorator): string | null {
+        if (
+            decorator.expression.type !== TSESTree.AST_NODE_TYPES.CallExpression
+        ) {
+            return null;
+        }
+
+        if (
+            decorator.expression.callee.type !==
+            TSESTree.AST_NODE_TYPES.Identifier
+        ) {
+            return null;
+        }
+
+        return decorator.expression.callee.name;
     },
 };

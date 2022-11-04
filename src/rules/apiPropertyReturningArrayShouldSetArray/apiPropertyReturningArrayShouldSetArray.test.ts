@@ -1,9 +1,9 @@
-import {RuleTester} from "@typescript-eslint/utils/dist/eslint-utils";
+import {ESLintUtils} from "@typescript-eslint/utils";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import rule from "./apiPropertyReturningArrayShouldSetArray";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new RuleTester({
+const ruleTester = new ESLintUtils.RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,
@@ -25,6 +25,12 @@ ruleTester.run("api-property-returning-array-should-set-array", rule, {
                 @Expose()
                 @ApiPropertyOptional({isArray:true})
                 thisIsAStringProp?: Array<string>;}`,
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiPropertyOptional()
+                thisIsABooleanProp = false}`,
         },
     ],
     invalid: [

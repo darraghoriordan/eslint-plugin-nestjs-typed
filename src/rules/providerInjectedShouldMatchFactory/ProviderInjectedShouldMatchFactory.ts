@@ -1,4 +1,4 @@
-import {TSESTree} from "@typescript-eslint/utils";
+import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 // eslint-disable-next-line unicorn/import-style
 //import util from "util";
@@ -24,16 +24,15 @@ export const hasMismatchedInjected = (
 
     // count number of factory params
     const factoryParameterCount = (
-        nestProviderAstParser.findNestProviderObjectsProperty(
-            node,
-            "useFactory"
-        )?.value as TSESTree.ArrowFunctionExpression
+        nestProviderAstParser.findProvideProperty(node, "useFactory")
+            ?.value as TSESTree.ArrowFunctionExpression
     ).params?.length;
 
     // Count number of injected params
-    const injectedParameter =
-        nestProviderAstParser.findNestProviderObjectsProperty(node, "inject")
-            ?.value as unknown as TSESTree.ArrayExpression;
+    const injectedParameter = nestProviderAstParser.findProvideProperty(
+        node,
+        "inject"
+    )?.value as unknown as TSESTree.ArrayExpression;
 
     const injectedParameterCount = injectedParameter
         ? injectedParameter.elements.length
@@ -60,7 +59,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(context: Readonly<TSESLint.RuleContext<"mainMessage", never[]>>) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             VariableDeclarator(node: TSESTree.VariableDeclarator): void {

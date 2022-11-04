@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-import {TSESTree} from "@typescript-eslint/types";
+import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 
 type ResultModel = {
@@ -184,7 +184,14 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(context) {
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<
+                "paramIdentifierDoesntNeedColon" | "paramIdentifierShouldMatch",
+                never[]
+            >
+        >
+    ) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             Decorator(node: TSESTree.Decorator): void {

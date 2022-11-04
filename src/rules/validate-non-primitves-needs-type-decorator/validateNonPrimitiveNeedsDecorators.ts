@@ -1,15 +1,23 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/types";
+import {
+    AST_NODE_TYPES,
+    TSESTree,
+    ESLintUtils,
+    TSESLint,
+} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {getParserServices} from "@typescript-eslint/utils/dist/eslint-utils";
-import {classValidatorDecorators} from "../../utils/classValidatorDecorators";
 
 const primitiveTypes = new Set([
     AST_NODE_TYPES.TSStringKeyword,
     AST_NODE_TYPES.TSBooleanKeyword,
     AST_NODE_TYPES.TSNumberKeyword,
 ]);
+export type ValidateNonPrimitivePropertyTypeDecoratorOptions = [
+    {
+        additionalTypeDecorators: string[];
+    }
+];
 export const shouldTrigger = (): boolean => {
     return true;
 };
@@ -27,14 +35,40 @@ const rule = createRule({
             shouldUseTypeDecorator:
                 "A non-primitve property with validation should probably use a @Type decorator",
         },
-        schema: [],
+        schema: [
+            {
+                properties: {
+                    additionalTypeDecorators: {
+                        description:
+                            "A list of custom type decorators that this rule will use to validate",
+                        type: "array",
+                        minItems: 0,
+                        items: {
+                            type: "string",
+                            minLength: 1,
+                        },
+                    },
+                },
+            },
+        ],
         hasSuggestions: false,
         type: "suggestion",
     },
-    defaultOptions: [],
+    defaultOptions: [{additionalTypeDecorators: new Array<string>()}],
 
-    create(context) {
-        const parserServices = getParserServices(context);
+    create(
+        context: Readonly<
+            TSESLint.RuleContext<
+                "shouldUseTypeDecorator",
+                ValidateNonPrimitivePropertyTypeDecoratorOptions
+            >
+        >
+    ) {
+        const {additionalTypeDecorators} = context.options[0] || {
+            additionalTypeDecorators: [],
+        };
+
+        const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -106,18 +140,37 @@ const rule = createRule({
                 // property has a validation decorator but not IsEnum
                 // (we don't care about un-validated properties and enums don't need Type())
                 const foundClassValidatorDecorators =
-                    typedTokenHelpers.getDecoratorsNamed(
-                        node,
-                        classValidatorDecorators.filter((x) => x !== "IsEnum")
-                    );
+                    typedTokenHelpers.getImportedClassValidatorDecorators(node);
+                const hasEnum = foundClassValidatorDecorators.some(
+                    (foundClassValidatorDecorator) =>
+                        typedTokenHelpers.decoratorIsIsEnum(
+                            foundClassValidatorDecorator
+                        )
+                );
+
+                if (hasEnum) {
+                    return;
+                }
+
+                // const foundClassValidatorDecorators =
+                //     typedTokenHelpers.getDecoratorsNamed(
+                //         node,
+                //         classValidatorDecorators.filter((x) => x !== "IsEnum")
+                //     );
                 if (foundClassValidatorDecorators.length === 0) {
                     return;
                 }
 
-                // ok so does the property have Type decorator? it probably should
+                // we add the supplied extra decorators from settings to the type decorators
+                const typeDecorators = new Array<string>().concat(
+                    additionalTypeDecorators, // these are user-specified extra type decorators, unique to user's project
+                    ["Type"] //this is the default type decorator
+                );
+
+                // ok so does the property have Type decorator or custom type decorator? it probably should
                 const foundTypeDecorator = typedTokenHelpers.getDecoratorsNamed(
                     node,
-                    ["Type"]
+                    typeDecorators
                 );
 
                 if (foundTypeDecorator.length === 0) {

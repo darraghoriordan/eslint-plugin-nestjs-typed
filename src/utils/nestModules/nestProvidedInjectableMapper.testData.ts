@@ -1,15 +1,12 @@
-import {
-    EcmaVersion,
-    ParserOptions,
-} from "@typescript-eslint/utils/dist/ts-eslint";
+import {TSESLint} from "@typescript-eslint/utils";
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
 export const fakeFilePath = "fake/path.ts";
 export const fakeContext = {
     parserOptions: {
-        ecmaVersion: 2019 as EcmaVersion,
+        ecmaVersion: 2019 as TSESLint.EcmaVersion,
         ecmaFeatures: {globalReturn: false},
         sourceType: "module",
-    } as ParserOptions,
+    } as TSESLint.ParserOptions,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 export const moduleMappingTestData = [

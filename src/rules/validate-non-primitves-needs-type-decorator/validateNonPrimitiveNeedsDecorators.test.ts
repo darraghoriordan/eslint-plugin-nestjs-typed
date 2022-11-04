@@ -1,9 +1,9 @@
-import {RuleTester} from "@typescript-eslint/utils/dist/eslint-utils";
+import {ESLintUtils} from "@typescript-eslint/utils";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import rule from "./validateNonPrimitiveNeedsDecorators";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new RuleTester({
+const ruleTester = new ESLintUtils.RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,
@@ -14,6 +14,28 @@ const ruleTester = new RuleTester({
 
 ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     valid: [
+        {
+            // is a primitive type date with custom transform - https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/32
+            options: [{additionalTypeDecorators: ["TransformDate"]}],
+            code: `
+            import { IsOptional, IsDate } from 'class-validator';
+            
+            class ExampleDto {
+                @ApiPropertyOptional(
+                    {
+                        description: "Filter by date",
+                        required: false,
+                        writeOnly: true,
+                    }
+                )
+                @Expose()
+                @IsOptional()
+                @TransformDate()
+                @IsDate()
+               exampleProperty!: Date;
+              }
+    `,
+        },
         {
             // is a primitive type array - doesn't need type (from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/22)
             code: `
@@ -52,10 +74,25 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // no validation decorator
             code: `
+            import { IsDefined } from 'class-validator';
+            
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
                 @IsDefined()
                 @Type(()=> Person)
+                members!: Person;
+            }
+    `,
+        },
+        {
+            // sequelize-typescript validator with class-validator name conflict
+            code: `
+            import { IsInt } from 'sequelize-typescript'
+            
+            export class CreateOrganisationDto {
+                @ApiProperty({ type: Person, isArray: true })
+                @IsDefined()
+                @IsInt
                 members!: Person;
             }
     `,
@@ -72,6 +109,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // has the type decorator already
             code: `
+                import { IsArray } from 'class-validator';
+                
                 export class CreateOrganisationDto {
                     @ApiProperty({ type: Person, isArray: true })
                     @ValidateNested({each:true})
@@ -84,6 +123,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is a primitive type
             code: `
+                import { IsBoolean } from 'class-validator';
+                
                 export class CreateOrganisationDto {
                     @ApiProperty({ type: Person, isArray: true })
                     @ValidateNested({each:true})
@@ -95,6 +136,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is not a primitive type so skip
             code: `
+                import { Allow } from 'class-validator';
+                
                 enum Foo {
                     BAR
                  }
@@ -109,6 +152,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is an array - should have type and has it so pass!
             code: `
+            import { ValidateNested } from 'class-validator';
+            
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
                 @ValidateNested({each:true})
@@ -122,6 +167,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is an array - should have type
             code: `
+            import { ValidateNested } from 'class-validator';
+            
             export class CreateOrganisationDto {
                 @ApiProperty({ type: Person, isArray: true })
                 @ValidateNested({each:true})
@@ -137,6 +184,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is an OPTIONAL array - should have type
             code: `
+            import { ValidateNested } from 'class-validator';
+            
             export class Foo {}
             
             export class CreateOrganisationDto {
@@ -154,6 +203,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is an array with union - should have type
             code: `
+                import { ValidateNested, IsArray } from 'class-validator';
+                
                 export class CreateOrganisationDto {
                     @ApiProperty({ type: Person, isArray: true })
                     @ValidateNested({each:true})
@@ -170,6 +221,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is not a primitive type
             code: `
+                import { ValidateNested, IsDate } from 'class-validator';
+                
                 export class CreateOrganisationDto {
                     @ApiProperty({ type: Person, isArray: true })
                     @ValidateNested({each:true})
@@ -186,6 +239,8 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
         {
             // is a custom class
             code: `
+                import { ValidateNested, IsDefined } from 'class-validator';
+                
                 export class CreateOrganisationDto {
                     @ApiProperty({ type: Person, isArray: true })
                     @ValidateNested({each:true})
