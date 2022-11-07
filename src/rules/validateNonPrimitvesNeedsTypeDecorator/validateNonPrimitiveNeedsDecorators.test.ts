@@ -61,6 +61,37 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     `,
         },
         {
+            // is an OPTIONAL primitive type array - doesn't need type (from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/22)
+            code: `
+            enum Bar {}
+
+            export class Foo {
+                @ApiProperty({
+                  enum: Bar,
+                  enumName: "Bar",
+                })
+                @IsOptional()
+                baz?: Bar | null;
+              }
+    `,
+        },
+        {
+            code: `
+enum Baz {}
+
+class Foo {
+  @ApiPropertyOptional({
+    enum: Baz,
+    enumName: "Baz",
+    required: false,
+    isArray: true,
+  })
+  @IsOptional()
+  bar?: Baz[];
+}
+`,
+        },
+        {
             // scenario from https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/21
             code: `
             class ExampleDto {
