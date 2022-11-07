@@ -27,13 +27,13 @@ const rule = createRule({
     meta: {
         docs: {
             description:
-                "A non-primitve property with validation should probably use a @Type decorator",
+                "A non-primitive property with validation should probably use a @Type decorator",
             recommended: false,
             requiresTypeChecking: false,
         },
         messages: {
             shouldUseTypeDecorator:
-                "A non-primitve property with validation should probably use a @Type decorator. If this is an enum use @IsEnum().",
+                "A non-primitive property with validation should probably use a @Type decorator. If this is an enum use @IsEnum().",
         },
         schema: [
             {
