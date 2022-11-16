@@ -193,7 +193,6 @@ const rule = createRule({
                                         ?.typeAnnotation as TSESTree.TSTypeReference
                                 )?.typeParameters?.params;
 
-                                console.log(foundParams);
                                 if (foundParams && foundParams.length === 1) {
                                     const typeName = (
                                         foundParams[0] as TSESTree.TSTypeReference
