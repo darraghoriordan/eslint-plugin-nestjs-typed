@@ -33,7 +33,7 @@ const rule = createRule({
         },
         messages: {
             autofixWithTypeDecorator:
-                "Add @Type({{ typeIdentifier }}) decorator before class property.",
+                "Add @Type(() => {{ typeIdentifier }}) decorator before class property.",
             shouldUseTypeDecorator:
                 "A non-primitive property with validation should probably use a @Type decorator. If this is an enum use @IsEnum().",
         },

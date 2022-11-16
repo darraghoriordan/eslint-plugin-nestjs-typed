@@ -212,6 +212,7 @@ class Foo {
                     suggestions: [
                         {
                             messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Foo"},
                             output: `
             import { ValidateNested } from 'class-validator';
             
@@ -245,6 +246,7 @@ class Foo {
                     suggestions: [
                         {
                             messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Foo"},
                             output: `
             import { ValidateNested } from 'class-validator';
             
@@ -280,6 +282,7 @@ class Foo {
                     suggestions: [
                         {
                             messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Foo"},
                             output: `
             import { ValidateNested } from 'class-validator';
             
@@ -333,6 +336,7 @@ class Foo {
                     suggestions: [
                         {
                             messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Date"},
                             output: `
                 import { ValidateNested, IsDate } from 'class-validator';
                 
@@ -366,6 +370,7 @@ class Foo {
                     suggestions: [
                         {
                             messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "CustomClass"},
                             output: `
                 import { ValidateNested, IsDefined } from 'class-validator';
                 
