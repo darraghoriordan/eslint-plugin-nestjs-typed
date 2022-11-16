@@ -32,6 +32,8 @@ const rule = createRule({
             requiresTypeChecking: false,
         },
         messages: {
+            autofixWithTypeDecorator:
+                "Add @Type({{ typeIdentifier }}) decorator before class property.",
             shouldUseTypeDecorator:
                 "A non-primitive property with validation should probably use a @Type decorator. If this is an enum use @IsEnum().",
         },
@@ -51,7 +53,7 @@ const rule = createRule({
                 },
             },
         ],
-        hasSuggestions: false,
+        hasSuggestions: true,
         type: "suggestion",
     },
     defaultOptions: [{additionalTypeDecorators: new Array<string>()}],
@@ -59,7 +61,7 @@ const rule = createRule({
     create(
         context: Readonly<
             TSESLint.RuleContext<
-                "shouldUseTypeDecorator",
+                "shouldUseTypeDecorator" | "autofixWithTypeDecorator",
                 ValidateNonPrimitivePropertyTypeDecoratorOptions
             >
         >
@@ -103,7 +105,6 @@ const rule = createRule({
                     mainType = node.typeAnnotation?.typeAnnotation?.type;
                 }
 
-                // if this couldn't be found we don't understand the AST
                 if (!mainType) {
                     return;
                 }
@@ -174,10 +175,79 @@ const rule = createRule({
                 );
 
                 if (foundTypeDecorator.length === 0) {
-                    context.report({
-                        node: node,
-                        messageId: "shouldUseTypeDecorator",
-                    });
+                    const typeAnnotationNode =
+                        node.typeAnnotation?.typeAnnotation;
+                    let typeIdentifier: string | undefined;
+
+                    if (typeAnnotationNode) {
+                        if (
+                            typeAnnotationNode.type ===
+                                AST_NODE_TYPES.TSTypeReference &&
+                            typeAnnotationNode.typeName.type === "Identifier"
+                        ) {
+                            typeIdentifier = typeAnnotationNode.typeName.name;
+
+                            if (typeAnnotationNode.typeName.name === "Array") {
+                                const foundParams = (
+                                    node.typeAnnotation
+                                        ?.typeAnnotation as TSESTree.TSTypeReference
+                                )?.typeParameters?.params;
+
+                                console.log(foundParams);
+                                if (foundParams && foundParams.length === 1) {
+                                    const typeName = (
+                                        foundParams[0] as TSESTree.TSTypeReference
+                                    ).typeName;
+
+                                    if (
+                                        typeName.type ===
+                                        AST_NODE_TYPES.Identifier
+                                    ) {
+                                        typeIdentifier = typeName.name;
+                                    }
+                                }
+                            }
+                        } else if (
+                            typeAnnotationNode.type ===
+                            AST_NODE_TYPES.TSArrayType
+                        ) {
+                            const elementTypeNode =
+                                typeAnnotationNode.elementType;
+
+                            if (
+                                elementTypeNode.type ===
+                                    AST_NODE_TYPES.TSTypeReference &&
+                                elementTypeNode.typeName.type ===
+                                    AST_NODE_TYPES.Identifier
+                            ) {
+                                typeIdentifier = elementTypeNode.typeName.name;
+                            }
+                        }
+                    }
+
+                    if (typeIdentifier) {
+                        context.report({
+                            node: node,
+                            messageId: "shouldUseTypeDecorator",
+                            suggest: [
+                                {
+                                    data: {typeIdentifier},
+                                    messageId: "autofixWithTypeDecorator",
+                                    fix: (fixer) => {
+                                        return fixer.insertTextBefore(
+                                            node,
+                                            `@Type(() => ${typeIdentifier})`
+                                        );
+                                    },
+                                },
+                            ],
+                        });
+                    } else {
+                        context.report({
+                            node: node,
+                            messageId: "shouldUseTypeDecorator",
+                        });
+                    }
                 }
             },
         };
