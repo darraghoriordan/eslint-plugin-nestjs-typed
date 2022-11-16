@@ -319,6 +319,25 @@ class Foo {
             ],
         },
         {
+            // is an array with union - should have type
+            code: `
+                import { ValidateNested, IsArray } from 'class-validator';
+                
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsArray()
+                    members!: (Person&Date)[];
+                }
+        `,
+            errors: [
+                {
+                    messageId: "shouldUseTypeDecorator",
+                    suggestions: [],
+                },
+            ],
+        },
+        {
             // is not a primitive type
             code: `
                 import { ValidateNested, IsDate } from 'class-validator';
