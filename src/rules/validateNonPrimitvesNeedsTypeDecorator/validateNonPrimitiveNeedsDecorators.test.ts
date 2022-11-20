@@ -66,6 +66,10 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
             enum Bar {}
 
             export class Foo {
+                @ApiProperty()
+                  @IsString()
+                  myProp!: string;
+
                 @ApiProperty({
                   enum: Bar,
                   enumName: "Bar",
