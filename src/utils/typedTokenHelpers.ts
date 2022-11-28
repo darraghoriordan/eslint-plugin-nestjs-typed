@@ -270,7 +270,7 @@ export const typedTokenHelpers = {
 
         return decoratorName === "IsEnum";
     },
-    /** Checks if the decorator is the IsEnum decorator
+    /** Checks if the decorator is the IsObject decorator
      * @param decorator
      */
     decoratorIsIsObject(decorator: TSESTree.Decorator): boolean {
