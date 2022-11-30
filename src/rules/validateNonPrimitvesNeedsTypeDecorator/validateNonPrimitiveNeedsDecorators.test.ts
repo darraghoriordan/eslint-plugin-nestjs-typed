@@ -197,6 +197,21 @@ class Foo {
             }
     `,
         },
+        {
+            // has @IsObject decorator, does not need a Type
+            code: `
+            import { IsObject } from 'class-validator';
+
+            class ExampleDto {
+                @ApiProperty({
+                  isArray: true,
+                })
+                @Allow()
+                @IsObject()
+               nullExampleProperty!: object
+              }
+    `,
+        },
     ],
     invalid: [
         {

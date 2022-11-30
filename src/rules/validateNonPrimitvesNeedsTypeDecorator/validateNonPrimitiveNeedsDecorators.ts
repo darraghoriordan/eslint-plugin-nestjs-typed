@@ -33,7 +33,7 @@ const rule = createRule({
         },
         messages: {
             shouldUseTypeDecorator:
-                "A non-primitive property with validation should probably use a @Type decorator. If this is an enum use @IsEnum().",
+                "A non-primitive property with validation should probably use a @Type decorator. If this is an enum use @IsEnum(). If this is a plain object use @IsObject().",
         },
         schema: [
             {
@@ -149,6 +149,17 @@ const rule = createRule({
                 );
 
                 if (hasEnum) {
+                    return;
+                }
+
+                const hasObject = foundClassValidatorDecorators.some(
+                    (foundClassValidatorDecorator) =>
+                        typedTokenHelpers.decoratorIsIsObject(
+                            foundClassValidatorDecorator
+                        )
+                );
+
+                if (hasObject) {
                     return;
                 }
 
