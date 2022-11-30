@@ -228,6 +228,21 @@ class Foo {
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",
+                    suggestions: [
+                        {
+                            messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Foo"},
+                            output: `
+            import { ValidateNested } from 'class-validator';
+            
+            export class CreateOrganisationDto {
+                @Type(() => Foo)@ApiProperty({ type: Person, isArray: true })
+                @ValidateNested({each:true})
+                members!: Foo[];
+            }
+    `,
+                        },
+                    ],
                 },
             ],
         },
@@ -247,6 +262,59 @@ class Foo {
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",
+                    suggestions: [
+                        {
+                            messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Foo"},
+                            output: `
+            import { ValidateNested } from 'class-validator';
+            
+            export class Foo {}
+            
+            export class CreateOrganisationDto {
+                @Type(() => Foo)@ApiProperty({ type: Person, isArray: true })
+                @ValidateNested({each:true})
+                members?: Foo[];
+            }
+    `,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            // is an Array<> declared array - should have type
+            code: `
+            import { ValidateNested } from 'class-validator';
+            
+            export class Foo {}
+            
+            export class CreateOrganisationDto {
+                @ApiProperty({ type: Person, isArray: true })
+                @ValidateNested({each:true})
+                members?: Array<Foo>;
+            }
+    `,
+            errors: [
+                {
+                    messageId: "shouldUseTypeDecorator",
+                    suggestions: [
+                        {
+                            messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Foo"},
+                            output: `
+            import { ValidateNested } from 'class-validator';
+            
+            export class Foo {}
+            
+            export class CreateOrganisationDto {
+                @Type(() => Foo)@ApiProperty({ type: Person, isArray: true })
+                @ValidateNested({each:true})
+                members?: Array<Foo>;
+            }
+    `,
+                        },
+                    ],
                 },
             ],
         },
@@ -265,6 +333,26 @@ class Foo {
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",
+                    suggestions: [],
+                },
+            ],
+        },
+        {
+            // is an array with union - should have type
+            code: `
+                import { ValidateNested, IsArray } from 'class-validator';
+                
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsArray()
+                    members!: (Person&Date)[];
+                }
+        `,
+            errors: [
+                {
+                    messageId: "shouldUseTypeDecorator",
+                    suggestions: [],
                 },
             ],
         },
@@ -283,6 +371,22 @@ class Foo {
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",
+                    suggestions: [
+                        {
+                            messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "Date"},
+                            output: `
+                import { ValidateNested, IsDate } from 'class-validator';
+                
+                export class CreateOrganisationDto {
+                    @Type(() => Date)@ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsDate()
+                    members!: Date;
+                }
+        `,
+                        },
+                    ],
                 },
             ],
         },
@@ -301,6 +405,22 @@ class Foo {
             errors: [
                 {
                     messageId: "shouldUseTypeDecorator",
+                    suggestions: [
+                        {
+                            messageId: "autofixWithTypeDecorator",
+                            data: {typeIdentifier: "CustomClass"},
+                            output: `
+                import { ValidateNested, IsDefined } from 'class-validator';
+                
+                export class CreateOrganisationDto {
+                    @Type(() => CustomClass)@ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsDefined()
+                    members!: CustomClass;
+                }
+        `,
+                        },
+                    ],
                 },
             ],
         },
