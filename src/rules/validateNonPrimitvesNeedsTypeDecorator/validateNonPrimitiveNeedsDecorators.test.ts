@@ -201,7 +201,6 @@ class Foo {
             // has @IsObject decorator, does not need a Type
             code: `
             import { IsObject } from 'class-validator';
-
             class ExampleDto {
                 @ApiProperty({
                   isArray: true,
@@ -209,6 +208,21 @@ class Foo {
                 @Allow()
                 @IsObject()
                nullExampleProperty!: object
+              }
+    `,
+        },
+        {
+            // is a union between primitive array and null - doesn't need type
+            code: `
+            import { IsString } from 'class-validator';
+
+            class ExampleDto {
+                @ApiProperty({
+                  isArray: true,
+                })
+                @Allow()
+                @IsString({each: true})
+               nullExampleProperty!: string[] | null;
               }
     `,
         },
