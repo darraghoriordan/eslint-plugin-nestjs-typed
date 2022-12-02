@@ -242,10 +242,10 @@ export const typedTokenHelpers = {
         return null;
     },
     /**
-     * Gets all the decorators actually imported from class-validator lib
+     * Gets all the decorators actually imported from class-validator lib or decorators that were included in the additionalCustomValidatorDecorators options
      * @param node PropertyDefinition node
      */
-    getImportedClassValidatorDecorators(
+    getValidationDecorators(
         node: TSESTree.PropertyDefinition,
         additionalCustomValidatorDecorators: string[] = []
     ): TSESTree.Decorator[] {

@@ -159,7 +159,7 @@ const rule = createRule({
                 // property has a validation decorator but not IsEnum
                 // (we don't care about un-validated properties and enums don't need Type())
                 const foundClassValidatorDecorators =
-                    typedTokenHelpers.getImportedClassValidatorDecorators(
+                    typedTokenHelpers.getValidationDecorators(
                         node,
                         additionalCustomValidatorDecorators
                     );
