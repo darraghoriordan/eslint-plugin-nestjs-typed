@@ -17,6 +17,7 @@ const primitiveTypes = new Set([
 export type ValidateNonPrimitivePropertyTypeDecoratorOptions = [
     {
         additionalTypeDecorators: string[];
+        additionalCustomValidatorDecorators?: string[];
     }
 ];
 export const shouldTrigger = (): boolean => {
@@ -51,13 +52,28 @@ const rule = createRule({
                             minLength: 1,
                         },
                     },
+                    additionalCustomValidatorDecorators: {
+                        description:
+                            "A list of custom validator decorators that this rule will use to validate",
+                        type: "array",
+                        minItems: 0,
+                        items: {
+                            type: "string",
+                            minLength: 1,
+                        },
+                    },
                 },
             },
         ],
         hasSuggestions: true,
         type: "suggestion",
     },
-    defaultOptions: [{additionalTypeDecorators: new Array<string>()}],
+    defaultOptions: [
+        {
+            additionalTypeDecorators: new Array<string>(),
+            additionalCustomValidatorDecorators: new Array<string>(),
+        },
+    ],
 
     create(
         context: Readonly<
@@ -67,9 +83,10 @@ const rule = createRule({
             >
         >
     ) {
-        const {additionalTypeDecorators} = context.options[0] || {
-            additionalTypeDecorators: [],
-        };
+        const {additionalTypeDecorators, additionalCustomValidatorDecorators} =
+            context.options[0] || {
+                additionalTypeDecorators: [],
+            };
 
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
@@ -142,7 +159,11 @@ const rule = createRule({
                 // property has a validation decorator but not IsEnum
                 // (we don't care about un-validated properties and enums don't need Type())
                 const foundClassValidatorDecorators =
-                    typedTokenHelpers.getImportedClassValidatorDecorators(node);
+                    typedTokenHelpers.getImportedClassValidatorDecorators(
+                        node,
+                        additionalCustomValidatorDecorators
+                    );
+
                 const hasEnum = foundClassValidatorDecorators.some(
                     (foundClassValidatorDecorator) =>
                         typedTokenHelpers.decoratorIsIsEnum(

@@ -226,6 +226,32 @@ class Foo {
               }
     `,
         },
+        {
+            // Checks for for custom validator decorators
+            options: [
+                {
+                    additionalTypeDecorators: [],
+                    additionalCustomValidatorDecorators: ["IsDateRange"],
+                },
+            ],
+            code: `
+            
+            class ExampleDto {
+                @ApiPropertyOptional(
+                    {
+                        description: "Filter by date",
+                        required: false,
+                        writeOnly: true,
+                    }
+                )
+                @Expose()
+                @IsDateRange()
+                @Type(() => Date)
+                @TransformDate()
+                exampleProperty!: [Date, Date];
+              }
+    `,
+        },
     ],
     invalid: [
         {
