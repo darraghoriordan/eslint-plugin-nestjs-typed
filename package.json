@@ -55,7 +55,7 @@
         "@types/node": "18.11.9",
         "@typescript-eslint/eslint-plugin": "5.42.0",
         "@typescript-eslint/parser": "5.42.0",
-        "class-validator": "^0.13.2",
+        "class-validator": "^0.14",
         "eslint": "8.26.0",
         "eslint-config-prettier": "8.5.0",
         "eslint-plugin-import": "2.26.0",
