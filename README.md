@@ -267,14 +267,25 @@ export class CreateOrganisationDto {
 
 If you use any of the class validator decorators on a property that is not a primitive, you should tell class-transformer how to transform it into a class first.
 
-This rule accepts an optional list of custom type decorators that will be counted as valid for the rule test. e.g.
+This rule accepts 2 options:
 
-```ts
-"@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator": [
-        "error",
-        {additionalTypeDecorators: ["TransformDate"]},
-    ],
-```
+-   `additionalTypeDecorators`: string list of custom type decorators that will be counted as valid for the rule test e.g.
+
+    ```ts
+    "@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator": [
+            "error",
+            {additionalTypeDecorators: ["TransformDate"]},
+        ],
+    ```
+
+-   `additionalCustomValidatorDecorators`: string list of custom class-validator decorators which will get recognized as a validator by the plugin. This is especially useful if you have created your own validator outside of the standard ones provided by the library. The example below prevents errors from being raised by the linter if we use the `@IsDateRange` validator on a class property.
+
+    ```ts
+    "@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator": [
+            "error",
+            {additionalCustomValidatorDecorators: ["IsDateRange"]},
+        ],
+    ```
 
 This PASSES because we're validating a Person class and we have added the @Type decorator.
 

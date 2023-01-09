@@ -242,11 +242,12 @@ export const typedTokenHelpers = {
         return null;
     },
     /**
-     * Gets all the decorators actually imported from class-validator lib
+     * Gets all the decorators actually imported from class-validator lib or decorators that were included in the additionalCustomValidatorDecorators options
      * @param node PropertyDefinition node
      */
-    getImportedClassValidatorDecorators(
-        node: TSESTree.PropertyDefinition
+    getValidationDecorators(
+        node: TSESTree.PropertyDefinition,
+        additionalCustomValidatorDecorators: string[] = []
     ): TSESTree.Decorator[] {
         const program = typedTokenHelpers.getRootProgram(node);
 
@@ -254,9 +255,24 @@ export const typedTokenHelpers = {
 
         return (
             decorators?.filter((decorator): decorator is TSESTree.Decorator => {
-                return typedTokenHelpers.decoratorIsClassValidatorDecorator(
-                    program,
-                    decorator
+                const isClassValidatorDecorator =
+                    typedTokenHelpers.decoratorIsClassValidatorDecorator(
+                        program,
+                        decorator
+                    );
+
+                const decoratorName =
+                    typedTokenHelpers.getDecoratorName(decorator);
+
+                const isCustomClassValidatorDecorator =
+                    decoratorName !== null
+                        ? additionalCustomValidatorDecorators.includes(
+                              decoratorName
+                          )
+                        : false;
+
+                return (
+                    isCustomClassValidatorDecorator || isClassValidatorDecorator
                 );
             }) ?? []
         );
