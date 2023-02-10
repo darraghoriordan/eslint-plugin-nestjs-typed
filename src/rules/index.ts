@@ -11,6 +11,7 @@ import validateNonPrimitiveNeedsDecorators from "./validateNonPrimitvesNeedsType
 import validateNestedOfArrayShouldSetEach from "./validateNestedOfArrayShouldSetEach/validateNestedOfArrayShouldSetEach";
 import allPropertiesAreWhitelisted from "./allPropertiesAreWhitelisted/allPropertiesAreWhitelisted";
 import allPropertiesHaveExplicitDefined from "./allPropertiesHaveExplicitDefined/allPropertiesHaveExplicitDefined";
+import apiMethodsShouldBeGuarded from "./apiMethodsShouldBeGuarded/apiMethodsShouldBeGuarded";
 
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
@@ -33,6 +34,7 @@ const allRules = {
     "validate-nested-of-array-should-set-each":
         validateNestedOfArrayShouldSetEach,
     "all-properties-are-whitelisted": allPropertiesAreWhitelisted,
+    "api-methods-should-be-guarded": apiMethodsShouldBeGuarded,
 };
 
 export default allRules;
