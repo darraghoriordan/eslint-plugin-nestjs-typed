@@ -23,6 +23,8 @@ const allRules = {
     "controllers-should-supply-api-tags": controllerDecoratedHasApiTags,
     "api-method-should-specify-api-response":
         apiMethodsShouldSpecifyApiResponse,
+    "api-method-should-specify-api-operation":
+        apiMethodsShouldSpecifyApiResponse,
     "api-enum-property-best-practices": apiEnumPropertyBestPractices,
     "api-property-returning-array-should-set-array":
         apiPropertyReturningArrayShouldSetArray,
