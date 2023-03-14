@@ -12,6 +12,7 @@ import validateNestedOfArrayShouldSetEach from "./validateNestedOfArrayShouldSet
 import allPropertiesAreWhitelisted from "./allPropertiesAreWhitelisted/allPropertiesAreWhitelisted";
 import allPropertiesHaveExplicitDefined from "./allPropertiesHaveExplicitDefined/allPropertiesHaveExplicitDefined";
 import apiMethodsShouldBeGuarded from "./apiMethodsShouldBeGuarded/apiMethodsShouldBeGuarded";
+import apiMethodsShouldSpecifyApiOperation from "./apiMethodsShouldSpecifyApiOperation/apiMethodsShouldSpecifyApiOperation";
 
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
@@ -24,7 +25,7 @@ const allRules = {
     "api-method-should-specify-api-response":
         apiMethodsShouldSpecifyApiResponse,
     "api-method-should-specify-api-operation":
-        apiMethodsShouldSpecifyApiResponse,
+        apiMethodsShouldSpecifyApiOperation,
     "api-enum-property-best-practices": apiEnumPropertyBestPractices,
     "api-property-returning-array-should-set-array":
         apiPropertyReturningArrayShouldSetArray,
