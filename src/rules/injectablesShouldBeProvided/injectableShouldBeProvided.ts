@@ -65,7 +65,7 @@ const checkNode = (
     }
 };
 
-function initialiseModuleMappings(
+function initializeModuleMappings(
     sourcePath: string,
     filterFromPaths: string[],
     context: Readonly<TSESLint.RuleContext<never, Options>>
@@ -151,7 +151,7 @@ const rule = createRule({
         } = context.options[0] || {};
 
         if (nestModuleMap === undefined || nestModuleMap.size === 0) {
-            initialiseModuleMappings(src[0], filterFromPaths, context);
+            initializeModuleMappings(src[0], filterFromPaths, context);
         }
 
         return {
