@@ -3,7 +3,7 @@ on:
     push:
         branches:
             - main
-
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
     publish:
         runs-on: ubuntu-latest
@@ -15,7 +15,8 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: "18"
-            - run: npm i -g npm
+                  cache: yarn
+            - run: npm install -g npm@latest
             - run: yarn
             - run: yarn test
             - run: yarn build
