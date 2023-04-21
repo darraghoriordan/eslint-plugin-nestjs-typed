@@ -57,7 +57,6 @@ jspm_packages/
 # next.js build output
 .next
 
-
 # Editor-specific metadata folders
 .vs
 
@@ -73,5 +72,4 @@ _ts3.4
 packages/types/src/ast-spec.ts
 .jest_cache
 false
-.npmrc
 junit-TEST.xml
