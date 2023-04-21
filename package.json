@@ -28,7 +28,7 @@
         "url": "https://github.com/darraghoriordan/eslint-plugin-nestjs-typed"
     },
     "engines": {
-        "node": ">=14"
+        "node": ">=16"
     },
     "files": [
         "dist",
