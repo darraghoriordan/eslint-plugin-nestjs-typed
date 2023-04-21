@@ -3,9 +3,13 @@ on:
     push:
         branches:
             - main
+
 jobs:
     publish:
         runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: read
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
