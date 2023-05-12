@@ -32,6 +32,7 @@ Nest Swagger
 -   api-property-matches-property-optionality
 -   controllers-should-supply-api-tags
 -   api-method-should-specify-api-response
+-   api-method-should-specify-api-operation
 -   api-enum-property-best-practices
 -   api-property-returning-array-should-set-array
 
