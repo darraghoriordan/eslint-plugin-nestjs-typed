@@ -29,5 +29,7 @@ export = {
         "@darraghor/nestjs-typed/all-properties-are-whitelisted": "error",
         "@darraghor/nestjs-typed/all-properties-have-explicit-defined": "error",
         "@darraghor/nestjs-typed/api-methods-should-be-guarded": "off",
+        "@darraghor/nestjs-typed/api-method-should-specify-api-operation":
+            "off",
     },
 };
