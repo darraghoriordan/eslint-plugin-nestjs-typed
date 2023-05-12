@@ -18,6 +18,10 @@ This plugin only supports typescript up to the version typescript eslint parser 
 
 ## Index of available rules
 
+Please check the recommended list (https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/main/src/configs/recommended.ts) to check which rules are turned on when using that config.
+
+Some rules are opinionated and have to be turned on explicitly.
+
 Nest Modules and Dependency Injection
 
 -   provided-injected-should-match-factory-parameters
@@ -48,7 +52,7 @@ Detailed docs are available here: https://github.com/darraghoriordan/eslint-plug
 
 ## Who is this package for?
 
-If you use NestJs (https://nestjs.com/) these ESLint rules will help you to prevent common bugs and issues in NestJs applications. 
+If you use NestJs (https://nestjs.com/) these ESLint rules will help you to prevent common bugs and issues in NestJs applications.
 
 They mostly check that you are using decorators correctly.
 
