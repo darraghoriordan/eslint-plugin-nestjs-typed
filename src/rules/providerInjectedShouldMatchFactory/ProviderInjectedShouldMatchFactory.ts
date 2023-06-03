@@ -16,7 +16,9 @@ export const hasMismatchedInjected = (
       // prettier-ignore
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
         )?.typeName as TSESTree.Identifier
-        )?.name === "Provider";
+        )?.name === "Provider" &&
+        // and there is a useFactory property in the declaration
+        nestProviderAstParser.findProvideProperty(node, "useFactory");
 
     if (!isNestProvider) {
         return false;
@@ -26,7 +28,7 @@ export const hasMismatchedInjected = (
     const factoryParameterCount = (
         nestProviderAstParser.findProvideProperty(node, "useFactory")
             ?.value as TSESTree.ArrowFunctionExpression
-    ).params?.length;
+    )?.params?.length;
 
     // Count number of injected params
     const injectedParameter = nestProviderAstParser.findProvideProperty(
