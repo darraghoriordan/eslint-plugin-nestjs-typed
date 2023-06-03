@@ -20,34 +20,30 @@ This plugin only supports typescript up to the version typescript eslint parser 
 
 Please check the recommended list (https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/main/src/configs/recommended.ts) to check which rules are turned on when using that config.
 
-Some rules are opinionated and have to be turned on explicitly.
+Some rules are opinionated and have to be turned on explicitly (if they're not in the recommended config pack).
 
-Nest Modules and Dependency Injection
-
--   provided-injected-should-match-factory-parameters
--   injectable-should-be-provided
-
-Nest Swagger
-
--   api-property-matches-property-optionality
--   controllers-should-supply-api-tags
--   api-method-should-specify-api-response
--   api-method-should-specify-api-operation
--   api-enum-property-best-practices
--   api-property-returning-array-should-set-array
-
-Preventing bugs
-
--   param-decorator-name-matches-route-param
--   validate-nested-of-array-should-set-each
--   validated-non-primitive-property-needs-type-decorator
--   all-properties-are-whitelisted
--   all-properties-have-explicit-defined
-
-Security
-
--   should-specify-forbid-unknown-values
--   api-methods-should-be-guarded
+| Category                              | Rule                                                  | is in recommended config |
+| ------------------------------------- | ----------------------------------------------------- | ------------------------ |
+| Nest Modules and Dependency Injection | provided-injected-should-match-factory-parameters     | Y                        |
+|                                       | injectable-should-be-provided                         | Y                        |
+|                                       |                                                       |                          |
+| Nest Swagger                          | api-property-matches-property-optionality             | Y                        |
+|                                       | controllers-should-supply-api-tags                    | Y                        |
+|                                       | api-method-should-specify-api-response                | N                        |
+|                                       | api-method-should-specify-api-operation               | Y                        |
+|                                       | api-enum-property-best-practices                      | Y                        |
+|                                       | api-property-returning-array-should-set-array         | Y                        |
+|                                       |                                                       |                          |
+| Preventing bugs                       | param-decorator-name-matches-route-param              | Y                        |
+|                                       | validate-nested-of-array-should-set-each              | Y                        |
+|                                       | validated-non-primitive-property-needs-type-decorator | Y                        |
+|                                       | all-properties-are-whitelisted                        | Y                        |
+|                                       | all-properties-have-explicit-defined                  | Y                        |
+|                                       |                                                       |                          |
+| Security                              | should-specify-forbid-unknown-values                  | Y                        |
+|                                       | api-methods-should-be-guarded                         | N                        |
+|                                       |                                                       |                          |
+| Code Consistency                      | sort-module-metadata-arrays                           | N                        |
 
 Detailed docs are available here: https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/tree/main/src/docs/rules
 
