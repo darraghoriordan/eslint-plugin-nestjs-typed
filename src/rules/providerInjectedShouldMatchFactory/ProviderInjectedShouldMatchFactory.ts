@@ -8,6 +8,7 @@ export const hasMismatchedInjected = (
     node: TSESTree.VariableDeclarator
 ): boolean => {
     // should be a nest provider - note this doesn't check the Provider used is an import actually from nest. Assumes nest Provider. Will change if this is annoying:)
+    // edit 03/06/2023 - it was annoying and someone complained on github so I added a check for a "useFactory" property on the Provider declaration
     const isNestProvider =
         (
             (
