@@ -226,6 +226,50 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             }
             `,
         },
+        {
+            // variables are ignored by rule
+            code: ` 
+            const MY_VAR="some/route"
+
+            @ApiTags("Custom Bot")
+            @ApiBearerAuth()
+            @UseGuards(DefaultAuthGuard)
+            @Controller("custom-bot/my-controller")
+            export class CustomBotController {
+                constructor(
+                ) {}
+            
+                @Get(MY_VAR)
+                @ApiOkResponse({ type: CustomBot })
+                findOne(
+                    @Param("uuid") uuid: string,
+                    @Request() request: RequestWithUser
+                ): Promise<CustomBot> {
+                    return this.customBotService.findOne(uuid, request.user.uuid);
+                }
+            }`,
+        },
+        {
+            // template strings are ignored by rule
+            code: ` 
+            @ApiTags("Custom Bot")
+            @ApiBearerAuth()
+            @UseGuards(DefaultAuthGuard)
+            @Controller("custom-bot/my-controller")
+            export class CustomBotController {
+                constructor(
+                ) {}
+            
+                @Get(\`some/route\`)
+                @ApiOkResponse({ type: CustomBot })
+                findOne(
+                    @Param("uuid") uuid: string,
+                    @Request() request: RequestWithUser
+                ): Promise<CustomBot> {
+                    return this.customBotService.findOne(uuid, request.user.uuid);
+                }
+            }`,
+        },
     ],
     invalid: [
         {

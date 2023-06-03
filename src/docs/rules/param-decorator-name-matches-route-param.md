@@ -4,6 +4,8 @@ This rule will verify you have entered a `Param("name")` that has a matching url
 
 NOTE: nestjs allows for fuzzy matching params in paths with `_+?()*` as regex params. This rule doesn't support parsing paths with regex so we will ignore any routes with these characters in them.
 
+This rule also doesn't support variables or template strings. It will only work with single or double quoted strings.
+
 this PASSES because the uuid param is in the `Get()` decorator
 
 ```ts
