@@ -50,6 +50,24 @@ ruleTester.run("validation-pipe-should-use-forbid-unknown", rule, {
     `,
         },
         {
+            // ignore spread options for validation pipe
+            code: `
+            const options = {
+                forbidNonWhitelisted: true,
+            } as ThisIsNotAValidationPipeOptionsClass;
+    
+            const validationPipeA = new ValidationPipe({...options});
+    
+            const validationPipeB = new ValidationPipe({
+                transform: true,
+                skipMissingProperties: false,
+                whitelist: true,
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+            });   
+    `,
+        },
+        {
             code: `
             const options = {
                 forbidNonWhitelisted: true,

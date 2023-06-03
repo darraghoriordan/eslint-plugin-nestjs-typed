@@ -1,6 +1,7 @@
 import {VariableDeclarator} from "@babel/types";
 import {TSESTree, TSESLint} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
+import {isNodeOfType} from "@typescript-eslint/utils/dist/ast-utils";
 
 export const isValidationPipeNewExpression = (node: TSESTree.Node): boolean => {
     const newExpression = node as TSESTree.NewExpression;
@@ -16,11 +17,11 @@ export const checkObjectExpression = (
     if (!os) {
         return false;
     }
-    const forbidUnknownValuesProperty = os?.properties?.find(
-        (p) =>
-            ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
-            "forbidUnknownValues"
-    ) as TSESTree.Property;
+    const forbidUnknownValuesProperty = os?.properties
+        ?.filter(isNodeOfType(TSESTree.AST_NODE_TYPES.Property))
+        .find(
+            (p) => (p.key as TSESTree.Identifier).name === "forbidUnknownValues"
+        ) as TSESTree.Property;
     // property is not present. this is wrong.
     if (os && !forbidUnknownValuesProperty) {
         return true;
@@ -46,9 +47,13 @@ export const shouldTriggerNewExpressionHasProperty = (
     const newExpression = node as TSESTree.NewExpression;
     // the default new ValidationPipe() seems to prevent the attack so we ignore calls with no parameters
     // we also ignore parameters that are not explicit object expressions
+    // or if the properties are spread
     if (
         newExpression.arguments?.length === 0 ||
-        newExpression.arguments[0].type !== "ObjectExpression"
+        newExpression.arguments[0].type !== "ObjectExpression" ||
+        newExpression.arguments[0].properties.some(
+            isNodeOfType(TSESTree.AST_NODE_TYPES.SpreadElement)
+        )
     ) {
         return false;
     }

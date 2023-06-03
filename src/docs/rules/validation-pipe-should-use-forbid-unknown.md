@@ -2,6 +2,8 @@
 
 This checks when if you are setting ValidationPipe parameters you set forbidUnknownValues to true.
 
+The rule is ignored if you use a spread operator to pass options to the validation pipe constructor.
+
 There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See
 https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
 https://github.com/typestack/class-validator/issues/438
