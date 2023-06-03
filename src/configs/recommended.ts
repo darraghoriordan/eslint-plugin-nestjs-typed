@@ -31,5 +31,6 @@ export = {
         "@darraghor/nestjs-typed/api-methods-should-be-guarded": "off",
         "@darraghor/nestjs-typed/api-method-should-specify-api-operation":
             "off",
+        "@darraghor/nestjs-typed/sort-module-metadata-arrays": "off",
     },
 };

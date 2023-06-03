@@ -13,6 +13,7 @@ import allPropertiesAreWhitelisted from "./allPropertiesAreWhitelisted/allProper
 import allPropertiesHaveExplicitDefined from "./allPropertiesHaveExplicitDefined/allPropertiesHaveExplicitDefined";
 import apiMethodsShouldBeGuarded from "./apiMethodsShouldBeGuarded/apiMethodsShouldBeGuarded";
 import apiMethodsShouldSpecifyApiOperation from "./apiMethodsShouldSpecifyApiOperation/apiMethodsShouldSpecifyApiOperation";
+import sortModuleMetadataArrays from "./sortModuleMetadataArrays/sortModuleMetadataArrays";
 
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
@@ -38,6 +39,7 @@ const allRules = {
         validateNestedOfArrayShouldSetEach,
     "all-properties-are-whitelisted": allPropertiesAreWhitelisted,
     "api-methods-should-be-guarded": apiMethodsShouldBeGuarded,
+    "sort-module-metadata-arrays": sortModuleMetadataArrays,
 };
 
 export default allRules;

@@ -107,6 +107,7 @@ const rule = createRule({
                         node.typeAnnotation
                             ?.typeAnnotation as TSESTree.TSArrayType
                     )?.elementType?.type;
+                    // eslint-disable-next-line unicorn/no-negated-condition
                     if (!mainTypeInShortArray) {
                         // try to get the type of Array<type> syntax
                         const foundParams = (
