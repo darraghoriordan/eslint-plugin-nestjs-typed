@@ -37,7 +37,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get(":uuid")
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -46,7 +46,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
                 ): Promise<CustomBot> {
                     return this.customBotService.findOne(uuid, request.user.uuid);
                 }
-            
+
             }
             `,
         },
@@ -60,7 +60,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get(':uuid')
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -69,7 +69,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
                 ): Promise<CustomBot> {
                     return this.customBotService.findOne(uuid, request.user.uuid);
                 }
-            
+
             }
             `,
         },
@@ -83,7 +83,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get(':uuid')
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -92,7 +92,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
                 ): Promise<CustomBot> {
                     return this.customBotService.findOne(uuid, request.user.uuid);
                 }
-            
+
             }
             `,
         },
@@ -105,7 +105,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get()
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -127,7 +127,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get()
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -148,7 +148,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get()
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -170,7 +170,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get()
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -192,7 +192,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get(":uuid?")
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -214,7 +214,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get(":uu*id")
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -228,7 +228,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
         },
         {
             // variables are ignored by rule
-            code: ` 
+            code: `
             const MY_VAR="some/route"
 
             @ApiTags("Custom Bot")
@@ -238,37 +238,19 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
-                @Get(MY_VAR)
-                @ApiOkResponse({ type: CustomBot })
-                findOne(
-                    @Param("uuid") uuid: string,
-                    @Request() request: RequestWithUser
-                ): Promise<CustomBot> {
-                    return this.customBotService.findOne(uuid, request.user.uuid);
-                }
+
+                @Get(FILTERS_URL)
+                async getMajorMedicalPlanFilters(
+                  @Param('employerId', new ParseUUIDPipe()) employerId: string)
             }`,
         },
         {
             // template strings are ignored by rule
-            code: ` 
-            @ApiTags("Custom Bot")
-            @ApiBearerAuth()
-            @UseGuards(DefaultAuthGuard)
-            @Controller("custom-bot/my-controller")
+            code: `
             export class CustomBotController {
-                constructor(
-                ) {}
-            
-                @Get(\`some/route\`)
-                @ApiOkResponse({ type: CustomBot })
-                findOne(
-                    @Param("uuid") uuid: string,
-                    @Request() request: RequestWithUser
-                ): Promise<CustomBot> {
-                    return this.customBotService.findOne(uuid, request.user.uuid);
-                }
-            }`,
+                @Put(\`onboarding-periods/:id/\${MAJOR_MEDICAL_PLAN_URL}\`)
+            async upsertMajorMedicalPlan(
+              @Param('id') periodId: string)}`,
         },
     ],
     invalid: [
@@ -281,7 +263,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get()
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -307,7 +289,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get()
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -333,7 +315,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get()
                 @ApiOkResponse({ type: CustomBot })
                 findOne(
@@ -359,7 +341,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 constructor(
                 ) {}
-            
+
                 @Get([":uuidd"])
                 @ApiOkResponse({ type: CustomBot })
                 findOne(

@@ -265,11 +265,11 @@ export const typedTokenHelpers = {
                     typedTokenHelpers.getDecoratorName(decorator);
 
                 const isCustomClassValidatorDecorator =
-                    decoratorName !== null
-                        ? additionalCustomValidatorDecorators.includes(
+                    decoratorName === null
+                        ? false
+                        : additionalCustomValidatorDecorators.includes(
                               decoratorName
-                          )
-                        : false;
+                          );
 
                 return (
                     isCustomClassValidatorDecorator || isClassValidatorDecorator

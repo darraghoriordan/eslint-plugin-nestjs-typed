@@ -18,7 +18,16 @@ export const shouldSetArrayProperty = (
     // There should only be one of these apiproperty decorators so we just grab the parameter to decorator at index 0
     const firstArgumentToDecorator = (
         decorators[0].expression as TSESTree.CallExpression
-    ).arguments[0] as TSESTree.ObjectExpression;
+    ).arguments[0];
+
+    // if the code is using anything other than object expression, ignore the rule (we dont want to go looking at objects)
+    // we DO want to alert if there is no argument at all. so we continue to test the rule if no argument was passed
+    if (
+        firstArgumentToDecorator &&
+        firstArgumentToDecorator.type !== AST_NODE_TYPES.ObjectExpression
+    ) {
+        return new ArraySetResultModel(false, false);
+    }
 
     const hasIsArraySetInOptions =
         typedTokenHelpers.getPropertyValueEqualsExpected(

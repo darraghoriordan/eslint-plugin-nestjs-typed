@@ -27,6 +27,20 @@ ruleTester.run("api-property-returning-array-should-set-array", rule, {
                 thisIsAStringProp?: Array<string>;}`,
         },
         {
+            // should ignore using spread or constant
+            code: `class TestClass {
+                @Expose()
+                @ApiPropertyOptional(...someVariable)
+                thisIsAStringProp?: Array<string>;}`,
+        },
+        {
+            // should ignore using spread or constant
+            code: `class TestClass {
+                @Expose()
+                @ApiPropertyOptional(someVariable)
+                thisIsAStringProp?: Array<string>;}`,
+        },
+        {
             code: `class TestClass {
                 @Expose()
                 @ApiPropertyOptional()
