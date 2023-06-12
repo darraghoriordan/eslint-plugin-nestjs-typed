@@ -63,16 +63,15 @@ export const typedTokenHelpers = {
         if (firstArgument !== undefined) {
             const foundPropertyOfName = firstArgument.properties.find(
                 (p) =>
-                    ((p as TSESTree.Property).key as TSESTree.Identifier)
-                        .name === propertyName
+                    p.type === TSESTree.AST_NODE_TYPES.Property &&
+                    (p.key as TSESTree.Identifier).name === propertyName
             );
 
             didMatchExpectedValues =
                 foundPropertyOfName !== undefined &&
-                (
-                    (foundPropertyOfName as TSESTree.Property)
-                        .value as TSESTree.Literal
-                ).value === expectedValue;
+                foundPropertyOfName.type === TSESTree.AST_NODE_TYPES.Property &&
+                (foundPropertyOfName.value as TSESTree.Literal)?.value ===
+                    expectedValue;
         }
         return didMatchExpectedValues;
     },

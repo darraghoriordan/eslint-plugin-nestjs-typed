@@ -24,7 +24,11 @@ export const shouldSetArrayProperty = (
     // we DO want to alert if there is no argument at all. so we continue to test the rule if no argument was passed
     if (
         firstArgumentToDecorator &&
-        firstArgumentToDecorator.type !== AST_NODE_TYPES.ObjectExpression
+        (firstArgumentToDecorator.type !== AST_NODE_TYPES.ObjectExpression ||
+            // if the things passed to the object expression contains a spread then ignore that too!
+            firstArgumentToDecorator.properties.some(
+                (x) => x.type === AST_NODE_TYPES.SpreadElement
+            ))
     ) {
         return new ArraySetResultModel(false, false);
     }
