@@ -22,28 +22,28 @@ Please check the recommended list (https://github.com/darraghoriordan/eslint-plu
 
 Some rules are opinionated and have to be turned on explicitly (if they're not in the recommended config pack).
 
-| Category                              | Rule                                                  | is in recommended config |
-| ------------------------------------- | ----------------------------------------------------- | ------------------------ |
-| Nest Modules and Dependency Injection | provided-injected-should-match-factory-parameters     | Y                        |
-|                                       | injectable-should-be-provided                         | Y                        |
-|                                       |                                                       |                          |
-| Nest Swagger                          | api-property-matches-property-optionality             | Y                        |
-|                                       | controllers-should-supply-api-tags                    | Y                        |
-|                                       | api-method-should-specify-api-response                | N                        |
-|                                       | api-method-should-specify-api-operation               | Y                        |
-|                                       | api-enum-property-best-practices                      | Y                        |
-|                                       | api-property-returning-array-should-set-array         | Y                        |
-|                                       |                                                       |                          |
-| Preventing bugs                       | param-decorator-name-matches-route-param              | Y                        |
-|                                       | validate-nested-of-array-should-set-each              | Y                        |
-|                                       | validated-non-primitive-property-needs-type-decorator | Y                        |
-|                                       | all-properties-are-whitelisted                        | Y                        |
-|                                       | all-properties-have-explicit-defined                  | Y                        |
-|                                       |                                                       |                          |
-| Security                              | should-specify-forbid-unknown-values                  | Y                        |
-|                                       | api-methods-should-be-guarded                         | N                        |
-|                                       |                                                       |                          |
-| Code Consistency                      | sort-module-metadata-arrays                           | N                        |
+| Category                              | Rule                                                                                                                                 | is in recommended config |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| Nest Modules and Dependency Injection | [`provided-injected-should-match-factory-parameters`](./src/docs/rules/provided-injected-should-match-factory-parameters.md)         | Y                        |
+|                                       | [`injectable-should-be-provided`](./src/docs/rules/injectable-should-be-provided.md)                                                 | Y                        |
+|                                       |                                                                                                                                      |                          |
+| Nest Swagger                          | [`api-property-matches-property-optionality`](./src/docs/rules/api-property-matches-property-optionality.md)                         | Y                        |
+|                                       | [`controllers-should-supply-api-tags`](./src/docs/rules/controllers-should-supply-api-tags.md)                                       | Y                        |
+|                                       | [`api-method-should-specify-api-response`](./src/docs/rules/api-method-should-specify-api-response.md)                               | N                        |
+|                                       | [`api-method-should-specify-api-operation`](./src/docs/rules/api-method-should-specify-api-operation.md)                             | Y                        |
+|                                       | [`api-enum-property-best-practices`](./src/docs/rules/api-enum-property-best-practices.md)                                           | Y                        |
+|                                       | [`api-property-returning-array-should-set-array`](./src/docs/rules/api-property-returning-array-should-set-array.md)                 | Y                        |
+|                                       |                                                                                                                                      |                          |
+| Preventing bugs                       | [`param-decorator-name-matches-route-param`](./src/docs/rules/param-decorator-name-matches-route-param.md)                           | Y                        |
+|                                       | [`validate-nested-of-array-should-set-each`](./src/docs/rules/validate-nested-of-array-should-set-each.md)                           | Y                        |
+|                                       | [`validated-non-primitive-property-needs-type-decorator`](./src/docs/rules/validated-non-primitive-property-needs-type-decorator.md) | Y                        |
+|                                       | [`all-properties-are-whitelisted`](./src/docs/rules/all-properties-are-whitelisted.md)                                               | Y                        |
+|                                       | [`all-properties-have-explicit-defined`](./src/docs/rules/all-properties-have-explicit-defined.md)                                   | Y                        |
+|                                       |                                                                                                                                      |                          |
+| Security                              | [`validation-pipe-should-forbid-unknown`](./src/docs/rules/validation-pipe-should-use-forbid-unknown.md)                             | Y                        |
+|                                       | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | N                        |
+|                                       |                                                                                                                                      |                          |
+| Code Consistency                      | [`sort-module-metadata-arrays`](./src/docs/rules/sort-module-metadata-arrays.md)                                                     | N                        |
 
 Detailed docs are available here: https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/tree/main/src/docs/rules
 
