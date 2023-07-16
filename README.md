@@ -20,7 +20,7 @@ This plugin only supports typescript up to the version typescript eslint parser 
 
 Please check the recommended ruleset list (https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/main/src/configs/recommended.ts) to check which rules are turned on when using that config.
 
-Some rules are opinionated and have to be turned on explicitly in your eslintrc (if they're not in the recommended config pack).
+The "recommended" ruleset are the default rules that are turned on. The name "recommended" is an eslint convention. Some rules in this plugin are opinionated and have to be turned on explicitly in your eslintrc (if they're not in the recommended config ruleset).
 
 | Category                              | Rule                                                                                                                                 | is in recommended config |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
