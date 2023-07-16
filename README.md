@@ -18,9 +18,9 @@ This plugin only supports typescript up to the version typescript eslint parser 
 
 ## Index of available rules
 
-Please check the recommended list (https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/main/src/configs/recommended.ts) to check which rules are turned on when using that config.
+Please check the recommended ruleset list (https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/main/src/configs/recommended.ts) to check which rules are turned on when using that config.
 
-Some rules are opinionated and have to be turned on explicitly (if they're not in the recommended config pack).
+Some rules are opinionated and have to be turned on explicitly in your eslintrc (if they're not in the recommended config pack).
 
 | Category                              | Rule                                                                                                                                 | is in recommended config |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
@@ -53,7 +53,7 @@ If you use NestJs (https://nestjs.com/) these ESLint rules will help you to prev
 
 They mostly check that you are using decorators correctly.
 
-The three primary groupings of rules in this plugin are...
+The primary groupings of rules in this plugin are...
 
 ### 1. Detect Nest Dependency Injection issues
 
@@ -83,6 +83,8 @@ https://github.com/typestack/class-validator/issues/438
 
 ## To install
 
+You can see how the rules are used in this NestJS project: https://github.com/darraghoriordan/use-miller
+
 ```
 npm install --save-dev @darraghor/eslint-plugin-nestjs-typed
 
@@ -102,9 +104,7 @@ yarn add class-validator
 
 ## To configure
 
-You can see how the rules are used in this NestJS project: https://github.com/darraghoriordan/use-miller
-
-Then update your eslint with the plugin import and add the recommended rule set
+Update your eslint with the plugin import and add the recommended rule set
 
 ```ts
 module.exports = {
@@ -122,7 +122,9 @@ module.exports = {
 };
 ```
 
-Note: the injectables test scans your whole project. It's best to filter out ts things that don't matter - use `filterFromPaths` configuration setting for this. There are some defaults already applied. See details below.
+Note: the injectables test scans your whole project. It's best to filter out ts things that don't matter - use `filterFromPaths` configuration setting for this. See the rule documentation for more info.
+
+There are some defaults already applied.
 
 Note: You can easily turn off all the swagger rules if you don't use swagger by adding the `no-swagger` rule set AFTER the recommended rule set.
 
@@ -131,7 +133,7 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
     extends: ["plugin:@darraghor/nestjs-typed/recommended",
     "plugin:@darraghor/nestjs-typed/no-swagger"
     ],
-    // more config
+ // more config
 ```
 
 Disable a single rule with the full name e.g. in your eslint configuration...
