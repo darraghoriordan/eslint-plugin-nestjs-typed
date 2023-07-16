@@ -6,9 +6,9 @@
 
 ## A note on versions
 
-Version 2.x supports Eslint version <=7.x and typescript eslint parser 4
-
-Version 3.x supports Eslint version >=8.x and typescript eslint parser 5+
+Version `4.x` supports Eslint version `>=8.x` and typescript eslint parser `^6`
+Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
+Version `2.x` supports Eslint version `<=7.x` and typescript eslint parser `^4`
 
 There were many breaking changes between these versions.
 
