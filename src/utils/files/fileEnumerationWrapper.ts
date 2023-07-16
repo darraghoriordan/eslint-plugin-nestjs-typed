@@ -1,9 +1,4 @@
-import {
-    EslintFile,
-    FileEnumerator,
-    FilePath,
-    // eslint-disable-next-line import/no-unresolved
-} from "eslint/use-at-your-own-risk";
+import {FileEnumerator, FilePath} from "eslint/use-at-your-own-risk";
 import IsFilteredPath from "./isFilteredPath";
 
 // eslint-disable-next-line unicorn/no-static-only-class
@@ -12,7 +7,7 @@ class FileEnumeratorWrapper {
         sourceGlobs: string[],
         extensions: string[],
         filterFromPaths: string[]
-    ): Array<FilePath> => {
+    ): FilePath[] => {
         const fileEnumerator = new FileEnumerator({
             extensions,
         });
@@ -26,9 +21,14 @@ class FileEnumeratorWrapper {
     };
 
     static mapEnumeratedFiles = (
-        paths: Array<EslintFile>,
+        paths: IterableIterator<{
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            config: any;
+            filePath: string;
+            ignored: boolean;
+        }>,
         filterFromPaths: string[]
-    ): Array<FilePath> => {
+    ): FilePath[] => {
         return [...paths]
             .map(
                 ({

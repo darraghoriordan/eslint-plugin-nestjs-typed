@@ -1,9 +1,9 @@
-import {ESLintUtils} from "@typescript-eslint/utils";
+import {RuleTester} from "@typescript-eslint/rule-tester";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import rule from "./validateNonPrimitiveNeedsDecorators";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new ESLintUtils.RuleTester({
+const ruleTester = new RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,
@@ -16,7 +16,12 @@ ruleTester.run("validated-non-primitive-property-needs-type-decorator", rule, {
     valid: [
         {
             // is a primitive type date with custom transform - https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/32
-            options: [{additionalTypeDecorators: ["TransformDate"]}],
+            options: [
+                {
+                    additionalTypeDecorators: ["TransformDate"],
+                    additionalCustomValidatorDecorators: [],
+                },
+            ],
             code: `
             import { IsOptional, IsDate } from 'class-validator';
             
@@ -231,7 +236,9 @@ class Foo {
             options: [
                 {
                     additionalTypeDecorators: [],
-                    additionalCustomValidatorDecorators: ["IsDateRange"],
+                    additionalCustomValidatorDecorators: [
+                        "IsDateRange",
+                    ] as string[],
                 },
             ],
             code: `

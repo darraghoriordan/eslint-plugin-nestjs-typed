@@ -1,10 +1,9 @@
 {
     "extends": "./tsconfig.common",
     "include": [
-        "**/*.ts"
+        "src",
     ],
     "exclude": [
-        "**/node_modules/*",
         "**/dist/*",
         "**/jest.config.ts"
     ]

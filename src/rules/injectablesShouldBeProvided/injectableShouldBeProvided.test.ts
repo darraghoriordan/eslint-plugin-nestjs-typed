@@ -2,7 +2,7 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 
 import rule from "./injectableShouldBeProvided";
-import {ESLintUtils} from "@typescript-eslint/utils";
+import {RuleTester} from "@typescript-eslint/rule-tester";
 
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import path from "path";
@@ -10,7 +10,7 @@ import path from "path";
 const tsRootDirectory = getFixturesRootDirectory();
 console.debug("Using tsrootdirectory", {tsRootDirectory});
 
-const ruleTester = new ESLintUtils.RuleTester({
+const ruleTester = new RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,

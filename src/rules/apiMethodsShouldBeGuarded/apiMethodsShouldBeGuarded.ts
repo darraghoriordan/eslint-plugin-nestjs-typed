@@ -1,4 +1,4 @@
-import {TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
@@ -16,7 +16,7 @@ export const apiMethodsShouldBeGuarded = (node: TSESTree.MethodDefinition) => {
     function findClassDeclaration(
         node: TSESTree.Node
     ): TSESTree.ClassDeclaration | null {
-        if (node.type === "ClassDeclaration") {
+        if (node.type === TSESTree.AST_NODE_TYPES.ClassDeclaration) {
             return node;
         }
         if (node.parent) {
@@ -38,13 +38,13 @@ export const apiMethodsShouldBeGuarded = (node: TSESTree.MethodDefinition) => {
     );
 };
 
-const rule = createRule({
+const rule = createRule<[], "apiMethodsShouldBeGuarded">({
     name: "api-methods-should-be-guarded",
     meta: {
         docs: {
             description:
                 "Endpoints should have authentication guards to maintain our security model.",
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -56,11 +56,7 @@ const rule = createRule({
         type: "suggestion",
     },
     defaultOptions: [],
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<"apiMethodsShouldBeGuarded", never[]>
-        >
-    ) {
+    create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             MethodDefinition(node: TSESTree.MethodDefinition): void {

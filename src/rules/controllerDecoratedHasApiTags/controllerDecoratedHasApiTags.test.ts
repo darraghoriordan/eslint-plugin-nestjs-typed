@@ -1,9 +1,9 @@
-import {ESLintUtils} from "@typescript-eslint/utils";
+import {RuleTester} from "@typescript-eslint/rule-tester";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import rule from "./controllerDecoratedHasApiTags";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new ESLintUtils.RuleTester({
+const ruleTester = new RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,

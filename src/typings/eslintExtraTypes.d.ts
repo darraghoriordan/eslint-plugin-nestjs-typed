@@ -1,3 +1,6 @@
+import "typescript";
+import {TSESTree} from "@typescript-eslint/typescript-estree";
+
 declare module "eslint/use-at-your-own-risk" {
     export class FileEnumerator {
         constructor(options: {
@@ -7,20 +10,20 @@ declare module "eslint/use-at-your-own-risk" {
             errorOnUnmatchedPattern?: boolean;
             ignore?: boolean;
         });
-        public iterateFiles: (source: string | string[]) => Array<EslintFile>;
+        public iterateFiles: (source: string | string[]) => EslintFile[];
     }
 
-    export type EslintFile = {
+    export interface EslintFile {
         filePath: string;
         ignored: boolean;
-    };
-    export type FilePath = {
+    }
+    export interface FilePath {
         ignored: boolean;
         filename: string;
-    };
+    }
 }
 
-type AstParsed = Program & {
+type AstParsed = TSESTree.Program & {
     range?: [number, number] | undefined;
     tokens?: Token[] | undefined;
     comments?: Comment[] | undefined;

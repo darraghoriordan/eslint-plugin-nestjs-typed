@@ -1,4 +1,4 @@
-import {ESLintUtils, TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {ESLintUtils, TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {EnumTestResultModel} from "./enumTestResultModel";
@@ -88,13 +88,16 @@ export const needsEnumNameMatchingEnumType = (
     return !isEnumNameMatchingEnumType;
 };
 
-const rule = createRule({
+const rule = createRule<
+    [],
+    "needsEnumNameAdded" | "needsTypeRemoved" | "enumNameShouldMatchType"
+>({
     name: "api-enum-property-best-practices",
     meta: {
         docs: {
             description:
                 "Enums should use the best practices for api documentation",
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -108,16 +111,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<
-                | "needsEnumNameAdded"
-                | "needsTypeRemoved"
-                | "enumNameShouldMatchType",
-                never[]
-            >
-        >
-    ) {
+    create(context) {
         //const globalScope = context.getScope();
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();

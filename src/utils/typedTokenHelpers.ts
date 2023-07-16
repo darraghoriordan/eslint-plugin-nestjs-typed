@@ -1,8 +1,7 @@
 import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
 import {parse, ParserServices} from "@typescript-eslint/parser";
 import ts from "typescript";
-import * as tsutils from "tsutils";
-import {unionTypeParts} from "tsutils";
+import * as tsutils from "ts-api-utils";
 
 export const typedTokenHelpers = {
     decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
@@ -30,7 +29,7 @@ export const typedTokenHelpers = {
         if (checker.isArrayType(nodeType)) {
             return true;
         }
-        for (const t of unionTypeParts(nodeType)) {
+        for (const t of tsutils.unionTypeParts(nodeType)) {
             if (!checker.isArrayType(t)) {
                 return false;
             }

@@ -4,8 +4,9 @@ import FileEnumeratorWrapper from "../../utils/files/fileEnumerationWrapper";
 import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper";
 import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-// eslint-disable-next-line import/no-unresolved
 import {FilePath} from "eslint/use-at-your-own-risk";
+import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
+import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let listOfPotentialNestModuleFiles: FilePath[];
 let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
@@ -86,13 +87,18 @@ function initializeModuleMappings(
         context
     );
 }
-
-const rule = createRule({
+const defaultOptions = [
+    {
+        src: ["src/**/*.ts"],
+        filterFromPaths: ["dist", "node_modules", ".test.", ".spec."],
+    },
+] as Options;
+const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
     name: "injectable-should-be-provided",
     meta: {
         docs: {
             description: "Public api methods should have documentation",
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -101,24 +107,25 @@ const rule = createRule({
         },
         schema: [
             {
+                type: "object" as JSONSchema4TypeName,
                 properties: {
                     src: {
                         description:
                             "files/paths to be analyzed (only for provided injectable or controller)",
-                        type: "array",
+                        type: "array" as JSONSchema4TypeName,
                         minItems: 1,
                         items: {
-                            type: "string",
+                            type: "string" as JSONSchema4TypeName,
                             minLength: 1,
                         },
                     },
                     filterFromPaths: {
                         description:
                             "strings to exclude from checks (only for provided injectable or controller)",
-                        type: "array",
+                        type: "array" as JSONSchema4TypeName,
                         minItems: 1,
                         items: {
-                            type: "string",
+                            type: "string" as JSONSchema4TypeName,
                             minLength: 1,
                         },
                     },
@@ -127,21 +134,26 @@ const rule = createRule({
         ],
         type: "problem",
     },
-    defaultOptions: [
-        {
-            src: ["src/**/*.ts"],
-            filterFromPaths: ["dist", "node_modules", ".test.", ".spec."],
-        },
-    ],
+    defaultOptions: defaultOptions,
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<
-                "injectableInModule" | "controllersInModule",
-                Options
-            >
-        >
-    ) {
+    create(contextWithoutDefaults) {
+        const context =
+            contextWithoutDefaults.options &&
+            contextWithoutDefaults.options.length > 0
+                ? contextWithoutDefaults
+                : // only apply the defaults when the user provides no config
+                  (Object.setPrototypeOf(
+                      {
+                          options: defaultOptions,
+                      },
+                      contextWithoutDefaults
+                  ) as Readonly<
+                      RuleContext<
+                          "injectableInModule" | "controllersInModule",
+                          Options
+                      >
+                  >);
+
         const {
             src,
             filterFromPaths,

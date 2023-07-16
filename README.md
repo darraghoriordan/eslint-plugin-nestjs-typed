@@ -102,6 +102,8 @@ yarn add class-validator
 
 ## To configure
 
+You can see how the rules are used in this NestJS project: https://github.com/darraghoriordan/use-miller
+
 Then update your eslint with the plugin import and add the recommended rule set
 
 ```ts

@@ -1,4 +1,4 @@
-import {AST_NODE_TYPES, TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import ArraySetResultModel from "./arraySetResultModel";
@@ -57,12 +57,15 @@ export const shouldSetArrayProperty = (
     );
 };
 
-const rule = createRule({
+const rule = createRule<
+    [],
+    "shouldSetArrayPropertyTrue" | "shouldSetArrayPropertyFalse"
+>({
     name: "api-property-returning-array-should-set-array",
     meta: {
         docs: {
             description: "Properties of array should set array",
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -75,14 +78,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<
-                "shouldSetArrayPropertyTrue" | "shouldSetArrayPropertyFalse",
-                never[]
-            >
-        >
-    ) {
+    create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition: (node: TSESTree.Node) => {
