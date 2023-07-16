@@ -12,11 +12,11 @@ import rule, {
     parsePathParts,
 } from "./paramDecoratorNameMatchesRouteParam";
 
-import {ESLintUtils} from "@typescript-eslint/utils";
+import {RuleTester} from "@typescript-eslint/rule-tester";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new ESLintUtils.RuleTester({
+const ruleTester = new RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,
@@ -241,7 +241,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
 
                 @Get(FILTERS_URL)
                 async getMajorMedicalPlanFilters(
-                  @Param('employerId', new ParseUUIDPipe()) employerId: string)
+                  @Param('employerId', new ParseUUIDPipe()) employerId: string){}
             }`,
         },
         {
@@ -250,7 +250,8 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             export class CustomBotController {
                 @Put(\`onboarding-periods/:id/\${MAJOR_MEDICAL_PLAN_URL}\`)
             async upsertMajorMedicalPlan(
-              @Param('id') periodId: string)}`,
+              @Param('id') periodId: string){}
+            }`,
         },
     ],
     invalid: [
@@ -373,7 +374,7 @@ describe("paramDecoratorParsePaths", () => {
             );
 
             const foundParts = parsePathParts(
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-explicit-any
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
                 (ast as any).body[0].decorators[0]
             );
 

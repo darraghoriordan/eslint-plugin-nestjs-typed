@@ -1,11 +1,17 @@
 import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {MODULE_CLASS_DECORATOR} from "../../utils/wellKnownSelectors";
-import {isNodeOfTypes} from "@typescript-eslint/utils/dist/ast-utils";
-
+import {ASTUtils} from "@typescript-eslint/utils";
+import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
 // Inspired by https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin/src/rules/sort-ngmodule-metadata-arrays.ts
 
 const DEFAULT_LOCALE = "en-US";
+
+export type RuleOptions = [
+    {
+        locale?: string;
+    }
+];
 
 export type ValidModuleNodeTypes =
     | TSESTree.Identifier
@@ -14,14 +20,13 @@ export type ValidModuleNodeTypes =
 export const isValidModuleMetaPropertyType = (
     node: TSESTree.Expression | TSESTree.SpreadElement | null
 ): node is ValidModuleNodeTypes => {
-    return (
-        !!node &&
-        (isNodeOfTypes([
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return (!!node &&
+        ASTUtils.isNodeOfTypes([
             TSESTree.AST_NODE_TYPES.Identifier,
             TSESTree.AST_NODE_TYPES.CallExpression,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ]) as any) // unsure about this type
-    );
+        ])) as any; // unsure about this type
 };
 export const getRelevantNodeName = (node: TSESTree.Node) => {
     let currentName = "";
@@ -38,14 +43,18 @@ export const getRelevantNodeName = (node: TSESTree.Node) => {
     }
     return currentName;
 };
-export default createRule({
+const defaultLocaleOptions = [
+    {
+        locale: DEFAULT_LOCALE,
+    },
+] as RuleOptions;
+export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
     name: "sort-module-metadata-arrays",
     meta: {
         type: "suggestion",
         docs: {
             description:
                 "Ensures ASC alphabetical order for `Module` metadata arrays for easy visual scanning",
-            recommended: false,
         },
         fixable: "code",
         schema: [
@@ -66,12 +75,23 @@ export default createRule({
                 "`Module` metadata arrays should be sorted in ASC alphabetical order",
         },
     },
-    defaultOptions: [
-        {
-            locale: DEFAULT_LOCALE,
-        },
-    ],
-    create(context, [{locale}]) {
+    defaultOptions: defaultLocaleOptions,
+    create(contextWithoutDefaults) {
+        const context =
+            contextWithoutDefaults.options &&
+            contextWithoutDefaults.options.length > 0
+                ? contextWithoutDefaults
+                : // only apply the defaults when the user provides no config
+                  (Object.setPrototypeOf(
+                      {
+                          options: defaultLocaleOptions,
+                      },
+                      contextWithoutDefaults
+                  ) as Readonly<
+                      RuleContext<"moduleMetadataArraysAreSorted", RuleOptions>
+                  >);
+
+        const {locale} = context.options[0];
         const sourceCode = context.getSourceCode();
         return {
             [`${MODULE_CLASS_DECORATOR} Property > ArrayExpression`]({

@@ -1,13 +1,12 @@
-import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
-const rule = createRule({
+const rule = createRule<[], "missing-property-decorator">({
     name: "all-properties-are-whitelisted",
     meta: {
         docs: {
             description: "Enforce all properties are whitelisted",
-            recommended: "error",
             requiresTypeChecking: false,
         },
         messages: {
@@ -16,17 +15,13 @@ const rule = createRule({
                 "Property has no class-validator decorator (use @Allow() if you don't need a validation)",
         },
         type: "problem",
-        schema: {},
+        schema: [],
     },
     defaultOptions: [],
-    create: function (
-        context: Readonly<
-            TSESLint.RuleContext<"missing-property-decorator", never[]>
-        >
-    ) {
+    create: function (context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassDeclaration(node) {
+            ClassDeclaration(node: TSESTree.ClassDeclaration) {
                 const program = typedTokenHelpers.getRootProgram(node);
                 const withDecorator: TSESTree.PropertyDefinition[] = [];
                 const withoutDecorator: TSESTree.PropertyDefinition[] = [];

@@ -1,4 +1,4 @@
-import {TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
@@ -17,13 +17,13 @@ export const shouldUseApiTagDecorator = (
     return hasControllerDecorator && !hasApiTagDecorator;
 };
 
-const rule = createRule({
+const rule = createRule<[], "shouldUseApiTagDecorator">({
     name: "controllers-should-supply-api-tags",
     meta: {
         docs: {
             description:
                 "Controllers should supply an ApiTag to make swagger UI easier to navigate",
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -35,11 +35,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<"shouldUseApiTagDecorator", never[]>
-        >
-    ) {
+    create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node: TSESTree.ClassDeclaration): void {

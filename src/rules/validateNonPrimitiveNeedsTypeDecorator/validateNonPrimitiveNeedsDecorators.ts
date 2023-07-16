@@ -1,12 +1,8 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-import {
-    AST_NODE_TYPES,
-    TSESTree,
-    ESLintUtils,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import {AST_NODE_TYPES, TSESTree, ESLintUtils} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 
 const primitiveTypes = new Set([
     AST_NODE_TYPES.TSStringKeyword,
@@ -17,20 +13,22 @@ const primitiveTypes = new Set([
 export type ValidateNonPrimitivePropertyTypeDecoratorOptions = [
     {
         additionalTypeDecorators: string[];
-        additionalCustomValidatorDecorators?: string[];
+        additionalCustomValidatorDecorators: string[];
     }
 ];
 export const shouldTrigger = (): boolean => {
     return true;
 };
 
-const rule = createRule({
+const rule = createRule<
+    ValidateNonPrimitivePropertyTypeDecoratorOptions,
+    "shouldUseTypeDecorator" | "autofixWithTypeDecorator"
+>({
     name: "validated-non-primitive-property-needs-type-decorator",
     meta: {
         docs: {
             description:
                 "A non-primitive property with validation should probably use a @Type decorator",
-            recommended: false,
             requiresTypeChecking: false,
         },
         messages: {
@@ -41,24 +39,25 @@ const rule = createRule({
         },
         schema: [
             {
+                type: "object" as JSONSchema4TypeName,
                 properties: {
                     additionalTypeDecorators: {
                         description:
                             "A list of custom type decorators that this rule will use to validate",
-                        type: "array",
+                        type: "array" as JSONSchema4TypeName,
                         minItems: 0,
                         items: {
-                            type: "string",
+                            type: "string" as JSONSchema4TypeName,
                             minLength: 1,
                         },
                     },
                     additionalCustomValidatorDecorators: {
                         description:
                             "A list of custom validator decorators that this rule will use to validate",
-                        type: "array",
+                        type: "array" as JSONSchema4TypeName,
                         minItems: 0,
                         items: {
-                            type: "string",
+                            type: "string" as JSONSchema4TypeName,
                             minLength: 1,
                         },
                     },
@@ -73,19 +72,13 @@ const rule = createRule({
             additionalTypeDecorators: new Array<string>(),
             additionalCustomValidatorDecorators: new Array<string>(),
         },
-    ],
+    ] as ValidateNonPrimitivePropertyTypeDecoratorOptions,
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<
-                "shouldUseTypeDecorator" | "autofixWithTypeDecorator",
-                ValidateNonPrimitivePropertyTypeDecoratorOptions
-            >
-        >
-    ) {
+    create(context) {
         const {additionalTypeDecorators, additionalCustomValidatorDecorators} =
             context.options[0] || {
                 additionalTypeDecorators: [],
+                additionalCustomValidatorDecorators: [],
             };
 
         const parserServices = ESLintUtils.getParserServices(context);
@@ -217,7 +210,8 @@ const rule = createRule({
                         if (
                             typeAnnotationNode.type ===
                                 AST_NODE_TYPES.TSTypeReference &&
-                            typeAnnotationNode.typeName.type === "Identifier"
+                            typeAnnotationNode.typeName.type ===
+                                AST_NODE_TYPES.Identifier
                         ) {
                             typeIdentifier = typeAnnotationNode.typeName.name;
 

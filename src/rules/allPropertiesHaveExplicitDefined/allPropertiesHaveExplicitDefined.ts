@@ -1,19 +1,28 @@
-import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
+import {
+    AST_NODE_TYPES,
+    TSESTree,
+    ESLintUtils,
+    ParserServicesWithTypeInformation,
+} from "@typescript-eslint/utils";
 import {isNullableType} from "@typescript-eslint/type-utils";
 import {getPropertiesDefinitions} from "../../utils/ast";
 import {createRule} from "../../utils/createRule";
-import {getParserServices} from "@typescript-eslint/utils/dist/eslint-utils";
 import {Type, TypeChecker} from "typescript";
-import {ParserWeakMapESTreeToTSNode} from "@typescript-eslint/typescript-estree/dist/parser-options";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {RuleRecommendation} from "@typescript-eslint/utils/ts-eslint";
 
-const rule = createRule({
+const rule = createRule<
+    [],
+    | "missing-is-defined-decorator"
+    | "missing-is-optional-decorator"
+    | "conflicting-defined-decorators"
+>({
     name: "all-properties-have-explicit-defined",
     meta: {
         docs: {
             description:
                 "Enforce all properties have an explicit defined status decorator",
-            recommended: "error",
+            recommended: "error" as RuleRecommendation,
             requiresTypeChecking: true,
         },
         messages: {
@@ -25,19 +34,20 @@ const rule = createRule({
                 "Properties can have @IsDefined() or @IsOptional() but not both",
         },
         type: "problem",
-        schema: {},
+        schema: [],
     },
     defaultOptions: [],
     create: function (context) {
-        const service = getParserServices(context);
-        const {esTreeNodeToTSNodeMap} = service;
+        const service = ESLintUtils.getParserServices(context);
+
         const checker = service.program.getTypeChecker();
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            ClassDeclaration(node) {
-                const propertyDefinitionsWithDecoratorsStatus: Array<
-                    [TSESTree.PropertyDefinition, DecoratorsStatus]
-                > = [];
+            ClassDeclaration(node: TSESTree.ClassDeclaration) {
+                const propertyDefinitionsWithDecoratorsStatus: [
+                    TSESTree.PropertyDefinition,
+                    DecoratorsStatus
+                ][] = [];
                 let withDecoratorCount = 0;
                 const propertyDefinitions = getPropertiesDefinitions(node);
                 // for each property in the class
@@ -81,7 +91,7 @@ const rule = createRule({
                         // get the type of the property
                         const type = getType(
                             propertyDefinition.typeAnnotation.typeAnnotation,
-                            esTreeNodeToTSNodeMap,
+                            service,
                             checker
                         );
 
@@ -116,18 +126,18 @@ const rule = createRule({
 
 export default rule;
 
-type DecoratorsStatus = {
+interface DecoratorsStatus {
     hasIsDefinedDecorator: boolean;
     hasTypeCheckingDecorator: boolean;
     hasIsOptionalDecorator: boolean;
-};
+}
 
 function getType(
     typeNode: TSESTree.Node,
-    esTreeNodeToTSNodeMap: ParserWeakMapESTreeToTSNode,
+    service: ParserServicesWithTypeInformation,
     checker: TypeChecker
 ): Type {
-    const tsNode = esTreeNodeToTSNodeMap.get(typeNode);
+    const tsNode = service.esTreeNodeToTSNodeMap.get(typeNode);
     const type = checker.getTypeAtLocation(tsNode);
     return type;
 }

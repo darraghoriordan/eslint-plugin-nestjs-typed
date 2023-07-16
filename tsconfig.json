@@ -1,9 +1,9 @@
 {
     "extends": "./tsconfig.common",
-    "include": ["**/*"],
+    "include": [
+        "src"
+    ],
     "exclude": [
-        "node_modules",
-        "**/node_modules/**",
         "jest.config.js",
         "dist",
         "**/*.test-data.ts"

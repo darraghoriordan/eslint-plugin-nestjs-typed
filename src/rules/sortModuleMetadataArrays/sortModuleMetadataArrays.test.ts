@@ -1,9 +1,9 @@
-import {ESLintUtils} from "@typescript-eslint/utils";
+import {RuleTester} from "@typescript-eslint/rule-tester";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import rule from "./sortModuleMetadataArrays";
 
 const tsRootDirectory = getFixturesRootDirectory();
-const ruleTester = new ESLintUtils.RuleTester({
+const ruleTester = new RuleTester({
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2015,
@@ -15,7 +15,6 @@ const ruleTester = new ESLintUtils.RuleTester({
 ruleTester.run("sortModuleMetadataArrays", rule, {
     valid: [
         {
-            options: [],
             code: `@Module({
                 imports: [
                     AuthzModule,
@@ -45,7 +44,6 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
     ],
     invalid: [
         {
-            options: [],
             code: `@Module({
                 imports: [
                     CoreModule,
@@ -103,7 +101,6 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
             ],
         },
         {
-            options: [],
             code: `@Module({
                 imports: [
                     CoreModule,
@@ -161,7 +158,6 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
             ],
         },
         {
-            options: [],
             code: `@Module({
                 imports: [
                     AuthzModule,

@@ -1,16 +1,13 @@
 module.exports = {
     env: {
-        es2017: true,
+        es2021: true,
         node: true,
+        jest: true,
     },
     extends: [
         "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:import/errors",
-        "plugin:import/warnings",
-        "plugin:import/typescript",
+        "plugin:@typescript-eslint/recommended-type-checked",
+        "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:unicorn/recommended",
         "prettier",
     ],
@@ -19,14 +16,8 @@ module.exports = {
         project: ["./tsconfig.json"],
         sourceType: "module",
     },
-    settings: {
-        "import/extensions": [".ts"],
-    },
+
     rules: {
-        "import/default": "off",
-        "import/no-named-as-default": "off",
-        "import/no-named-as-default-member": "off",
-        "import/namespace": "off", // this is very slow
         "unicorn/filename-case": [
             "warn",
             {
@@ -37,7 +28,7 @@ module.exports = {
             },
         ],
         "no-eval": "error",
-        "@typescript-eslint/restrict-template-expressions": "off",
+
         "unicorn/no-fn-reference-in-iterator": "off",
         "unicorn/no-array-for-each": "off",
         "unicorn/no-null": "off",
@@ -46,14 +37,11 @@ module.exports = {
         "unicorn/no-array-reduce": "off",
         "unicorn/prefer-spread": "off",
         "unicorn/no-array-callback-reference": "off",
-        "@typescript-eslint/no-unsafe-member-access": "off",
-        "@typescript-eslint/camelcase": "off",
+
         "unicorn/consistent-function-scoping": "off",
         "unicorn/no-useless-undefined": "off",
         "unicorn/prefer-ternary": "off",
-        "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/no-unsafe-call": "off",
-        "@typescript-eslint/no-unsafe-assignment": "off",
+
         "unicorn/prefer-node-protocol": "off",
         "unicorn/prevent-abbreviations": [
             "error",
@@ -103,5 +91,5 @@ module.exports = {
             },
         ],
     },
-    plugins: ["@typescript-eslint", "import", "prefer-arrow", "unicorn"],
+    plugins: ["@typescript-eslint", "prefer-arrow", "unicorn"],
 };

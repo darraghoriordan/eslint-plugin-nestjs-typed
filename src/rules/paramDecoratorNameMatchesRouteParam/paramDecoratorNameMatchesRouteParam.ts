@@ -1,11 +1,11 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-import {TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 
-type ResultModel = {
+interface ResultModel {
     hasColonInName: boolean;
     paramNameNotMatchedInPath: boolean;
-};
+}
 
 const nestRequestMethodDecoratorNames = new Set([
     "Get",
@@ -121,6 +121,7 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     let pathPartsToCheck: string[] = [];
 
     // grab any controller path parts
+    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
     const controllerDecorator = (
         decorator.parent?.parent?.parent?.parent
             ?.parent as TSESTree.ClassDeclaration
@@ -141,6 +142,7 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     const methodDefinition = decorator.parent?.parent
         ?.parent as TSESTree.MethodDefinition;
 
+    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
     const methodDecorator = methodDefinition?.decorators?.find((d) => {
         return nestRequestMethodDecoratorNames.has(
             (
@@ -173,13 +175,16 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     };
 };
 
-const rule = createRule({
+const rule = createRule<
+    [],
+    "paramIdentifierDoesntNeedColon" | "paramIdentifierShouldMatch"
+>({
     name: "param-decorator-name-matches-route-param",
     meta: {
         docs: {
             description:
                 'Param decorators with a name parameter e.g. Param("myvar") should match a specified route parameter - e.g. Get(":myvar")',
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -194,14 +199,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<
-                "paramIdentifierDoesntNeedColon" | "paramIdentifierShouldMatch",
-                never[]
-            >
-        >
-    ) {
+    create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             Decorator(node: TSESTree.Decorator): void {

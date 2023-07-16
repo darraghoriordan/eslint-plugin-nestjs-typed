@@ -1,7 +1,7 @@
 import {TSESLint, TSESTree} from "@typescript-eslint/utils";
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import * as unambiguous from "eslint-module-utils/unambiguous";
-// eslint-disable-next-line import/no-unresolved
 import {FilePath} from "eslint/use-at-your-own-risk";
 import fs from "fs";
 import {typedTokenHelpers} from "../typedTokenHelpers";
@@ -35,7 +35,7 @@ const NestProvidedInjectableMapper = {
         return [currentWorkingDirectory];
     },
     parseFileList(
-        files: Array<FilePath>,
+        files: FilePath[],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         context: Readonly<TSESLint.RuleContext<never, any>>
     ): Map<string, NestProvidedInjectablesMap> {
@@ -94,12 +94,14 @@ const NestProvidedInjectableMapper = {
     mapAllProvidedInjectables(
         ast: TSESTree.Program,
         path: string
-    ): Array<string | NestProvidedInjectablesMap> | null {
+    ): (string | NestProvidedInjectablesMap)[] | null {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
             if (
-                // eslint-disable-next-line no-constant-condition
+                // eslint-disable-next-line no-constant-condition, @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
                 !unambiguous.isModule(ast)
             ) {
                 return null;

@@ -1,4 +1,4 @@
-import {TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
@@ -18,13 +18,13 @@ export const shouldUseApiResponseDecorator = (
     return hasApiMethodDecorator && !hasApiOperationDecorator;
 };
 
-const rule = createRule({
+const rule = createRule<[], "shouldSpecifyApiOperation">({
     name: "api-method-should-specify-api-operation",
     meta: {
         docs: {
             description:
                 "Api methods should at least specify the expected ApiOperation.",
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -36,11 +36,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<"shouldSpecifyApiOperation", never[]>
-        >
-    ) {
+    create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             MethodDefinition(node: TSESTree.MethodDefinition): void {

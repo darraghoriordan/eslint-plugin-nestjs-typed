@@ -1,4 +1,4 @@
-import {TSESTree, TSESLint} from "@typescript-eslint/utils";
+import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 
@@ -30,13 +30,16 @@ export const shouldUseOptionalDecorator = (
     return hasRequiredDecorator && isOptionalPropertyValue;
 };
 
-const rule = createRule({
+const rule = createRule<
+    [],
+    "shouldUseOptionalDecorator" | "shouldUseRequiredDecorator"
+>({
     name: "api-property-matches-property-optionality",
     meta: {
         docs: {
             description:
                 "Properties should have correct @ApiProperty decorators",
-            recommended: false,
+
             requiresTypeChecking: false,
         },
         messages: {
@@ -49,14 +52,7 @@ const rule = createRule({
     },
     defaultOptions: [],
 
-    create(
-        context: Readonly<
-            TSESLint.RuleContext<
-                "shouldUseOptionalDecorator" | "shouldUseRequiredDecorator",
-                never[]
-            >
-        >
-    ) {
+    create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition(node: TSESTree.PropertyDefinition): void {
