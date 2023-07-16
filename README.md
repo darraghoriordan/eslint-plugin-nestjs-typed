@@ -83,6 +83,7 @@ https://github.com/typestack/class-validator/issues/438
 
 ## To install
 
+The plugin is on npm here: https://www.npmjs.com/package/@darraghor/eslint-plugin-nestjs-typed
 You can see how the rules are used in this NestJS project: https://github.com/darraghoriordan/use-miller
 
 ```
@@ -91,6 +92,9 @@ npm install --save-dev @darraghor/eslint-plugin-nestjs-typed
 // or
 
 yarn add -D @darraghor/eslint-plugin-nestjs-typed
+// or
+
+pnpm add -D @darraghor/eslint-plugin-nestjs-typed
 ```
 
 If you don't already have `class-validator` you should install that
@@ -99,7 +103,12 @@ If you don't already have `class-validator` you should install that
 npm install class-validator
 
 // or
+
 yarn add class-validator
+
+// or
+
+pnpm add class-validator
 ```
 
 ## To configure
