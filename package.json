@@ -43,22 +43,22 @@
     "main": "dist/index.js",
     "types": "index.d.ts",
     "dependencies": {
-        "@typescript-eslint/scope-manager": "6.0.0",
-        "@typescript-eslint/utils": "6.0.0",
+        "@typescript-eslint/scope-manager": "6.1.0",
+        "@typescript-eslint/utils": "6.1.0",
         "eslint-module-utils": "2.8.0",
         "reflect-metadata": "0.1.13"
     },
     "devDependencies": {
-        "@typescript-eslint/rule-tester": "6.0.0",
-        "@commitlint/cli": "17.6.6",
-        "@commitlint/config-conventional": "17.6.6",
+        "@commitlint/cli": "17.6.7",
+        "@commitlint/config-conventional": "17.6.7",
         "@semantic-release/changelog": "6.0.3",
         "@semantic-release/exec": "6.0.3",
         "@types/eslint": "8.44.0",
         "@types/jest": "29.5.3",
         "@types/node": "20.4.2",
-        "@typescript-eslint/eslint-plugin": "6.0.0",
-        "@typescript-eslint/parser": "6.0.0",
+        "@typescript-eslint/eslint-plugin": "6.1.0",
+        "@typescript-eslint/parser": "6.1.0",
+        "@typescript-eslint/rule-tester": "6.1.0",
         "class-validator": "^0.14",
         "eslint": "8.45.0",
         "eslint-config-prettier": "8.8.0",
@@ -76,7 +76,7 @@
         "typescript": "5.1.6"
     },
     "peerDependencies": {
-        "@typescript-eslint/parser": "^5.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
         "class-validator": "*",
         "eslint": "^8.0.0"
     },
