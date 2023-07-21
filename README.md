@@ -16,6 +16,10 @@ typescript eslint parser supports a range of typescript versions but there can b
 
 This plugin only supports typescript up to the version typescript eslint parser supports. See https://github.com/typescript-eslint/typescript-eslint#supported-typescript-version for the versions.
 
+## Have an idea for a rule?
+
+Awsome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/new?title=New%20Rule%20Suggestion&labels=Rule%20Suggestion&body=Hi!%20I%20have%20an%20idea%20for%20a%20rule...) to submit a new issue!
+
 ## Index of available rules
 
 | Category                              | Rule                                                                                                                                 | is on in recommended ruleset? |
