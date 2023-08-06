@@ -1,0 +1,39 @@
+name: Renovate
+on:
+    # Allows manual/automated ad-hoc trigger
+    workflow_dispatch:
+        inputs:
+            logLevel:
+                description: "Override default log level"
+                required: false
+                default: "info"
+                type: string
+            overrideSchedule:
+                description: "Override all schedules"
+                required: false
+                default: "false"
+                type: string
+    # Run twice in the early morning for initial and follow up steps (create pull request and merge)
+    schedule:
+        - cron: "18 21,2,5 * * *"
+concurrency: renovate
+jobs:
+    renovate:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+            - name: Self-hosted Renovate
+              uses: renovatebot/github-action@23a02fe7be9e93f857a953cc8162e57d2c8401ef # v39.0.1
+              env:
+                  # Repository taken from variable to keep configuration file generic
+                  RENOVATE_REPOSITORIES: ${{ github.repository }}
+
+                  # Use GitHub API to create commits (this allows for signed commits from GitHub App)
+                  RENOVATE_PLATFORM_COMMIT: "true"
+                  # Override schedule if set
+                  RENOVATE_FORCE: ${{ github.event.inputs.overrideSchedule == 'true' && '{''schedule'':null}' || '' }}
+                  LOG_LEVEL: ${{ inputs.logLevel || 'info' }}
+              with:
+                  token: ${{ secrets.RENOVATE_TOKEN }}
