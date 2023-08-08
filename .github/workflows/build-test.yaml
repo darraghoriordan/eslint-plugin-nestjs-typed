@@ -1,5 +1,8 @@
-name: BuildPR
+name: Build and Test
 on:
+    push:
+        branches:
+            - "renovate/**"
     pull_request:
         branches:
             - main
