@@ -2,9 +2,12 @@
     "extends": "./tsconfig.common",
     "include": [
         "src",
+        "jest.config.ts"
     ],
+    "compilerOptions": {
+        "rootDir": "."
+    },
     "exclude": [
-        "jest.config.ts",
         "dist",
         "**/*.test-data.ts"
     ]

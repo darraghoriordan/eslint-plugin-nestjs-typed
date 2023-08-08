@@ -9,11 +9,10 @@ const config: Config.InitialOptions = {
     moduleFileExtensions: ["ts", "js", "json"],
     setupFiles: ["./src/testing/preRun.ts"],
     collectCoverage: true,
-    globals: {
-        "ts-jest": {
-            tsconfig: `tsconfig.test.json`,
-        },
+    transform: {
+        "^.+\\.(tsx?|ts?)$": ["ts-jest", {tsconfig: `tsconfig.test.json`}],
     },
+
     silent: false,
     verbose: true,
     collectCoverageFrom: [

@@ -11,9 +11,12 @@ module.exports = {
         "plugin:unicorn/recommended",
         "prettier",
     ],
+    ignorePatterns: ["**/jest.config.ts"],
+
     parser: "@typescript-eslint/parser",
     parserOptions: {
-        project: ["./tsconfig.json"],
+        tsconfigRootDir: __dirname,
+        project: ["./tsconfig.lint.json"],
         sourceType: "module",
     },
 

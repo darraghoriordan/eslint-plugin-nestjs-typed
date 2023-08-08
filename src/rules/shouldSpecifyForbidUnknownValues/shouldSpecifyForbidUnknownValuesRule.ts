@@ -1,4 +1,3 @@
-import {VariableDeclarator} from "@babel/types";
 import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
 import {ASTUtils} from "@typescript-eslint/utils";
@@ -64,11 +63,11 @@ export const shouldTriggerNewExpressionHasProperty = (
     return checkObjectExpression(argument);
 };
 
-export const shouldTriggerForVariableDecleratorExpression = (
-    node: TSESTree.Node
+export const shouldTriggerForVariableDeclaratorExpression = (
+    node: TSESTree.VariableDeclarator
 ): boolean => {
     // if the developer hasn't annotated the object we can't continue to check these rules correctly (we don't know if anonymous objects need to have any props)
-    const variableDeclarator = node as VariableDeclarator;
+    const variableDeclarator = node;
     const asExpression = variableDeclarator?.init as TSESTree.TSAsExpression;
     const typeAnnotation =
         asExpression?.typeAnnotation as TSESTree.TSTypeReference;
@@ -103,7 +102,7 @@ const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
     create(context) {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            NewExpression(node: TSESTree.Node): void {
+            NewExpression(node: TSESTree.NewExpression): void {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result = shouldTriggerNewExpressionHasProperty(node);
 
@@ -115,10 +114,10 @@ const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
                 }
             },
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            VariableDeclarator(node: TSESTree.Node): void {
+            VariableDeclarator(node: TSESTree.VariableDeclarator): void {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result =
-                    shouldTriggerForVariableDecleratorExpression(node);
+                    shouldTriggerForVariableDeclaratorExpression(node);
 
                 if (result) {
                     context.report({

@@ -30,6 +30,7 @@ describe("nest module ast mapper", () => {
 
         expect(result).not.toBeUndefined();
         expect(
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             (
                 (typeAnnotation?.typeAnnotation as TSESTree.TSTypeReference)
                 // prettier-ignore
@@ -42,7 +43,7 @@ describe("nest module ast mapper", () => {
         "Can parse a module",
         (testItem: {
             moduleCode: string;
-            expectedMapping: Array<string | NestProvidedInjectablesMap>;
+            expectedMapping: (string | NestProvidedInjectablesMap)[];
         }) => {
             const ast = typedTokenHelpers.parseStringToAst(
                 testItem.moduleCode,

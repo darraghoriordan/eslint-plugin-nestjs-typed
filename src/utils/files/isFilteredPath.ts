@@ -10,7 +10,7 @@ class IsFilteredPath {
         const hasFoundFilter = filteredStrings?.some((setting: string) => {
             return new RegExp(`(${setting})`).test(path);
         });
-        return hasFoundFilter || false;
+        return hasFoundFilter ?? false;
     };
 }
 

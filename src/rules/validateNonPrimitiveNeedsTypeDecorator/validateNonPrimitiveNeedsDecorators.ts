@@ -14,7 +14,7 @@ export type ValidateNonPrimitivePropertyTypeDecoratorOptions = [
     {
         additionalTypeDecorators: string[];
         additionalCustomValidatorDecorators: string[];
-    }
+    },
 ];
 export const shouldTrigger = (): boolean => {
     return true;
@@ -106,7 +106,7 @@ const rule = createRule<
                         const foundParams = (
                             node.typeAnnotation
                                 ?.typeAnnotation as TSESTree.TSTypeReference
-                        )?.typeParameters?.params;
+                        )?.typeArguments?.params;
                         if (foundParams && foundParams.length === 1) {
                             mainType = foundParams[0].type;
                         }
@@ -219,7 +219,7 @@ const rule = createRule<
                                 const foundParams = (
                                     node.typeAnnotation
                                         ?.typeAnnotation as TSESTree.TSTypeReference
-                                )?.typeParameters?.params;
+                                )?.typeArguments?.params;
 
                                 if (foundParams && foundParams.length === 1) {
                                     const typeName = (

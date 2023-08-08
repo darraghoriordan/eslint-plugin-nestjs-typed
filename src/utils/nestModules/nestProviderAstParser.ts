@@ -5,7 +5,7 @@ export const nestProviderAstParser = {
     mapNestProviderObject(
         n: TSESTree.Property,
         path: string
-    ): Array<string | NestProvidedInjectablesMap> | null {
+    ): (string | NestProvidedInjectablesMap)[] | null {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const propertyName = (n.value as TSESTree.Identifier).name;
         if (propertyName) {

@@ -29,7 +29,7 @@ export const nestModuleAstParser = {
     mapNestModuleDecorator(
         n: TSESTree.ClassDeclaration,
         path: string
-    ): Array<string | NestProvidedInjectablesMap> | null {
+    ): (string | NestProvidedInjectablesMap)[] | null {
         // The nest module decorator is called "Module"
         const moduleDecorator = n.decorators?.find(
             (d) =>

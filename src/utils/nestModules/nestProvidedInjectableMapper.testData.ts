@@ -1,6 +1,7 @@
 import {TSESLint} from "@typescript-eslint/utils";
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
 export const fakeFilePath = "fake/path.ts";
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 export const fakeContext = {
     parserOptions: {
         ecmaVersion: 2019 as TSESLint.EcmaVersion,
