@@ -43,8 +43,8 @@
     "main": "dist/index.js",
     "types": "index.d.ts",
     "dependencies": {
-        "@typescript-eslint/scope-manager": "6.2.1",
-        "@typescript-eslint/utils": "6.2.1",
+        "@typescript-eslint/scope-manager": "6.3.0",
+        "@typescript-eslint/utils": "6.3.0",
         "eslint-module-utils": "2.8.0",
         "reflect-metadata": "0.1.13"
     },
@@ -56,9 +56,9 @@
         "@types/eslint": "8.44.2",
         "@types/jest": "29.5.3",
         "@types/node": "20.4.9",
-        "@typescript-eslint/eslint-plugin": "6.2.1",
-        "@typescript-eslint/parser": "6.2.1",
-        "@typescript-eslint/rule-tester": "6.2.1",
+        "@typescript-eslint/eslint-plugin": "6.3.0",
+        "@typescript-eslint/parser": "6.3.0",
+        "@typescript-eslint/rule-tester": "6.3.0",
         "class-validator": "^0.14",
         "eslint": "8.46.0",
         "eslint-config-prettier": "9.0.0",
