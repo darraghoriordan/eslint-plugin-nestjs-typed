@@ -60,7 +60,7 @@ export class CustomBotController {
 }
 ```
 
-this FAILS because you shouldn't put the `:` in the param decorator
+this FAILS because you shouldn't put the `:` in the param decorator. This is just the way NestJS params work. You use ":" in the route to indicate the word is meant to be a param. But when using the @Param() decorator, you should just use the name, i.e. do not use ":". In the example below `@Param("uuid")` is correct.
 
 ```ts
 @Controller("custom-bot")
