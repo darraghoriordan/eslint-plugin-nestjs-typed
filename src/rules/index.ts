@@ -14,12 +14,13 @@ import allPropertiesHaveExplicitDefined from "./allPropertiesHaveExplicitDefined
 import apiMethodsShouldBeGuarded from "./apiMethodsShouldBeGuarded/apiMethodsShouldBeGuarded";
 import apiMethodsShouldSpecifyApiOperation from "./apiMethodsShouldSpecifyApiOperation/apiMethodsShouldSpecifyApiOperation";
 import sortModuleMetadataArrays from "./sortModuleMetadataArrays/sortModuleMetadataArrays";
-
+import noDuplicateDecorators from "./noDuplicateDecorators/noDuplicateDecorators";
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
         apiPropertyMatchesPropertyOptionality,
     "injectable-should-be-provided": injectableShouldBeProvided,
+    "no-duplicate-decorators": noDuplicateDecorators,
     "provided-injected-should-match-factory-parameters":
         providedInjectedShouldMatchFactoryParameters,
     "controllers-should-supply-api-tags": controllerDecoratedHasApiTags,
