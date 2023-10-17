@@ -14,19 +14,19 @@ const ruleTester = new RuleTester({
 ruleTester.run("no-duplicate-decorators", rule, {
     valid: [
         {
-            code: `@DiscoverDecorator()
+            code: `@Controller()
             class MyClass {
-                @DiscoverDecorator()
+                @Controller()
                 myProperty: string;
 
             }`,
         },
         {
-            code: `@DiscoverDecorator()
+            code: `@Controller()
             @NotValidated()
             @NotValidated()
             class MyClass {
-                @DiscoverDecorator()
+                @Controller()
                 myProperty: string;
 
             }`,
@@ -34,10 +34,10 @@ ruleTester.run("no-duplicate-decorators", rule, {
     ],
     invalid: [
         {
-            code: `@DiscoverDecorator()
-        @DiscoverDecorator()
+            code: `@Controller()
+        @Controller()
         class MyClass {
-            @DiscoverDecorator()
+            @Controller()
             myProperty: string;
 
         }`,
@@ -49,10 +49,10 @@ ruleTester.run("no-duplicate-decorators", rule, {
         },
         {
             code: `
-        @DiscoverDecorator()
+        @Controller()
         class MyClass {
-            @DiscoverDecorator()
-            @DiscoverDecorator()
+            @Controller()
+            @Controller()
             myProperty: string;
 
         }`,
@@ -64,7 +64,7 @@ ruleTester.run("no-duplicate-decorators", rule, {
         },
         {
             code: `
-        @DiscoverDecorator()
+        @Controller()
         class MyClass {
             @Validated()
             @Validated()
