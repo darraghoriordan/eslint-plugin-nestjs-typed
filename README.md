@@ -39,6 +39,7 @@ Awsome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-typ
 |                                       | [`validated-non-primitive-property-needs-type-decorator`](./src/docs/rules/validated-non-primitive-property-needs-type-decorator.md) | Y                             |
 |                                       | [`all-properties-are-whitelisted`](./src/docs/rules/all-properties-are-whitelisted.md)                                               | Y                             |
 |                                       | [`all-properties-have-explicit-defined`](./src/docs/rules/all-properties-have-explicit-defined.md)                                   | Y                             |
+|                                       | [`no-duplicate-decorators`](./src/docs/rules/no-duplicate-decorators.md)                                                             | Y                             |
 |                                       |                                                                                                                                      |                               |
 | Security                              | [`validation-pipe-should-forbid-unknown`](./src/docs/rules/validation-pipe-should-use-forbid-unknown.md)                             | Y                             |
 |                                       | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | N                             |

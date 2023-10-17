@@ -32,5 +32,6 @@ export = {
         "@darraghor/nestjs-typed/api-method-should-specify-api-operation":
             "off",
         "@darraghor/nestjs-typed/sort-module-metadata-arrays": "off",
+        "@darraghor/nestjs-typed/no-duplicate-decorators": "error",
     },
 };
