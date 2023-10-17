@@ -12,7 +12,7 @@ export type NoDuplicateDecoratorsOptions = [
 export const shouldTrigger = (): boolean => {
     return true;
 };
-export const standardDecoratorsToValidate = ["DiscoverDecorator"];
+export const standardDecoratorsToValidate = ["Controller", "Injectable"];
 const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
     name: "no-duplicate-decorators",
     meta: {
