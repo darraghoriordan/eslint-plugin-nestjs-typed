@@ -25,7 +25,7 @@ jobs:
               uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
             - name: Self-hosted Renovate
-              uses: renovatebot/github-action@89c8a9b60f5bc8395658abab8f40f96e4b490ebf # v39.1.0
+              uses: renovatebot/github-action@5d3fbef92a76cbf78f5732d17c07a2e76e6f7555 # v39.1.4
               env:
                   # Repository taken from variable to keep configuration file generic
                   RENOVATE_REPOSITORIES: ${{ github.repository }}
