@@ -63,7 +63,7 @@
         "eslint": "8.55.0",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-prefer-arrow": "1.2.3",
-        "eslint-plugin-unicorn": "49.0.0",
+        "eslint-plugin-unicorn": "50.0.1",
         "husky": "8.0.3",
         "jest": "29.7.0",
         "jest-create-mock-instance": "2.0.0",
