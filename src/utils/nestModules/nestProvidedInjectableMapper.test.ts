@@ -36,6 +36,8 @@ describe("nest module ast mapper", () => {
                 // prettier-ignore
                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     .typeName as any
+            // prettier-ignore
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             ).name
         ).toEqual("Date");
     });
