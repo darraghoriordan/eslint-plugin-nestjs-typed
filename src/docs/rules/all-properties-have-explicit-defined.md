@@ -1,8 +1,8 @@
 ### Rule: all-properties-have-explicit-defined
 
-This rule checks that all properties of a class have an appropriate `@IsDefined()` or `@IsOptional()` decorator.
+This rule checks that all properties of a class have an appropriate `@IsDefined()`, `@IsOptional()` or `@ValidateIf()` decorator.
 
-This rule also checks that both `@IsDefined()` and `@IsOptional()` are not used on the same property because this doesn't make sense.
+This rule also checks that both `@IsDefined()`, `@IsOptional()` and `@ValidatedIf` are not used on the same property because this doesn't make sense.
 
 The rule will ignore any classes that have 0 class-validator decorators. This is to avoid errors for classes that are not used for validation.
 
@@ -15,6 +15,10 @@ export class CreateOrganisationDto {
 
     @IsOptional()
     someStringProperty?: string;
+
+    @ValidatedIf(o => !o.someStringProperty)
+    @Length(10, 20)
+    someOtherProperty?:  string
 }
 ```
 
@@ -28,7 +32,7 @@ export class CreateOrganisationDto {
 }
 ```
 
-This FAILS - missing `@IsOptional()` on `someStringProperty`
+This FAILS - missing `@IsOptional()` or `ValidateIf()` on `someStringProperty`
 
 ```ts
 export class CreateOrganisationDto {
