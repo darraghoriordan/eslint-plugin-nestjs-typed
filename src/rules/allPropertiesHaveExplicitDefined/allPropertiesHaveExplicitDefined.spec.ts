@@ -109,6 +109,21 @@ class A {
 }
     `,
         },
+
+        {
+            code: `
+import { IsInt, IsOptional, IsString, ValidateIf } from 'class-validator';
+class A {
+  @IsInt()
+  @IsOptional()
+  b?: number
+
+  @ValidateIf((o) => !o.b)
+  @IsString()
+  c?: string
+}
+    `,
+        },
     ],
     invalid: [
         {
@@ -196,7 +211,56 @@ class A {
     `,
             errors: [
                 {
-                    messageId: "conflicting-defined-decorators",
+                    messageId:
+                        "conflicting-defined-decorators-defined-optional",
+                },
+            ],
+        },
+        {
+            code: `
+            import { ValidateIf, IsDefined } from 'class-validator';
+class A {
+  @IsDefined()
+  @ValidateIf()
+  b?: string
+}
+    `,
+            errors: [
+                {
+                    messageId:
+                        "conflicting-defined-decorators-defined-validate-if",
+                },
+            ],
+        },
+        {
+            code: `
+            import { ValidateIf, IsOptional } from 'class-validator';
+class A {
+  @IsOptional()
+  @ValidateIf()
+  b?: string
+}
+    `,
+            errors: [
+                {
+                    messageId:
+                        "conflicting-defined-decorators-optional-validate-if",
+                },
+            ],
+        },
+        {
+            code: `
+            import { ValidateIf, IsOptional, IsDefined } from 'class-validator';
+class A {
+  @IsDefined()
+  @IsOptional()
+  @ValidateIf()
+  b?: string
+}
+    `,
+            errors: [
+                {
+                    messageId: "conflicting-defined-decorators-all",
                 },
             ],
         },

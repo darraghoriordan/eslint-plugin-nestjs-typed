@@ -15,7 +15,10 @@ const rule = createRule<
     [],
     | "missing-is-defined-decorator"
     | "missing-is-optional-decorator"
-    | "conflicting-defined-decorators"
+    | "conflicting-defined-decorators-defined-optional"
+    | "conflicting-defined-decorators-defined-validate-if"
+    | "conflicting-defined-decorators-optional-validate-if"
+    | "conflicting-defined-decorators-all"
 >({
     name: "all-properties-have-explicit-defined",
     meta: {
@@ -29,9 +32,15 @@ const rule = createRule<
             "missing-is-defined-decorator":
                 "Non-optional properties must have a decorator that checks the value is defined (for example: @IsDefined())",
             "missing-is-optional-decorator":
-                "Optional properties must have @IsOptional() decorator",
-            "conflicting-defined-decorators":
+                "Optional properties must have @IsOptional() or @ValidateIf() decorator",
+            "conflicting-defined-decorators-defined-optional":
                 "Properties can have @IsDefined() or @IsOptional() but not both",
+            "conflicting-defined-decorators-defined-validate-if":
+                "Properties can have @IsDefined() or @ValidateIf() but not both",
+            "conflicting-defined-decorators-optional-validate-if":
+                "Properties can have @IsOptional() or @ValidateIf() but not both",
+            "conflicting-defined-decorators-all":
+                "Properties can have one of @IsDefined() or @IsOptional() or @ValidateIf()",
         },
         type: "problem",
         schema: [],
@@ -46,7 +55,7 @@ const rule = createRule<
             ClassDeclaration(node: TSESTree.ClassDeclaration) {
                 const propertyDefinitionsWithDecoratorsStatus: [
                     TSESTree.PropertyDefinition,
-                    DecoratorsStatus
+                    DecoratorsStatus,
                 ][] = [];
                 let withDecoratorCount = 0;
                 const propertyDefinitions = getPropertiesDefinitions(node);
@@ -60,21 +69,48 @@ const rule = createRule<
                         decoratorsStatus,
                     ]);
 
-                    // It doesn't make sense to have both @IsDefined and @IsOptional decorators
+                    // It doesn't make sense to have all three decorators on the same property
                     if (
+                        decoratorsStatus.hasIsDefinedDecorator &&
+                        decoratorsStatus.hasIsOptionalDecorator &&
+                        decoratorsStatus.hasValidateIfDecorator
+                    ) {
+                        context.report({
+                            node: propertyDefinition,
+                            messageId: "conflicting-defined-decorators-all",
+                        });
+                    } else if (
                         decoratorsStatus.hasIsDefinedDecorator &&
                         decoratorsStatus.hasIsOptionalDecorator
                     ) {
                         context.report({
                             node: propertyDefinition,
-                            messageId: "conflicting-defined-decorators",
+                            messageId:
+                                "conflicting-defined-decorators-defined-optional",
                         });
-                    }
-
-                    if (
+                    } else if (
+                        decoratorsStatus.hasIsDefinedDecorator &&
+                        decoratorsStatus.hasValidateIfDecorator
+                    ) {
+                        context.report({
+                            node: propertyDefinition,
+                            messageId:
+                                "conflicting-defined-decorators-defined-validate-if",
+                        });
+                    } else if (
+                        decoratorsStatus.hasIsOptionalDecorator &&
+                        decoratorsStatus.hasValidateIfDecorator
+                    ) {
+                        context.report({
+                            node: propertyDefinition,
+                            messageId:
+                                "conflicting-defined-decorators-optional-validate-if",
+                        });
+                    } else if (
                         decoratorsStatus.hasIsDefinedDecorator ||
                         decoratorsStatus.hasTypeCheckingDecorator ||
-                        decoratorsStatus.hasIsOptionalDecorator
+                        decoratorsStatus.hasIsOptionalDecorator ||
+                        decoratorsStatus.hasValidateIfDecorator
                     ) {
                         withDecoratorCount++;
                     }
@@ -100,7 +136,10 @@ const rule = createRule<
                             propertyDefinition.optional ||
                             isNullableType(type)
                         ) {
-                            if (!decoratorsStatus.hasIsOptionalDecorator) {
+                            if (
+                                !decoratorsStatus.hasIsOptionalDecorator &&
+                                !decoratorsStatus.hasValidateIfDecorator
+                            ) {
                                 context.report({
                                     node: propertyDefinition,
                                     messageId: "missing-is-optional-decorator",
@@ -130,6 +169,7 @@ interface DecoratorsStatus {
     hasIsDefinedDecorator: boolean;
     hasTypeCheckingDecorator: boolean;
     hasIsOptionalDecorator: boolean;
+    hasValidateIfDecorator: boolean;
 }
 
 function getType(
@@ -148,6 +188,7 @@ function getDecoratorsStatus(
     let hasIsDefinedDecorator = false;
     let hasTypeCheckingDecorator = false;
     let hasIsOptionalDecorator = false;
+    let hasValidateIfDecorator = false;
     const program = typedTokenHelpers.getRootProgram(propertyDefinition);
 
     if (propertyDefinition.decorators) {
@@ -168,7 +209,8 @@ function getDecoratorsStatus(
                 // We care if the decorator is a validation decorator like IsString etc for checks later
                 if (
                     decorator.expression.callee.name !== "IsDefined" &&
-                    decorator.expression.callee.name !== "IsOptional"
+                    decorator.expression.callee.name !== "IsOptional" &&
+                    decorator.expression.callee.name !== "ValidateIf"
                 ) {
                     hasTypeCheckingDecorator = true;
                 }
@@ -180,6 +222,9 @@ function getDecoratorsStatus(
                 if (decorator.expression.callee.name === "IsOptional") {
                     hasIsOptionalDecorator = true;
                 }
+                if (decorator.expression.callee.name === "ValidateIf") {
+                    hasValidateIfDecorator = true;
+                }
             }
         }
     }
@@ -187,5 +232,6 @@ function getDecoratorsStatus(
         hasIsDefinedDecorator,
         hasTypeCheckingDecorator,
         hasIsOptionalDecorator,
+        hasValidateIfDecorator,
     };
 }
