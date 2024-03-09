@@ -28,7 +28,7 @@
         "url": "https://github.com/darraghoriordan/eslint-plugin-nestjs-typed"
     },
     "engines": {
-        "node": "^16.0.0 || ^18.0.0 || >=20.0.0"
+        "node": "^18.18.0 || >=20.0.0"
     },
     "files": [
         "dist",
@@ -76,9 +76,9 @@
         "typescript": "5.3.3"
     },
     "peerDependencies": {
-        "@typescript-eslint/parser": "^6.0.0",
+        "@typescript-eslint/parser": "^7.0.0",
         "class-validator": "*",
-        "eslint": "^8.0.1"
+        "eslint": "^8.56.0"
     },
     "keywords": [
         "eslint",
