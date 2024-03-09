@@ -11,7 +11,7 @@
 -   Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
 -   Version `2.x` supports Eslint version `<=7.x` and typescript eslint parser `^4`
 
-There were many breaking changes between these versions.
+There are breaking changes between versions ofr ts-eslint.
 
 typescript eslint parser supports a range of typescript versions but there can be a delay in supporting the latest versions.
 
