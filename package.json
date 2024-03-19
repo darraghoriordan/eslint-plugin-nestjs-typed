@@ -55,7 +55,7 @@
         "@semantic-release/exec": "6.0.3",
         "@types/eslint": "8.56.5",
         "@types/jest": "29.5.12",
-        "@types/node": "20.11.27",
+        "@types/node": "20.11.28",
         "@typescript-eslint/eslint-plugin": "7.2.0",
         "@typescript-eslint/parser": "7.2.0",
         "@typescript-eslint/rule-tester": "7.2.0",
@@ -70,7 +70,7 @@
         "jest-junit": "16.0.0",
         "lint-staged": "15.2.2",
         "prettier": "3.2.5",
-        "semantic-release": "23.0.2",
+        "semantic-release": "23.0.3",
         "ts-jest": "29.1.2",
         "ts-node": "10.9.2",
         "typescript": "5.4.2"
