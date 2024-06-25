@@ -174,6 +174,19 @@ class Foo {
         `,
         },
         {
+            // is a literal type
+            code: `
+                import { IsString } from 'class-validator';
+                
+                export class CreateOrganisationDto {
+                    @ApiProperty({ type: Person, isArray: true })
+                    @ValidateNested({each:true})
+                    @IsString()
+                    type!: 'organization'
+                }
+        `,
+        },
+        {
             // is not a primitive type so skip
             code: `
                 import { Allow } from 'class-validator';
@@ -228,6 +241,21 @@ class Foo {
                 @Allow()
                 @IsString({each: true})
                nullExampleProperty!: string[] | null;
+              }
+    `,
+        },
+        {
+            // is a union between literal types - doesn't need type
+            code: `
+            import { IsString } from 'class-validator';
+
+            class ExampleDto {
+                @ApiProperty({
+                  isArray: true,
+                })
+                @Allow()
+                @IsString()
+               nullExampleProperty!: "foo" | "bar";
               }
     `,
         },
