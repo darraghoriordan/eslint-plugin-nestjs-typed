@@ -203,7 +203,7 @@ class Foo {
         `,
         },
         {
-            // is an array - should have type and has it so pass!
+            // is an array with both syntaxes - should have type and has it so pass!
             code: `
             import { ValidateNested } from 'class-validator';
             
@@ -211,7 +211,12 @@ class Foo {
                 @ApiProperty({ type: Person, isArray: true })
                 @ValidateNested({each:true})
                 @Type(()=> Foo)
-                members!: Foo[];
+                members1!: Foo[];
+
+                @ApiProperty({ type: Person, isArray: true })
+                @ValidateNested({each:true})
+                @Type(()=> Foo)
+                members2!: Array<Foo>;
             }
     `,
         },
@@ -285,6 +290,69 @@ class Foo {
                 @TransformDate()
                 exampleProperty!: [Date, Date];
               }
+    `,
+        },
+        {
+            // an array of unknown - this is a type that this rule shouldn't care about
+            //https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/184
+            code: `
+            import { Allow } from 'class-validator';
+            
+            export class CreateOrganisationDto {
+                @ApiProperty({
+                  isArray: true,
+                })    
+                @Allow()
+                EXAMPLE1!: unknown[];
+
+                @ApiProperty({
+                  isArray: true,
+                })    
+                @Allow()
+                EXAMPLE2!: Array<unknown>;
+            }
+    `,
+        },
+        {
+            // an array of any - this is a type that this rule shouldn't care about
+            //https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/184
+            code: `
+            import { Allow } from 'class-validator';
+            
+            export class CreateOrganisationDto {
+                @ApiProperty({
+                  isArray: true,
+                })    
+                @Allow()
+                EXAMPLE1!: any[];
+
+                @ApiProperty({
+                  isArray: true,
+                })    
+                @Allow()
+                EXAMPLE2!: Array<any>;
+            }
+    `,
+        },
+        {
+            // an array of any - this is a type that this rule shouldn't care about
+            //https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/184
+            code: `
+            import { Allow } from 'class-validator';
+            
+            export class CreateOrganisationDto {
+                @ApiProperty({
+                  isArray: true,
+                })    
+                @Allow()
+                EXAMPLE1!: object[];
+
+                @ApiProperty({
+                  isArray: true,
+                })    
+                @Allow()
+                EXAMPLE2!: Array<object>;
+            }
     `,
         },
     ],
