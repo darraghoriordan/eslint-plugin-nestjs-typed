@@ -8,6 +8,7 @@ const primitiveTypes = new Set([
     AST_NODE_TYPES.TSStringKeyword,
     AST_NODE_TYPES.TSBooleanKeyword,
     AST_NODE_TYPES.TSNumberKeyword,
+    AST_NODE_TYPES.TSLiteralType,
     AST_NODE_TYPES.TSNullKeyword,
 ]);
 export type ValidateNonPrimitivePropertyTypeDecoratorOptions = [
