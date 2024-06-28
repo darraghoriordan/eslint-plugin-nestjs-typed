@@ -19,33 +19,36 @@ This plugin only supports typescript up to the version typescript eslint parser 
 
 ## Have an idea for a rule?
 
-Awsome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/new?title=New%20Rule%20Suggestion&labels=Rule%20Suggestion&body=Hi!%20I%20have%20an%20idea%20for%20a%20rule...) to submit a new issue!
+Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/new?title=New%20Rule%20Suggestion&labels=Rule%20Suggestion&body=Hi!%20I%20have%20an%20idea%20for%20a%20rule...) to submit a new issue!
 
 ## Index of available rules
 
 | Category                              | Rule                                                                                                                                 | is on in recommended ruleset? |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
-| Nest Modules and Dependency Injection | [`provided-injected-should-match-factory-parameters`](./src/docs/rules/provided-injected-should-match-factory-parameters.md)         | Y                             |
-|                                       | [`injectable-should-be-provided`](./src/docs/rules/injectable-should-be-provided.md)                                                 | Y                             |
+| Nest Modules and Dependency Injection | [`provided-injected-should-match-factory-parameters`](./src/docs/rules/provided-injected-should-match-factory-parameters.md)         | ✅                            |
+|                                       | [`injectable-should-be-provided`](./src/docs/rules/injectable-should-be-provided.md)                                                 | ✅                            |
 |                                       |                                                                                                                                      |                               |
-| Nest Swagger                          | [`api-property-matches-property-optionality`](./src/docs/rules/api-property-matches-property-optionality.md)                         | Y                             |
-|                                       | [`controllers-should-supply-api-tags`](./src/docs/rules/controllers-should-supply-api-tags.md)                                       | Y                             |
-|                                       | [`api-method-should-specify-api-response`](./src/docs/rules/api-method-should-specify-api-response.md)                               | N                             |
-|                                       | [`api-method-should-specify-api-operation`](./src/docs/rules/api-method-should-specify-api-operation.md)                             | Y                             |
-|                                       | [`api-enum-property-best-practices`](./src/docs/rules/api-enum-property-best-practices.md)                                           | Y                             |
-|                                       | [`api-property-returning-array-should-set-array`](./src/docs/rules/api-property-returning-array-should-set-array.md)                 | Y                             |
+| Nest Swagger                          | [`api-property-matches-property-optionality`](./src/docs/rules/api-property-matches-property-optionality.md)                         | ✅                            |
+|                                       | [`controllers-should-supply-api-tags`](./src/docs/rules/controllers-should-supply-api-tags.md)                                       | ✅                            |
+|                                       | [`api-method-should-specify-api-response`](./src/docs/rules/api-method-should-specify-api-response.md)                               | ✅                            |
+|                                       | [`api-method-should-specify-api-operation`](./src/docs/rules/api-method-should-specify-api-operation.md)                             | ✅                            |
+|                                       | [`api-enum-property-best-practices`](./src/docs/rules/api-enum-property-best-practices.md)                                           | ✅                            |
+|                                       | [`api-property-returning-array-should-set-array`](./src/docs/rules/api-property-returning-array-should-set-array.md)                 | ✅                            |
 |                                       |                                                                                                                                      |                               |
-| Preventing bugs                       | [`param-decorator-name-matches-route-param`](./src/docs/rules/param-decorator-name-matches-route-param.md)                           | Y                             |
-|                                       | [`validate-nested-of-array-should-set-each`](./src/docs/rules/validate-nested-of-array-should-set-each.md)                           | Y                             |
-|                                       | [`validated-non-primitive-property-needs-type-decorator`](./src/docs/rules/validated-non-primitive-property-needs-type-decorator.md) | Y                             |
-|                                       | [`all-properties-are-whitelisted`](./src/docs/rules/all-properties-are-whitelisted.md)                                               | Y                             |
-|                                       | [`all-properties-have-explicit-defined`](./src/docs/rules/all-properties-have-explicit-defined.md)                                   | Y                             |
-|                                       | [`no-duplicate-decorators`](./src/docs/rules/no-duplicate-decorators.md)                                                             | Y                             |
+| Preventing bugs                       | [`param-decorator-name-matches-route-param`](./src/docs/rules/param-decorator-name-matches-route-param.md)                           | ✅                            |
+|                                       | [`validate-nested-of-array-should-set-each`](./src/docs/rules/validate-nested-of-array-should-set-each.md)                           | ✅                            |
+|                                       | [`validated-non-primitive-property-needs-type-decorator`](./src/docs/rules/validated-non-primitive-property-needs-type-decorator.md) | ✅                            |
+|                                       | [`all-properties-are-whitelisted`](./src/docs/rules/all-properties-are-whitelisted.md)                                               | ✅                            |
+|                                       | [`all-properties-have-explicit-defined`](./src/docs/rules/all-properties-have-explicit-defined.md)                                   | ✅                            |
+|                                       | [`no-duplicate-decorators`](./src/docs/rules/no-duplicate-decorators.md)                                                             | ✅                            |
+|                                       | [`should-specify-forbid-unknown-values`](./src/docs/rules/should-specify-forbid-unknown-values.md)                                   | ✅                            |
 |                                       |                                                                                                                                      |                               |
-| Security                              | [`validation-pipe-should-forbid-unknown`](./src/docs/rules/validation-pipe-should-use-forbid-unknown.md)                             | Y                             |
-|                                       | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | N                             |
+| Security                              | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | ❌                            |
 |                                       |                                                                                                                                      |                               |
-| Code Consistency                      | [`sort-module-metadata-arrays`](./src/docs/rules/sort-module-metadata-arrays.md)                                                     | N                             |
+| Code Consistency                      | [`sort-module-metadata-arrays`](./src/docs/rules/sort-module-metadata-arrays.md)                                                     | ❌                            |
+
+
+
 
 The "recommended" ruleset are the default rules that are turned on when you configure the plugin as described in this document.
 
