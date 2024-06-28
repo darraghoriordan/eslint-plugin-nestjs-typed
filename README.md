@@ -52,7 +52,7 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 
 The "recommended" ruleset are the default rules that are turned on when you configure the plugin as described in this document.
 
-The name "recommended" is an eslint convention. Some rules in this plugin are opinionated and have to be turned on explicitly in your eslintrc file.
+The name "recommended" is an eslint convention, you can safely use the rules not in that list, they are just more opinionated.
 
 ## Who is this package for?
 
