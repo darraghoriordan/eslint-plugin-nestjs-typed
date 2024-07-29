@@ -44,6 +44,7 @@ ruleTester.run("no-duplicate-decorators", rule, {
             errors: [
                 {
                     messageId: "noDuplicateDecorators",
+                    suggestions: []
                 },
             ],
         },
@@ -59,6 +60,7 @@ ruleTester.run("no-duplicate-decorators", rule, {
             errors: [
                 {
                     messageId: "noDuplicateDecorators",
+                     suggestions: []
                 },
             ],
         },
@@ -75,6 +77,7 @@ ruleTester.run("no-duplicate-decorators", rule, {
             errors: [
                 {
                     messageId: "noDuplicateDecorators",
+                     suggestions: []
                 },
             ],
         },
