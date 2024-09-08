@@ -44,6 +44,12 @@ ruleTester.run("no-duplicate-decorators", rule, {
             errors: [
                 {
                     messageId: "noDuplicateDecorators",
+                    suggestions: [
+                        {
+                            messageId: "noDuplicateDecorators",
+                            output: "Controller",
+                        },
+                    ],
                 },
             ],
         },
@@ -59,6 +65,17 @@ ruleTester.run("no-duplicate-decorators", rule, {
             errors: [
                 {
                     messageId: "noDuplicateDecorators",
+                    suggestions: [
+                        {
+                            messageId: "noDuplicateDecorators",
+                            output: `
+        @Controller()
+        class MyClass {
+            Controller
+
+        }`,
+                        },
+                    ],
                 },
             ],
         },
@@ -75,6 +92,17 @@ ruleTester.run("no-duplicate-decorators", rule, {
             errors: [
                 {
                     messageId: "noDuplicateDecorators",
+                    suggestions: [
+                        {
+                            messageId: "noDuplicateDecorators",
+                            output: `
+        @Controller()
+        class MyClass {
+            Validated
+
+        }`,
+                        },
+                    ],
                 },
             ],
         },
