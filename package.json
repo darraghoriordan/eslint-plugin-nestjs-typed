@@ -55,7 +55,7 @@
         "@semantic-release/exec": "6.0.3",
         "@types/eslint": "8.56.11",
         "@types/jest": "29.5.12",
-        "@types/node": "20.14.14",
+        "@types/node": "20.16.5",
         "@typescript-eslint/eslint-plugin": "7.14.1",
         "@typescript-eslint/parser": "7.14.1",
         "@typescript-eslint/rule-tester": "7.14.1",
