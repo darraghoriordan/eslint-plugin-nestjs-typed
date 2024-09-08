@@ -6,6 +6,9 @@
 
 ## A note on versions
 
+Note: doesn't support eslint 9 yet!
+
+-   Version `6.x` supports Eslint version `>=8.x` and typescript eslint parser `^8`
 -   Version `5.x` supports Eslint version `>=8.x` and typescript eslint parser `^7`
 -   Version `4.x` supports Eslint version `>=8.x` and typescript eslint parser `^6`
 -   Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
@@ -46,9 +49,6 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 | Security                              | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | ❌                            |
 |                                       |                                                                                                                                      |                               |
 | Code Consistency                      | [`sort-module-metadata-arrays`](./src/docs/rules/sort-module-metadata-arrays.md)                                                     | ❌                            |
-
-
-
 
 The "recommended" ruleset are the default rules that are turned on when you configure the plugin as described in this document.
 
