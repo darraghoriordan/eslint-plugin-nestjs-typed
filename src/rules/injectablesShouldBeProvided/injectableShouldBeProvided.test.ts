@@ -11,11 +11,12 @@ const tsRootDirectory = getFixturesRootDirectory();
 console.debug("Using tsrootdirectory", {tsRootDirectory});
 
 const ruleTester = new RuleTester({
-    parser: "@typescript-eslint/parser",
-    parserOptions: {
-        ecmaVersion: 2015,
-        tsconfigRootDir: tsRootDirectory,
-        project: "tsconfig-withMeta.json",
+    languageOptions: {
+        parserOptions: {
+            ecmaVersion: 2015,
+            tsconfigRootDir: tsRootDirectory,
+            project: "tsconfig-withMeta.json",
+        },
     },
 });
 

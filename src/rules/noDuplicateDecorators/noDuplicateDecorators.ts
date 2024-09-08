@@ -19,7 +19,6 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
         docs: {
             description:
                 "Some decorators should only be used once on a property or class. This rule enforces that.",
-            requiresTypeChecking: false,
         },
         messages: {
             noDuplicateDecorators:

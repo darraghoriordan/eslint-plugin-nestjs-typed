@@ -33,7 +33,6 @@ const rule = createRule<
         docs: {
             description:
                 "A non-primitive property with validation should probably use a @Type decorator",
-            requiresTypeChecking: false,
         },
         messages: {
             autofixWithTypeDecorator:

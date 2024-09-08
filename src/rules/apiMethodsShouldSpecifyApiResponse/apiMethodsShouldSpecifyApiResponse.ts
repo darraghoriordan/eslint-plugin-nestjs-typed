@@ -52,8 +52,6 @@ const rule = createRule<[], "shouldSpecifyApiResponse">({
         docs: {
             description:
                 "Api methods should at least specify the expected OK response with @ApiOkResponse. But also add any error responses that might not be expected (e.g. 429)",
-
-            requiresTypeChecking: false,
         },
         messages: {
             shouldSpecifyApiResponse: `A method decorated with @Get, @Post etc. should specify the expected ApiResponse e.g. @ApiOkResponse(type: MyType). These decorators are in the @nestjs/swagger npm package.`,

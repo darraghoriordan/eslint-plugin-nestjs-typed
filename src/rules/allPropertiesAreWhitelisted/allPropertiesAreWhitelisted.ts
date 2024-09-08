@@ -7,7 +7,6 @@ const rule = createRule<[], "missing-property-decorator">({
     meta: {
         docs: {
             description: "Enforce all properties are whitelisted",
-            requiresTypeChecking: false,
         },
         messages: {
             // eslint-disable-next-line @typescript-eslint/naming-convention

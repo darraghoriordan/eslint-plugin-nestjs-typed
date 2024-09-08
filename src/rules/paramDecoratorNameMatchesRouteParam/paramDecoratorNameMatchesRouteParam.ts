@@ -184,8 +184,6 @@ const rule = createRule<
         docs: {
             description:
                 'Param decorators with a name parameter e.g. Param("myvar") should match a specified route parameter - e.g. Get(":myvar")',
-
-            requiresTypeChecking: false,
         },
         messages: {
             paramIdentifierDoesntNeedColon:

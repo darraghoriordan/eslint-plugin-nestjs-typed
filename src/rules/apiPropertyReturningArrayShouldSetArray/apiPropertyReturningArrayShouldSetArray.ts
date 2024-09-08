@@ -65,8 +65,6 @@ const rule = createRule<
     meta: {
         docs: {
             description: "Properties of array should set array",
-
-            requiresTypeChecking: false,
         },
         messages: {
             shouldSetArrayPropertyTrue: `Property returning array should set array option property true`,

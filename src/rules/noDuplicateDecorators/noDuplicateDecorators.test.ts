@@ -3,11 +3,12 @@ import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
 import rule from "./noDuplicateDecorators";
 const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({
-    parser: "@typescript-eslint/parser",
-    parserOptions: {
-        ecmaVersion: 2015,
-        tsconfigRootDir: tsRootDirectory,
-        project: "./tsconfig.json",
+    languageOptions: {
+        parserOptions: {
+            ecmaVersion: 2015,
+            tsconfigRootDir: tsRootDirectory,
+            project: "./tsconfig.json",
+        },
     },
 });
 

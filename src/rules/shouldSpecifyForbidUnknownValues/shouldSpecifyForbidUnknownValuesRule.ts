@@ -87,8 +87,6 @@ const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
         docs: {
             description:
                 "ValidationPipe should use forbidUnknownValues: true to prevent attacks. See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413",
-
-            requiresTypeChecking: false,
         },
         messages: {
             shouldSpecifyForbidUnknownValues: `ValidationPipe should use forbidUnknownValues: true to prevent attacks if setting you're setting any options. See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413`,

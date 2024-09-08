@@ -15,7 +15,7 @@ type Options = [
     {
         src: string[];
         filterFromPaths: string[];
-    }
+    },
 ];
 
 const findModuleMapping = (
@@ -98,8 +98,6 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
     meta: {
         docs: {
             description: "Public api methods should have documentation",
-
-            requiresTypeChecking: false,
         },
         messages: {
             injectableInModule: `Classes marked as Injectable must be added to a module's providers. If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,

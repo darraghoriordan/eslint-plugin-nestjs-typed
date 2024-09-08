@@ -49,8 +49,6 @@ const rule = createRule<
         docs: {
             description:
                 "If you set ValidateNested() on an array, you should set {each: true} in the options",
-
-            requiresTypeChecking: false,
         },
         messages: {
             shouldSetEachPropertyTrue: `ValidateNested should have {each: true} when used on an array`,

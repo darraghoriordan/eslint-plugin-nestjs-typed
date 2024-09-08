@@ -9,7 +9,6 @@ import {getPropertiesDefinitions} from "../../utils/ast";
 import {createRule} from "../../utils/createRule";
 import {Type, TypeChecker} from "typescript";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {RuleRecommendation} from "@typescript-eslint/utils/ts-eslint";
 
 const rule = createRule<
     [],
@@ -25,8 +24,6 @@ const rule = createRule<
         docs: {
             description:
                 "Enforce all properties have an explicit defined status decorator",
-            recommended: "error" as RuleRecommendation,
-            requiresTypeChecking: true,
         },
         messages: {
             "missing-is-defined-decorator":

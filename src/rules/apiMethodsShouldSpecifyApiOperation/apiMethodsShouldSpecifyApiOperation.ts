@@ -24,8 +24,6 @@ const rule = createRule<[], "shouldSpecifyApiOperation">({
         docs: {
             description:
                 "Api methods should at least specify the expected ApiOperation.",
-
-            requiresTypeChecking: false,
         },
         messages: {
             shouldSpecifyApiOperation: `A method decorated with @Get, @Post etc. should specify the expected ApiOperation e.g. @ApiOperation({description: ""}). These decorators are in the @nestjs/swagger npm package.`,

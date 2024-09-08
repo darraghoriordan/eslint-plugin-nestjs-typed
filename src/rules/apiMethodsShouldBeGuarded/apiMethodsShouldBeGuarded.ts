@@ -44,8 +44,6 @@ const rule = createRule<[], "apiMethodsShouldBeGuarded">({
         docs: {
             description:
                 "Endpoints should have authentication guards to maintain our security model.",
-
-            requiresTypeChecking: false,
         },
         messages: {
             apiMethodsShouldBeGuarded:

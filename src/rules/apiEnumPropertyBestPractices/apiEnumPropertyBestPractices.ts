@@ -97,8 +97,6 @@ const rule = createRule<
         docs: {
             description:
                 "Enums should use the best practices for api documentation",
-
-            requiresTypeChecking: false,
         },
         messages: {
             needsEnumNameAdded: `Properties with enum should also specify an enumName property to keep generated models clean`,

@@ -51,8 +51,6 @@ const rule = createRule<[], "mainMessage">({
         docs: {
             description:
                 "The injected items in a provider should typically match the parameters to the factory method used",
-
-            requiresTypeChecking: false,
         },
         messages: {
             mainMessage: `The injected items don't match the factory method parameters, did you forget to add one?`,
