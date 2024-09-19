@@ -43,22 +43,22 @@
     "main": "dist/index.js",
     "types": "index.d.ts",
     "dependencies": {
-        "@typescript-eslint/scope-manager": "8.4.0",
-        "@typescript-eslint/utils": "8.4.0",
-        "eslint-module-utils": "2.9.0",
+        "@typescript-eslint/scope-manager": "8.5.0",
+        "@typescript-eslint/utils": "8.5.0",
+        "eslint-module-utils": "2.11.0",
         "reflect-metadata": "0.2.2"
     },
     "devDependencies": {
-        "@commitlint/cli": "19.4.1",
-        "@commitlint/config-conventional": "19.4.1",
+        "@commitlint/cli": "19.5.0",
+        "@commitlint/config-conventional": "19.5.0",
         "@semantic-release/changelog": "6.0.3",
         "@semantic-release/exec": "6.0.3",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.13",
         "@types/node": "20.16.5",
-        "@typescript-eslint/eslint-plugin": "8.4.0",
-        "@typescript-eslint/parser": "8.4.0",
-        "@typescript-eslint/rule-tester": "8.4.0",
+        "@typescript-eslint/eslint-plugin": "8.5.0",
+        "@typescript-eslint/parser": "8.5.0",
+        "@typescript-eslint/rule-tester": "8.5.0",
         "class-validator": "^0.14.1",
         "eslint": "8.57.0",
         "eslint-config-prettier": "9.1.0",
@@ -73,7 +73,7 @@
         "semantic-release": "24.1.1",
         "ts-jest": "29.2.5",
         "ts-node": "10.9.2",
-        "typescript": "5.5.4"
+        "typescript": "5.6.2"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
