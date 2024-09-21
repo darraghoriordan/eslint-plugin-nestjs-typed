@@ -1,6 +1,5 @@
 {
-
   "*.ts": [
-    "prettier --parser typescript --write","npx eslint -c .eslintrc.js --ext .ts --no-error-on-unmatched-pattern --no-ignore --max-warnings 0"
+    "prettier --parser typescript --write","npx eslint --no-error-on-unmatched-pattern --no-ignore --max-warnings 0"
   ]
 }

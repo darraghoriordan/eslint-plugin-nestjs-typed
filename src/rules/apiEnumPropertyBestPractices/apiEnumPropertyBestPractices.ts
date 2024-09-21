@@ -115,7 +115,6 @@ const rule = createRule<
         const typeChecker = parserServices.program.getTypeChecker();
 
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition(node: TSESTree.Node): void {
                 const mappedNode =
                     parserServices.esTreeNodeToTSNodeMap.get(node);

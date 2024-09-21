@@ -78,7 +78,6 @@ const rule = createRule<
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition: (node: TSESTree.Node) => {
                 const shouldSetArrayResults = shouldSetArrayProperty(
                     node as TSESTree.PropertyDefinition

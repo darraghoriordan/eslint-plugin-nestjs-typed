@@ -53,7 +53,7 @@ export const nestModuleAstParser = {
             const nestModuleMap = [
                 path,
                 new NestProvidedInjectablesMap(
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                     
                     mappedControllerElements,
                     mappedProviderElements
                 ),

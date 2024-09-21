@@ -87,7 +87,6 @@ const rule = createRule<
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition(node: TSESTree.PropertyDefinition): void {
                 // if it's an array get the element type
                 let mainType: AST_NODE_TYPES | undefined;

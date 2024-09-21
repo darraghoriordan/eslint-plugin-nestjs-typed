@@ -96,12 +96,12 @@ const NestProvidedInjectableMapper = {
         path: string
     ): (string | NestProvidedInjectablesMap)[] | null {
         try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
 
             if (
-                // eslint-disable-next-line no-constant-condition, @typescript-eslint/ban-ts-comment
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+                 
                 !unambiguous.isModule(ast)
             ) {
                 return null;

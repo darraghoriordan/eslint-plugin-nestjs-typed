@@ -7,7 +7,7 @@ import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {FilePath} from "eslint/use-at-your-own-risk";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 let listOfPotentialNestModuleFiles: FilePath[];
 let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
 
@@ -165,7 +165,6 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
         }
 
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node: TSESTree.ClassDeclaration): void {
                 checkNode(
                     node,
@@ -182,7 +181,6 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
                     context
                 );
             },
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             "Program:exit"(): void {
                 // map the source to a mapping thing
                 // if not undefined set it to the mapping set
