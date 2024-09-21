@@ -99,7 +99,6 @@ const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             NewExpression(node: TSESTree.NewExpression): void {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result = shouldTriggerNewExpressionHasProperty(node);
@@ -111,7 +110,6 @@ const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
                     });
                 }
             },
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             VariableDeclarator(node: TSESTree.VariableDeclarator): void {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result =

@@ -56,7 +56,6 @@ const rule = createRule<[], "apiMethodsShouldBeGuarded">({
     defaultOptions: [],
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             MethodDefinition(node: TSESTree.MethodDefinition): void {
                 if (apiMethodsShouldBeGuarded(node)) {
                     context.report({

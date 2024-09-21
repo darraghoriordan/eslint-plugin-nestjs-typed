@@ -1,6 +1,0 @@
-**/node_modules
-node_modules
-commitlint.config.js
-jest.config.js
-.eslintrc.js
-jest.config.ts

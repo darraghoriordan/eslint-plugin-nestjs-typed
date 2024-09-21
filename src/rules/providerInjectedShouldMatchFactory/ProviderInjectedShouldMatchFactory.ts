@@ -1,6 +1,6 @@
 import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule";
-// eslint-disable-next-line unicorn/import-style
+ 
 //import util from "util";
 import {nestProviderAstParser} from "../../utils/nestModules/nestProviderAstParser";
 
@@ -15,7 +15,6 @@ export const hasMismatchedInjected = (
             node.id.typeAnnotation
                 ?.typeAnnotation as TSESTree.TSTypeReference
       // prettier-ignore
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
         )?.typeName as TSESTree.Identifier
         )?.name === "Provider" &&
         // and there is a useFactory property in the declaration
@@ -62,7 +61,6 @@ const rule = createRule<[], "mainMessage">({
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             VariableDeclarator(node: TSESTree.VariableDeclarator): void {
                 if (hasMismatchedInjected(node)) {
                     context.report({

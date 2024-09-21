@@ -9,7 +9,6 @@ const rule = createRule<[], "missing-property-decorator">({
             description: "Enforce all properties are whitelisted",
         },
         messages: {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             "missing-property-decorator":
                 "Property has no class-validator decorator (use @Allow() if you don't need a validation)",
         },
@@ -19,7 +18,6 @@ const rule = createRule<[], "missing-property-decorator">({
     defaultOptions: [],
     create: function (context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node: TSESTree.ClassDeclaration) {
                 const program = typedTokenHelpers.getRootProgram(node);
                 const withDecorator: TSESTree.PropertyDefinition[] = [];

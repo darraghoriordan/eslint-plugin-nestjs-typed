@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/prefer-module */
-/* eslint-disable unicorn/prevent-abbreviations */
 
 import rule from "./injectableShouldBeProvided";
 import {RuleTester} from "@typescript-eslint/rule-tester";
@@ -15,7 +14,10 @@ const ruleTester = new RuleTester({
         parserOptions: {
             ecmaVersion: 2015,
             tsconfigRootDir: tsRootDirectory,
-            project: "tsconfig-withMeta.json",
+            projectServices: {
+                allowDefaultProject: ["*.ts*"],
+                defaultProject: "tsconfig-withMeta.json",
+            },
         },
     },
 });

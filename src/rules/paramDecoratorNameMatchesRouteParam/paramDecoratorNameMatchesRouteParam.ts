@@ -59,7 +59,6 @@ export const hasPathPartsAnyRegexParams = (
     pathPartsToCheck: string[]
 ): boolean => {
     // prettier-ignore
-    // eslint-disable-next-line no-useless-escape
     const specialCharacterRegex = /(dareslint__skip|\*|\+|\?|\(|\)|_)/ //new RegExp("([\?\+\*\_\(\)])")
     return pathPartsToCheck.some((pathPart) => {
         return specialCharacterRegex.test(pathPart);
@@ -199,7 +198,6 @@ const rule = createRule<
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             Decorator(node: TSESTree.Decorator): void {
                 if (
                     (
@@ -210,7 +208,6 @@ const rule = createRule<
                     return;
                 }
 
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result = shouldTrigger(node);
 
                 if (result.paramNameNotMatchedInPath) {

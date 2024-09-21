@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable unicorn/prevent-abbreviations */
 import {createRule} from "../../utils/createRule";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 import {TSESTree} from "@typescript-eslint/utils";
@@ -61,7 +59,6 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
         }
         return {
             ["PropertyDefinition,ClassDeclaration"](node) {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
                 const allDecorators = (
                     node as
                         | TSESTree.PropertyDefinition
@@ -77,7 +74,6 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
                                 decorator.expression.callee.type ===
                                     TSESTree.AST_NODE_TYPES.Identifier
                             ) {
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                                 return decorator.expression.callee.name;
                             }
                             return "";
