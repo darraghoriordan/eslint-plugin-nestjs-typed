@@ -60,7 +60,7 @@
         "@typescript-eslint/parser": "8.6.0",
         "@typescript-eslint/rule-tester": "8.6.0",
         "class-validator": "^0.14.1",
-        "eslint": "8.57.0",
+        "eslint": "8.57.1",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-prefer-arrow": "1.2.3",
         "eslint-plugin-unicorn": "55.0.0",
