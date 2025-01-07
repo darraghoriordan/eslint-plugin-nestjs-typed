@@ -92,9 +92,5 @@
         "lint",
         "style"
     ],
-    "license": "ISC",
-    "lint-staged": {
-        "*.ts": "eslint --cache --fix",
-        "*.{ts,js,css,md}": "prettier --write"
-    }
+    "license": "ISC"
 }
