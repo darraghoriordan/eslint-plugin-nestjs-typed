@@ -57,7 +57,7 @@
         "@semantic-release/exec": "6.0.3",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
-        "@types/node": "20.17.11",
+        "@types/node": "20.17.14",
         "@typescript-eslint/eslint-plugin": "8.21.0",
         "@typescript-eslint/parser": "8.21.0",
         "@typescript-eslint/rule-tester": "8.21.0",
@@ -76,7 +76,7 @@
         "semantic-release": "24.2.1",
         "ts-jest": "29.2.5",
         "ts-node": "10.9.2",
-        "typescript": "5.7.2"
+        "typescript": "5.7.3"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
