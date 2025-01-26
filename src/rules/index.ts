@@ -1,4 +1,4 @@
-import injectableShouldBeProvided from "./injectablesShouldBeProvided/injectableShouldBeProvided";
+import injectableShouldBeProvided from "./constructorParamShouldBeMarked/constructorParamShouldBeMarked";
 import providedInjectedShouldMatchFactoryParameters from "./providerInjectedShouldMatchFactory/ProviderInjectedShouldMatchFactory";
 import apiPropertyMatchesPropertyOptionality from "./apiPropertyMatchesPropertyOptionality/apiPropertyMatchesPropertyOptionality";
 import controllerDecoratedHasApiTags from "./controllerDecoratedHasApiTags/controllerDecoratedHasApiTags";
@@ -15,11 +15,14 @@ import apiMethodsShouldBeGuarded from "./apiMethodsShouldBeGuarded/apiMethodsSho
 import apiMethodsShouldSpecifyApiOperation from "./apiMethodsShouldSpecifyApiOperation/apiMethodsShouldSpecifyApiOperation";
 import sortModuleMetadataArrays from "./sortModuleMetadataArrays/sortModuleMetadataArrays";
 import noDuplicateDecorators from "./noDuplicateDecorators/noDuplicateDecorators";
+import constructorParamShouldBeMarked from "./constructorParamShouldBeMarked/constructorParamShouldBeMarked";
+
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
         apiPropertyMatchesPropertyOptionality,
     "injectable-should-be-provided": injectableShouldBeProvided,
+    "constructor-param-should-be-marked": constructorParamShouldBeMarked,
     "no-duplicate-decorators": noDuplicateDecorators,
     "provided-injected-should-match-factory-parameters":
         providedInjectedShouldMatchFactoryParameters,
