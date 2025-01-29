@@ -58,7 +58,6 @@ const checkNode = (
             propertyName,
             nestModuleMap
         );
-        console.log(foundModuleMaps);
 
         if (foundModuleMaps.length === 1) {
             return;
