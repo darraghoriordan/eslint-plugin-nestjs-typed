@@ -62,11 +62,6 @@ const checkNode = (
         if (foundModuleMaps.length === 1) {
             return;
         }
-
-        console.log(
-            `Expected 1 reference, but found ${foundModuleMaps.length} for ${name}`
-        );
-
         // couldn't find map so error
         context.report({
             node: node,
