@@ -5,7 +5,6 @@ import * as unambiguous from "eslint-module-utils/unambiguous";
 import {FilePath} from "eslint/use-at-your-own-risk";
 import fs from "fs";
 import {typedTokenHelpers} from "../typedTokenHelpers";
-
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
 import {nestModuleAstParser} from "./nestModuleAstParser";
 import {nestProviderAstParser} from "./nestProviderAstParser";
@@ -58,12 +57,7 @@ const NestProvidedInjectableMapper = {
             })
             // eslint-disable-next-line @typescript-eslint/unbound-method
             .filter(NestProvidedInjectableMapper.notEmpty)
-            .forEach((m) =>
-                moduleMaps.set(
-                    m[0] as string,
-                    m[1] as NestProvidedInjectablesMap
-                )
-            );
+            .forEach((m) => moduleMaps.set(m[0], m[1]));
 
         return moduleMaps;
     },
@@ -94,7 +88,7 @@ const NestProvidedInjectableMapper = {
     mapAllProvidedInjectables(
         ast: TSESTree.Program,
         path: string
-    ): (string | NestProvidedInjectablesMap)[] | null {
+    ): [string, NestProvidedInjectablesMap] | null {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
@@ -111,7 +105,7 @@ const NestProvidedInjectableMapper = {
             // dangerous assumption i guess. i have never seen this done before though.
 
             // set up the response model
-            let nestModuleMap: (string | NestProvidedInjectablesMap)[] | null =
+            let nestModuleMap: [string, NestProvidedInjectablesMap] | null =
                 null;
 
             // Is this a module?

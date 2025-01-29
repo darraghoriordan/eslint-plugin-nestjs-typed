@@ -7,7 +7,7 @@ import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
 import {FilePath} from "eslint/use-at-your-own-risk";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 let listOfPotentialNestModuleFiles: FilePath[];
 let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
 
@@ -19,16 +19,15 @@ type Options = [
 ];
 
 const findModuleMapping = (
-    classNAme: string,
+    className: string,
     propertyName: "controllers" | "providers",
     nestModuleMap: Map<string, NestProvidedInjectablesMap>
-): NestProvidedInjectablesMap | undefined => {
-    for (const entry of nestModuleMap.values()) {
-        if (entry[propertyName].has(classNAme)) {
-            return entry;
-        }
-    }
-    return undefined;
+): NestProvidedInjectablesMap[] => {
+    const modules = [...nestModuleMap.values()].filter((entry) => {
+        return entry[propertyName].has(className);
+    });
+
+    return modules;
 };
 
 // super fragile types but whatevs
@@ -54,14 +53,29 @@ const checkNode = (
         if (!name) {
             return;
         }
-        const foundMap = findModuleMapping(name, propertyName, nestModuleMap);
-        if (foundMap) {
+        const foundModuleMaps = findModuleMapping(
+            name,
+            propertyName,
+            nestModuleMap
+        );
+        console.log(foundModuleMaps);
+
+        if (foundModuleMaps.length === 1) {
             return;
         }
+
+        console.log(
+            `Expected 1 reference, but found ${foundModuleMaps.length} for ${name}`
+        );
+
         // couldn't find map so error
         context.report({
             node: node,
             messageId: messageId,
+            data: {
+                references: foundModuleMaps.length,
+                name: name,
+            },
         });
     }
 };
@@ -100,8 +114,8 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
             description: "Public api methods should have documentation",
         },
         messages: {
-            injectableInModule: `Classes marked as Injectable must be added to a module's providers. If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
-            controllersInModule: `Classes marked as Controller must be added to a module's controllers. If you added it already but this error still shows in your editor, please change one character in the controller file to poke your eslint plugin.`,
+            injectableInModule: `Expected Injectable "{{name}}" to be referenced in 1 module's providers array, but found {{references}} references. If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
+            controllersInModule: `Expected Controller "{{name}}" to be referenced in 1 module's controllers array, but found {{references}} references. If you added it already but this error still shows in your editor, please change one character in the controller file to poke your eslint plugin.`,
         },
         schema: [
             {
@@ -193,8 +207,8 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
                     );
                 if (mappedProvidedInjectables !== null) {
                     nestModuleMap.set(
-                        mappedProvidedInjectables[0] as string,
-                        mappedProvidedInjectables[1] as NestProvidedInjectablesMap
+                        mappedProvidedInjectables[0],
+                        mappedProvidedInjectables[1]
                     );
                 }
             },
