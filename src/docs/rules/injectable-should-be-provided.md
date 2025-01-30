@@ -2,6 +2,8 @@
 
 Checks that a class marked with `@Injectable` is injected somewhere in a module or used in a provider.
 
+This rule will also check that you only have the injectable provided once exactly. (Thanks  [floydnant](https://github.com/floydnant))
+
 NestJS will catch these at runtime but I prefer to get a nudge during development in my IDE. This will only check if the service is injected once. It won't check that the correct things are injected to the correct modules. So you might still get occasional runtime issues if you forget to import a module.
 
 Fails if a thing marked as `@Injectable` is not in the `providers` of a module or `provides` in a provider.
