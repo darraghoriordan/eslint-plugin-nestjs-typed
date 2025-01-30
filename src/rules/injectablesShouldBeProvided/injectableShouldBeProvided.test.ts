@@ -137,6 +137,29 @@ ruleTester.run("injectable-should-be-provided", rule, {
             ],
         },
         {
+            // this provider is included in multiple module's providers located in /fixtures
+            code: `
+        import {Injectable} from "./Injectable.stub";
+
+        @Injectable()
+        class TooManyTimesExampleProviderIncludedInModule {}
+        
+        export default TooManyTimesExampleProviderIncludedInModule;
+        `,
+            errors: [{messageId: "injectableInModule"}],
+            options: [
+                {
+                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    filterFromPaths: [
+                        "node_modules",
+                        ".test.",
+                        ".spec.",
+                        "file.ts",
+                    ],
+                },
+            ],
+        },
+        {
             // this provider is not included in the module's providers located in /fixtures
             code: `
             import {Controller} from "./Controller.stub";
