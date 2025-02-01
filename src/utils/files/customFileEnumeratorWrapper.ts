@@ -32,6 +32,7 @@ export class FileEnumerator {
         const files = glob.sync(patterns, {
             ignore: ["**/node_modules/**"],
             nodir: true,
+            absolute: true,
         });
         console.log("files", files);
         // Map to the expected format and filter
