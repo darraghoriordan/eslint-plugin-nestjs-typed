@@ -108,10 +108,6 @@ function initializeModuleMappings(
         extensions: [".ts"],
         filterFromPaths,
     });
-    console.log(
-        "listOfPotentialNestModuleFiles",
-        listOfPotentialNestModuleFiles
-    );
 
     nestModuleMap = NestProvidedInjectableMapper.parseFileList(
         listOfPotentialNestModuleFiles,

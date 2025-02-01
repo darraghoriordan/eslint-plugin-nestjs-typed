@@ -27,14 +27,14 @@ export class FileEnumerator {
                 (extension: string) => `${filePath}/**/*${extension}`
             );
         });
-        console.log("globPatterns", patterns);
+
         // Find all files matching the patterns
         const files = glob.sync(patterns, {
             ignore: ["**/node_modules/**"],
             nodir: true,
             absolute: true,
         });
-        console.log("files", files);
+
         // Map to the expected format and filter
         return files
             .map(
@@ -48,7 +48,7 @@ export class FileEnumerator {
                     file.filename,
                     filterFromPaths
                 );
-                console.log("isFiltered", file.filename, isFiltered);
+
                 return !isFiltered;
             });
     }
