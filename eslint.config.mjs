@@ -1,7 +1,6 @@
 import preferArrow from "eslint-plugin-prefer-arrow";
 import unicorn from "eslint-plugin-unicorn";
 import globals from "globals";
-import eslintConfigPrettier from "eslint-config-prettier";
 import eslint from "@eslint/js";
 
 import tseslint, {parser} from "typescript-eslint";
@@ -13,7 +12,7 @@ export default tseslint.config(
             "dist/**",
             "**/commitlint.config.js",
             "**/eslint.config.mjs",
-            "**/vitest.config.ts",
+            "**/vitest.config.mts",
         ],
     },
     eslint.configs.recommended,

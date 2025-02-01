@@ -1,6 +1,6 @@
 {
     "extends": "./tsconfig.common",
-    "include": ["src", "jest.config.ts", "vitest.config.ts"],
+    "include": ["src", "jest.config.ts", "vitest.config.mts"],
     "compilerOptions": {
         "rootDir": "."
     },
