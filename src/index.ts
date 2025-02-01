@@ -39,7 +39,7 @@ export function flatBaseConfig(
     plugin: FlatConfig.Plugin,
     parser: FlatConfig.Parser
 ): FlatConfig.Config {
-    return {
+    const baseConfig: FlatConfig.Config = {
         name: "@darraghor/nestjs-typed/base",
         languageOptions: {
             parser,
@@ -49,19 +49,18 @@ export function flatBaseConfig(
             "@darraghor/nestjs-typed": plugin,
         },
     };
+    return baseConfig;
 }
 
 export function flatRecommendedConfig(
     plugin: FlatConfig.Plugin,
     parser: FlatConfig.Parser
 ): FlatConfig.ConfigArray {
-    return [
-        flatBaseConfig(plugin, parser),
-        {
-            name: "@darraghor/nestjs-typed/recommended",
-            rules: configs.recommended.rules,
-        },
-    ];
+    const recommendedConfig: FlatConfig.Config = {
+        name: "@darraghor/nestjs-typed/recommended",
+        rules: configs.recommended.rules,
+    };
+    return [flatBaseConfig(plugin, parser), recommendedConfig];
 }
 export function flatNoSwaggerConfig(): FlatConfig.ConfigArray {
     return [
