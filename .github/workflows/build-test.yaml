@@ -17,6 +17,6 @@ jobs:
                   node-version-file: ".nvmrc"
                   cache: pnpm
 
-            - run: pnpm
+            - run: pnpm i
             - run: pnpm run test
             - run: pnpm build
