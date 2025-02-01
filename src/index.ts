@@ -72,8 +72,8 @@ export function flatNoSwaggerConfig(): FlatConfig.ConfigArray {
 }
 const flatRecommended = flatRecommendedConfig(plugin, parser);
 const flatNoSwagger = flatNoSwaggerConfig();
-// export the flat configs
-export {flatRecommended, flatNoSwagger};
+// export the classic plugin configs
+export {classicPlugin};
 
-// export the classic plugin so people can use it in their eslint configs
-export default classicPlugin;
+// export the flat configs
+export default {configs: {flatRecommended, flatNoSwagger}};
