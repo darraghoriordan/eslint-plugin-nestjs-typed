@@ -4,7 +4,6 @@ import recommended from "./configs/recommended.js";
 import rules from "./rules/index.js";
 import {TSESLint} from "@typescript-eslint/utils";
 import * as parserBase from "@typescript-eslint/parser";
-import pluginBase from "@typescript-eslint/eslint-plugin";
 import {fileURLToPath} from "url";
 import {readFileSync} from "fs";
 import {dirname, resolve} from "path";
@@ -32,10 +31,6 @@ export const parser: TSESLint.FlatConfig.Parser = {
     parseForESLint: parserBase.parseForESLint,
 };
 
-export const plugin: TSESLint.FlatConfig.Plugin = pluginBase as Omit<
-    typeof pluginBase,
-    "configs"
->;
 const classicPlugin = {
     configs: {
         recommended: recommended,
@@ -45,6 +40,10 @@ const classicPlugin = {
     meta,
 } satisfies Linter.Plugin;
 
+export const plugin: TSESLint.FlatConfig.Plugin = classicPlugin as Omit<
+    typeof classicPlugin,
+    "configs"
+>;
 const flatBaseConfig = (
     plugin: FlatConfig.Plugin,
     parser: FlatConfig.Parser
