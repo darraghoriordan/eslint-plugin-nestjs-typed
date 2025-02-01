@@ -69,7 +69,7 @@ export const shouldTriggerForVariableDeclaratorExpression = (
     const variableDeclarator = node;
     const asExpression = variableDeclarator.init as TSESTree.TSAsExpression;
     const typeAnnotation =
-        asExpression.typeAnnotation as TSESTree.TSTypeReference;
+        asExpression?.typeAnnotation as TSESTree.TSTypeReference;
     const typeName = typeAnnotation?.typeName as TSESTree.Identifier;
     if (typeName === undefined || typeName.name !== "ValidationPipeOptions") {
         return false;
