@@ -38,15 +38,12 @@ const NestProvidedInjectableMapper = {
     parseFileList(
         files: {
             ignored: boolean;
-            filename: NestProvidedFilePath;
+            filename: string;
         }[],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         context: Readonly<TSESLint.RuleContext<never, any>>
-    ): Map<NestProvidedFilePath, NestProvidedInjectablesMap> {
-        const moduleMaps = new Map<
-            NestProvidedFilePath,
-            NestProvidedInjectablesMap
-        >();
+    ): Map<string, NestProvidedInjectablesMap> {
+        const moduleMaps = new Map<string, NestProvidedInjectablesMap>();
         files
             .map((f) => {
                 const fileContents =
@@ -58,9 +55,7 @@ const NestProvidedInjectableMapper = {
                     context
                 );
 
-                const result:
-                    | [NestProvidedFilePath, NestProvidedInjectablesMap]
-                    | null =
+                const result: [string, NestProvidedInjectablesMap] | null =
                     NestProvidedInjectableMapper.mapAllProvidedInjectablesInModuleOrProviderFile(
                         fileAstString,
                         f.filename
@@ -69,6 +64,7 @@ const NestProvidedInjectableMapper = {
             })
             // eslint-disable-next-line @typescript-eslint/unbound-method
             .filter(NestProvidedInjectableMapper.notEmpty)
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             .forEach((m) => moduleMaps.set(m[0], m[1]));
 
         return moduleMaps;
@@ -100,7 +96,7 @@ const NestProvidedInjectableMapper = {
     mapAllProvidedInjectablesInModuleOrProviderFile(
         ast: TSESTree.Program,
         path: string
-    ): [NestProvidedFilePath, NestProvidedInjectablesMap] | null {
+    ): [string, NestProvidedInjectablesMap] | null {
         try {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
             if (!unambiguous.isModule(ast as any)) {

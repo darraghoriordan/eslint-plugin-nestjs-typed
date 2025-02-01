@@ -9,11 +9,15 @@ interface FilePath {
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class FileEnumerator {
-    static enumerateFiles(
-        sourceGlobs: string[],
-        extensions: string[],
-        filterFromPaths: string[]
-    ): FilePath[] {
+    static enumerateFiles({
+        sourceGlobs,
+        extensions,
+        filterFromPaths,
+    }: {
+        sourceGlobs: string[];
+        extensions: string[];
+        filterFromPaths: string[];
+    }): FilePath[] {
         // Create glob pattern that includes extensions
         const patterns = sourceGlobs.flatMap((pattern) => {
             if (path.extname(pattern)) {

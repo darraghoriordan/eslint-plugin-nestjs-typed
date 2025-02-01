@@ -103,10 +103,14 @@ function initializeModuleMappings(
             process.cwd()
         );
 
-    listOfPotentialNestModuleFiles = FileEnumeratorWrapper.enumerateFiles(
-        mappedSourceDirectory,
-        [".ts"],
-        filterFromPaths
+    listOfPotentialNestModuleFiles = FileEnumeratorWrapper.enumerateFiles({
+        sourceGlobs: mappedSourceDirectory,
+        extensions: [".ts"],
+        filterFromPaths,
+    });
+    console.log(
+        "listOfPotentialNestModuleFiles",
+        listOfPotentialNestModuleFiles
     );
 
     nestModuleMap = NestProvidedInjectableMapper.parseFileList(

@@ -46,13 +46,12 @@ export const plugin: TSESLint.FlatConfig.Plugin = classicPlugin as Omit<
 >;
 const flatBaseConfig = (
     plugin: FlatConfig.Plugin,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     parser: FlatConfig.Parser
 ): FlatConfig.Config => {
     const baseConfig: FlatConfig.Config = {
         name: "@darraghor/nestjs-typed/base",
         languageOptions: {
-            // parser,
+            parser,
             sourceType: "module",
         },
         plugins: {
