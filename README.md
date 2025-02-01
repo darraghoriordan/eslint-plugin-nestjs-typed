@@ -12,6 +12,18 @@
 - Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
 - Version `2.x` supports Eslint version `<=7.x` and typescript eslint parser `^4`
 
+## Eslint 9.x support
+
+I have updated the configs to work with eslint 9.x. This is a breaking change.
+
+If you are using eslint 8.x you should use version 5.x of this plugin.
+
+I did try to leave the old style configs in place but I haven't tested them properly. If you have any issues please submit a PR.
+
+See [How to configure](#to-configure) for more info.
+
+## TS Eslint version support
+
 There are breaking changes between versions of ts-eslint.
 
 typescript eslint parser supports a range of typescript versions but there can be a delay in supporting the latest versions.
@@ -118,29 +130,59 @@ pnpm add class-validator
 
 ## To configure
 
-Update your eslint with the plugin import and add the recommended rule set
+Update your flat eslint config with the plugin import and add the flatRecommended rule set.
+
+My config looks something like this. I'm 99% sure that you have to setup typescript parser also.
 
 ```ts
-module.exports = {
-    env: {
-        es6: true,
+import eslintNestJs from "@darraghor/eslint-plugin-nestjs-typed";
+// ... and all your other imports
+export default tseslint.config(
+    eslint.configs.recommended,
+    tseslint.configs.strictTypeChecked,
+    tseslint.configs.stylisticTypeChecked,
+    {
+        languageOptions: {
+            globals: {
+                ...globals.node,
+                ...globals.jest,
+            },
+            parser,
+            ecmaVersion: 2022,
+            sourceType: "module",
+            parserOptions: {
+                project: "tsconfig.json",
+            },
+        },
     },
-    extends: ["plugin:@darraghor/nestjs-typed/recommended"],
-    parser: "@typescript-eslint/parser",
-    parserOptions: {
-        project: ["./tsconfig.json"],
-        sourceType: "module",
-        ecmaVersion: "es2019",
-    },
-    plugins: ["@darraghor/nestjs-typed"],
-};
+    eslintNestJs.configs.flatRecommended // This is the recommended ruleset for this plugin
+);
 ```
+
+For ESlint 8 I export the old style config in the "classicConfig" export.
+
+I believe it would work something like this...
+
+````ts
+import {
+    classicPlugin,
+} from "@darraghor/eslint-plugin-nestjs-typed";
+
+
+module.exports = {
+    plugins: [
+        classicPlugin,
+    ],
+};
+
+```
+
 
 Note: the injectables test scans your whole project. It's best to filter out ts things that don't matter - use `filterFromPaths` configuration setting for this. See the rule documentation for more info.
 
-There are some defaults already applied.
+There are some sensible defaults already applied.
 
-Note: You can easily turn off all the swagger rules if you don't use swagger by adding the `no-swagger` rule set AFTER the recommended rule set.
+Note: You can easily turn off all the swagger rules if you don't use swagger by adding the `flatNoSwagger` rule set AFTER the recommended rule set.
 
 ```ts
 // all the other config
@@ -148,11 +190,11 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
     "plugin:@darraghor/nestjs-typed/no-swagger"
     ],
  // more config
-```
+````
 
 Disable a single rule with the full name e.g. in your eslint configuration...
 
-```
+```ts
    rules: {
    "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
             "off",
