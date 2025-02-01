@@ -4,9 +4,15 @@
 ![size](https://badgen.net/bundlephobia/minzip/@darraghor/eslint-plugin-nestjs-typed?color=cyan)
 ![types](https://badgen.net/npm/types/@darraghor/eslint-plugin-nestjs-typed?color=blue)
 
+# NestJS Eslint Plugin
+
+If you use NestJs (https://nestjs.com/) these ESLint rules will help you to prevent common bugs and issues in NestJs applications.
+
+Skip to [How to configure](#to-configure) but if you have issues come back and read this whole document.
+
 ## A note on versions
 
-- Version `6.x` supports Eslint version `>=9.x` and typescript eslint parser `^8`
+- Version `6.x` supports Eslint version `>=9.x` and typescript eslint parser `^7` and `^8`
 - Version `5.x` supports Eslint version `>=8.x` and typescript eslint parser `^7` and `^8`
 - Version `4.x` supports Eslint version `>=8.x` and typescript eslint parser `^6`
 - Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
@@ -163,7 +169,7 @@ For ESlint 8 I export the old style config in the "classicConfig" export.
 
 I believe it would work something like this...
 
-````ts
+```ts
 import {
     classicPlugin,
 } from "@darraghor/eslint-plugin-nestjs-typed";
@@ -177,6 +183,7 @@ module.exports = {
 
 ```
 
+## Injectables rule scans everything
 
 Note: the injectables test scans your whole project. It's best to filter out ts things that don't matter - use `filterFromPaths` configuration setting for this. See the rule documentation for more info.
 
@@ -191,6 +198,8 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
     ],
  // more config
 ````
+
+## Disabling a rule
 
 Disable a single rule with the full name e.g. in your eslint configuration...
 
