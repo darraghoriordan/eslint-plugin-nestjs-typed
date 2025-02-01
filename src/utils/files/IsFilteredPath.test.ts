@@ -1,4 +1,4 @@
-import IsFilteredPath from "./isFilteredPath";
+import IsFilteredPath from "./isFilteredPath.js";
 
 describe("IsFilteredPath", () => {
     test.each([

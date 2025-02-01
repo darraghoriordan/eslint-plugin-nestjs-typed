@@ -1,7 +1,7 @@
 import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import ArraySetResultModel from "./arraySetResultModel";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
+import ArraySetResultModel from "./arraySetResultModel.js";
 
 export const shouldSetArrayProperty = (
     node: TSESTree.PropertyDefinition

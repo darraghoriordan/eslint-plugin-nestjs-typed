@@ -1,5 +1,5 @@
 import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
-import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
+import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
 
 export const nestProviderAstParser = {
     mapNestProviderObject(

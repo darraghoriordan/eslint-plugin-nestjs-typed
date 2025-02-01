@@ -1,19 +1,19 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 
-import {pathPartTestCases, responseParsingTestCases} from "./rule.testData";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {pathPartTestCases, responseParsingTestCases} from "./rule.testData.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 import {
     fakeContext,
     fakeFilePath,
-} from "../../utils/nestModules/nestProvidedInjectableMapper.testData";
+} from "../../utils/nestModules/nestProvidedInjectableMapper.testData.js";
 
 import rule, {
     isParameterNameIncludedInAPathPart,
     parsePathParts,
-} from "./paramDecoratorNameMatchesRouteParam";
+} from "./paramDecoratorNameMatchesRouteParam.js";
 
 import {RuleTester} from "@typescript-eslint/rule-tester";
-import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup.js";
 
 const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({

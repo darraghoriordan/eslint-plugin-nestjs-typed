@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
+import {createRule} from "../../utils/createRule.js";
 
 interface ResultModel {
     hasColonInName: boolean;

@@ -1,6 +1,6 @@
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 
 export const apiMethodsShouldBeGuarded = (node: TSESTree.MethodDefinition) => {
     const hasApiMethodDecorator = typedTokenHelpers.nodeHasDecoratorsNamed(

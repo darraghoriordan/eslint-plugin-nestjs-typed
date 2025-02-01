@@ -1,4 +1,4 @@
-import {createRule} from "../../utils/createRule";
+import {createRule} from "../../utils/createRule.js";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 import {TSESTree} from "@typescript-eslint/utils";
 

@@ -1,6 +1,6 @@
 import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 
 const rule = createRule<[], "missing-property-decorator">({
     name: "all-properties-are-whitelisted",

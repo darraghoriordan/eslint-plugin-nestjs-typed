@@ -1,5 +1,5 @@
 import {RuleTester} from "@typescript-eslint/rule-tester";
-import rule from "./allPropertiesAreWhitelisted";
+import rule from "./allPropertiesAreWhitelisted.js";
 
 const ruleTester = new RuleTester();
 

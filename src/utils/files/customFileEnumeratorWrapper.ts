@@ -1,6 +1,6 @@
 import {glob} from "glob";
 import path from "path";
-import IsFilteredPath from "./isFilteredPath";
+import IsFilteredPath from "./isFilteredPath.js";
 
 interface FilePath {
     ignored: boolean;

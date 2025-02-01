@@ -1,8 +1,8 @@
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
+import {createRule} from "../../utils/createRule.js";
 
 //import util from "util";
-import {nestProviderAstParser} from "../../utils/nestModules/nestProviderAstParser";
+import {nestProviderAstParser} from "../../utils/nestModules/nestProviderAstParser.js";
 
 export const hasMismatchedInjected = (
     node: TSESTree.VariableDeclarator

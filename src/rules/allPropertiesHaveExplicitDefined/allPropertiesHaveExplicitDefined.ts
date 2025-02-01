@@ -5,10 +5,10 @@ import {
     ParserServicesWithTypeInformation,
 } from "@typescript-eslint/utils";
 import {isNullableType} from "@typescript-eslint/type-utils";
-import {getPropertiesDefinitions} from "../../utils/ast";
-import {createRule} from "../../utils/createRule";
+import {getPropertiesDefinitions} from "../../utils/ast.js";
+import {createRule} from "../../utils/createRule.js";
 import {Type, TypeChecker} from "typescript";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 
 const rule = createRule<
     [],

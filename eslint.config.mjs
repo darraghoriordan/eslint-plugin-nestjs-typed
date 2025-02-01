@@ -10,7 +10,7 @@ export default tseslint.config(
         ignores: [
             "src/fixtures/**",
             "dist/**",
-            "**/commitlint.config.js",
+            "**/commitlint.config.cjs",
             "**/eslint.config.mjs",
             "**/vitest.config.mts",
         ],

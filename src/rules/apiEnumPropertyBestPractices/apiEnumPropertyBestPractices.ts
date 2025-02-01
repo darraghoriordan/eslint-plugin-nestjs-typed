@@ -1,7 +1,7 @@
 import {ESLintUtils, TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {EnumTestResultModel} from "./enumTestResultModel";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
+import {EnumTestResultModel} from "./enumTestResultModel.js";
 
 const noChangesRequiredResult = new EnumTestResultModel({
     needsEnumAdded: false,

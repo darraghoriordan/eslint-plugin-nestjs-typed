@@ -3,10 +3,10 @@ import {TSESLint, TSESTree} from "@typescript-eslint/utils";
 // @ts-ignore
 import * as unambiguous from "eslint-module-utils/unambiguous";
 import fs from "fs";
-import {typedTokenHelpers} from "../typedTokenHelpers";
-import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
-import {nestModuleAstParser} from "./nestModuleAstParser";
-import {nestProviderAstParser} from "./nestProviderAstParser";
+import {typedTokenHelpers} from "../typedTokenHelpers.js";
+import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
+import {nestModuleAstParser} from "./nestModuleAstParser.js";
+import {nestProviderAstParser} from "./nestProviderAstParser.js";
 
 const implementsForInjectablesThatAreNotProvided = new Set([
     "CanActivate", //(isAGuard)

@@ -1,5 +1,5 @@
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
+import {createRule} from "../../utils/createRule.js";
 import {ASTUtils} from "@typescript-eslint/utils";
 
 export const isValidationPipeNewExpression = (node: TSESTree.Node): boolean => {

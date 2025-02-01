@@ -1,13 +1,13 @@
 import {TSESTree} from "@typescript-eslint/utils";
 import {EcmaVersion, ParserOptions} from "@typescript-eslint/types";
-import {typedTokenHelpers} from "../typedTokenHelpers";
-import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
-import nestModuleAstMapper from "./nestProvidedInjectableMapper";
+import {typedTokenHelpers} from "../typedTokenHelpers.js";
+import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
+import nestModuleAstMapper from "./nestProvidedInjectableMapper.js";
 import {
     fakeContext,
     fakeFilePath,
     moduleMappingTestData,
-} from "./nestProvidedInjectableMapper.testData";
+} from "./nestProvidedInjectableMapper.testData.js";
 
 describe("nest module ast mapper", () => {
     it("Can parse typescript typings using the typescript parser", () => {

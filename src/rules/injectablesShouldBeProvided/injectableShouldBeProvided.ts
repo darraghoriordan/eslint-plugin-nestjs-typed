@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import {TSESTree, TSESLint} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
+import {createRule} from "../../utils/createRule.js";
 // import FileEnumeratorWrapper from "../../utils/files/fileEnumerationWrapper";
-import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper";
-import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper.js";
+import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 import {FilePath} from "eslint/use-at-your-own-risk";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
-import FileEnumeratorWrapper from "../../utils/files/customFileEnumeratorWrapper";
+import FileEnumeratorWrapper from "../../utils/files/customFileEnumeratorWrapper.js";
 
 let listOfPotentialNestModuleFiles: FilePath[];
 let nestModuleMap: Map<string, NestProvidedInjectablesMap>;

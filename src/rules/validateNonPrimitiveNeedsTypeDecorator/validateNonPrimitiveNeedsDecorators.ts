@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 import {AST_NODE_TYPES, TSESTree, ESLintUtils} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 
 const primitiveTypes = new Set([

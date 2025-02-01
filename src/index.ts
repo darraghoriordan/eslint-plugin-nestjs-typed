@@ -1,7 +1,7 @@
 import type {FlatConfig, Linter} from "@typescript-eslint/utils/ts-eslint";
-import noSwagger from "./configs/noSwagger";
-import recommended from "./configs/recommended";
-import rules from "./rules";
+import noSwagger from "./configs/noSwagger.js";
+import recommended from "./configs/recommended.js";
+import rules from "./rules/index.js";
 import {TSESLint} from "@typescript-eslint/utils";
 import * as parserBase from "@typescript-eslint/parser";
 import pluginBase from "@typescript-eslint/eslint-plugin";
