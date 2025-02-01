@@ -1,6 +1,6 @@
 import {Linter} from "eslint";
 
-const rules: Partial<Linter.RulesRecord> = {
+export const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/provided-injected-should-match-factory-parameters":
         "error",
     "@darraghor/nestjs-typed/injectable-should-be-provided": [

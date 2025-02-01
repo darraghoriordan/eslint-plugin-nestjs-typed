@@ -1,7 +1,7 @@
 import {Linter} from "eslint";
 
 // Should turn off swagger rules for folks not using swagger typings
-const rules: Partial<Linter.RulesRecord> = {
+export const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/api-property-matches-property-optionality": "off",
     "@darraghor/nestjs-typed/api-method-should-specify-api-response": "off",
     "@darraghor/nestjs-typed/api-method-should-specify-api-operation": "off",
