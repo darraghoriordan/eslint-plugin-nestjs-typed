@@ -17,7 +17,12 @@
     },
     "release": {
         "branches": [
-            "main"
+            "main",
+            {
+                "name": "release/*",
+                "prerelease": "rc",
+                "channel": "next"
+            }
         ]
     },
     "publishConfig": {
