@@ -13,6 +13,7 @@ export default tseslint.config(
             "dist/**",
             "**/commitlint.config.js",
             "**/eslint.config.mjs",
+            "**/vitest.config.ts",
         ],
     },
     eslint.configs.recommended,
