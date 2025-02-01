@@ -12,7 +12,7 @@ const config: Config.InitialOptions = {
     transform: {
         "^.+\\.(tsx?|ts?)$": ["ts-jest", {tsconfig: `tsconfig.test.json`}],
     },
-    transformIgnorePatterns: ["node_modules/(?!(cliui|string-width)/)"],
+    // transformIgnorePatterns: ["node_modules/(?!(cliui|string-width)/)"],
     silent: false,
     verbose: true,
     collectCoverageFrom: [

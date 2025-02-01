@@ -15,12 +15,11 @@ jobs:
             - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
             - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
               with:
-                  node-version: "20"
-                  cache: yarn
-            - run: npm install -g npm@latest
-            - run: yarn
-            - run: yarn test
-            - run: yarn build
+                  node-version-file: ".nvmrc"
+                  cache: pnpm
+            - run: pnpm install
+            - run: pnpm test
+            - run: pnpm build
             - name: Release
               env:
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
