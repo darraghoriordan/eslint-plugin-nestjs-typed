@@ -1,11 +1,14 @@
 import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
-import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
+import {
+    NestProvidedInjectablesMap,
+    NestProvidedFilePath,
+} from "./models/NestProvidedInjectablesMap.js";
 
 export const nestProviderAstParser = {
     mapNestProviderObject(
         n: TSESTree.Property,
-        path: string
-    ): [string, NestProvidedInjectablesMap] | null {
+        path: NestProvidedFilePath
+    ): [NestProvidedFilePath, NestProvidedInjectablesMap] | null {
         const propertyName = (n.value as TSESTree.Identifier)?.name;
         if (propertyName) {
             return [

@@ -20,18 +20,32 @@ type Options = [
     },
 ];
 
-const findModuleMapping = (
+const findModuleMappingsContaining = (
     className: string,
     propertyName: "controllers" | "providers",
     nestModuleMap: Map<string, NestProvidedInjectablesMap>
-): NestProvidedInjectablesMap[] => {
-    const modules = [...nestModuleMap.values()].filter((entry) => {
+): [string, NestProvidedInjectablesMap][] => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+    const modules = [...nestModuleMap.entries()].filter(([_, entry]) => {
         return entry[propertyName].has(className);
     });
 
     return modules;
 };
+function convertNestModuleMapToString(
+    nestModules: [string, NestProvidedInjectablesMap][]
+): string {
+    // const uniqueValues = new Set<string>();
+    const vals: string[] = [];
+    nestModules.forEach((module) => {
+        // Add all paths
+        vals.push(module[0]);
+    });
 
+    // Convert the Set to an array and join with commas
+    // return Array.from(uniqueValues).join(", ");
+    return vals.join(", ");
+}
 const checkNode = (
     // super fragile types but whatevs
     node: TSESTree.ClassDeclaration,
@@ -55,7 +69,7 @@ const checkNode = (
         if (!name) {
             return;
         }
-        const foundModuleMaps = findModuleMapping(
+        const foundModuleMaps = findModuleMappingsContaining(
             name,
             propertyName,
             nestModuleMap
@@ -69,7 +83,9 @@ const checkNode = (
             node: node,
             messageId: messageId,
             data: {
-                references: foundModuleMaps.length,
+                numberOfReferences: foundModuleMaps.length,
+
+                refLocations: convertNestModuleMapToString(foundModuleMaps),
                 name: name,
             },
         });
@@ -111,8 +127,8 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
             description: "Public api methods should have documentation",
         },
         messages: {
-            injectableInModule: `Expected Injectable "{{name}}" to be referenced in 1 module's providers array, but found {{references}} references. If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
-            controllersInModule: `Expected Controller "{{name}}" to be referenced in 1 module's controllers array, but found {{references}} references. If you added it already but this error still shows in your editor, please change one character in the controller file to poke your eslint plugin.`,
+            injectableInModule: `Expected Injectable "{{name}}" to be referenced in 1 module's providers array, but found {{numberOfReferences}} references ({{refLocations}}). If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
+            controllersInModule: `Expected Controller "{{name}}" to be referenced in 1 module's controllers array, but found {{numberOfReferences}} references ({{refLocations}}). If you added it already but this error still shows in your editor, please change one character in the controller file to poke your eslint plugin.`,
         },
         schema: [
             {
@@ -192,7 +208,7 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
                 // map the source to a mapping thing
                 // if not undefined set it to the mapping set
                 const mappedProvidedInjectables =
-                    NestProvidedInjectableMapper.mapAllProvidedInjectables(
+                    NestProvidedInjectableMapper.mapAllProvidedInjectablesInModuleOrProviderFile(
                         context.sourceCode.ast,
                         context.filename
                     );

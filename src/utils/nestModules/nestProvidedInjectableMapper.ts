@@ -4,7 +4,10 @@ import {TSESLint, TSESTree} from "@typescript-eslint/utils";
 import * as unambiguous from "eslint-module-utils/unambiguous";
 import fs from "fs";
 import {typedTokenHelpers} from "../typedTokenHelpers.js";
-import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
+import {
+    NestProvidedFilePath,
+    NestProvidedInjectablesMap,
+} from "./models/NestProvidedInjectablesMap.js";
 import {nestModuleAstParser} from "./nestModuleAstParser.js";
 import {nestProviderAstParser} from "./nestProviderAstParser.js";
 
@@ -35,12 +38,15 @@ const NestProvidedInjectableMapper = {
     parseFileList(
         files: {
             ignored: boolean;
-            filename: string;
+            filename: NestProvidedFilePath;
         }[],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         context: Readonly<TSESLint.RuleContext<never, any>>
-    ): Map<string, NestProvidedInjectablesMap> {
-        const moduleMaps = new Map<string, NestProvidedInjectablesMap>();
+    ): Map<NestProvidedFilePath, NestProvidedInjectablesMap> {
+        const moduleMaps = new Map<
+            NestProvidedFilePath,
+            NestProvidedInjectablesMap
+        >();
         files
             .map((f) => {
                 const fileContents =
@@ -52,10 +58,14 @@ const NestProvidedInjectableMapper = {
                     context
                 );
 
-                return NestProvidedInjectableMapper.mapAllProvidedInjectables(
-                    fileAstString,
-                    f.filename
-                );
+                const result:
+                    | [NestProvidedFilePath, NestProvidedInjectablesMap]
+                    | null =
+                    NestProvidedInjectableMapper.mapAllProvidedInjectablesInModuleOrProviderFile(
+                        fileAstString,
+                        f.filename
+                    );
+                return result;
             })
             // eslint-disable-next-line @typescript-eslint/unbound-method
             .filter(NestProvidedInjectableMapper.notEmpty)
@@ -87,12 +97,13 @@ const NestProvidedInjectableMapper = {
 
         return false;
     },
-    mapAllProvidedInjectables(
+    mapAllProvidedInjectablesInModuleOrProviderFile(
         ast: TSESTree.Program,
         path: string
-    ): [string, NestProvidedInjectablesMap] | null {
+    ): [NestProvidedFilePath, NestProvidedInjectablesMap] | null {
         try {
-            if (!unambiguous.isModule(ast)) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            if (!unambiguous.isModule(ast as any)) {
                 return null;
             }
             // This does too much and should probably be split up
@@ -100,23 +111,25 @@ const NestProvidedInjectableMapper = {
             // dangerous assumption i guess. i have never seen this done before though.
 
             // set up the response model
-            let nestModuleMap: [string, NestProvidedInjectablesMap] | null =
-                null;
+            let moduleFileListOfControllersAndProviders:
+                | [NestProvidedFilePath, NestProvidedInjectablesMap]
+                | null = null;
 
             // Is this a module?
             const foundNestModuleClass =
                 nestModuleAstParser.findNestModuleClass(ast);
 
             if (foundNestModuleClass) {
-                nestModuleMap = nestModuleAstParser.mapNestModuleDecorator(
-                    foundNestModuleClass,
-                    path
-                );
-                return nestModuleMap;
+                moduleFileListOfControllersAndProviders =
+                    nestModuleAstParser.mapNestModuleDecorator(
+                        foundNestModuleClass,
+                        path
+                    );
+                return moduleFileListOfControllersAndProviders;
             }
 
             // or is this a custom provider that would provide an instance of the class?
-            // if it is we map the itentifier it "provide"s. This will only work if it's an identifier
+            // if it is we map the identifier it "provide"s. This will only work if it's an identifier
             // it can't be provider for a string literal "provide".
 
             const foundProviderDeclaration =
@@ -127,12 +140,13 @@ const NestProvidedInjectableMapper = {
                 "provide"
             );
             if (provideProperty) {
-                nestModuleMap = nestProviderAstParser.mapNestProviderObject(
-                    provideProperty,
-                    path
-                );
+                moduleFileListOfControllersAndProviders =
+                    nestProviderAstParser.mapNestProviderObject(
+                        provideProperty,
+                        path
+                    );
             }
-            return nestModuleMap;
+            return moduleFileListOfControllersAndProviders;
         } catch (error) {
             console.error("parse error:", path, error);
             // m.errors.push(error);

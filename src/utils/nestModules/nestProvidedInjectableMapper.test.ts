@@ -53,10 +53,11 @@ describe("nest module ast mapper", () => {
                 fakeContext
             );
 
-            const modules = nestModuleAstMapper.mapAllProvidedInjectables(
-                ast,
-                fakeFilePath
-            );
+            const modules =
+                nestModuleAstMapper.mapAllProvidedInjectablesInModuleOrProviderFile(
+                    ast,
+                    fakeFilePath
+                );
             expect(modules).toEqual(testItem.expectedMapping);
         }
     );

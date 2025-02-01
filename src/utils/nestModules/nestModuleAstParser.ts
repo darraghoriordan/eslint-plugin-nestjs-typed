@@ -1,5 +1,8 @@
 import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
-import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
+import {
+    NestProvidedFilePath,
+    NestProvidedInjectablesMap,
+} from "./models/NestProvidedInjectablesMap.js";
 
 export const nestModuleAstParser = {
     findNestModuleClass(
@@ -28,15 +31,15 @@ export const nestModuleAstParser = {
 
     mapNestModuleDecorator(
         n: TSESTree.ClassDeclaration,
-        path: string
-    ): [string, NestProvidedInjectablesMap] | null {
+        path: NestProvidedFilePath
+    ): [NestProvidedFilePath, NestProvidedInjectablesMap] | null {
         // The nest module decorator is called "Module"
         const moduleDecorator = n.decorators.find(
             (d) =>
                 (
                     (d.expression as TSESTree.CallExpression)
                         .callee as TSESTree.Identifier
-                ).name === "Module"
+                )?.name === "Module"
         );
         if (moduleDecorator) {
             const mappedControllerElements =
@@ -50,7 +53,10 @@ export const nestModuleAstParser = {
                     "providers"
                 );
 
-            const nestModuleMap: [string, NestProvidedInjectablesMap] = [
+            const nestModuleMap: [
+                NestProvidedFilePath,
+                NestProvidedInjectablesMap,
+            ] = [
                 path,
                 new NestProvidedInjectablesMap(
                     mappedControllerElements,

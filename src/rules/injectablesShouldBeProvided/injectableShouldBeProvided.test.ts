@@ -120,7 +120,16 @@ ruleTester.run("injectable-should-be-provided", rule, {
         
         export default ExampleProviderNOTInModule;
         `,
-            errors: [{messageId: "injectableInModule"}],
+            errors: [
+                {
+                    messageId: "injectableInModule",
+                    data: {
+                        numberOfReferences: 0,
+                        name: "ExampleProviderNOTInModule",
+                        refLocations: "",
+                    },
+                },
+            ],
             options: [
                 {
                     src: [path.join(__dirname + "../../../fixtures", "*.ts")],
@@ -143,7 +152,16 @@ ruleTester.run("injectable-should-be-provided", rule, {
         
         export default TooManyTimesExampleProviderIncludedInModule;
         `,
-            errors: [{messageId: "injectableInModule"}],
+            errors: [
+                {
+                    messageId: "injectableInModule",
+                    data: {
+                        numberOfReferences: 2,
+                        refLocations: `${process.cwd()}/src/fixtures/example.module.ts, ${process.cwd()}/src/fixtures/anotherExample.module.ts`,
+                        name: "TooManyTimesExampleProviderIncludedInModule",
+                    },
+                },
+            ],
             options: [
                 {
                     src: [path.join(__dirname + "../../../fixtures", "*.ts")],
@@ -166,7 +184,16 @@ ruleTester.run("injectable-should-be-provided", rule, {
         
         export default BadController;
         `,
-            errors: [{messageId: "controllersInModule"}],
+            errors: [
+                {
+                    messageId: "controllersInModule",
+                    data: {
+                        numberOfReferences: 0,
+                        refLocations: "",
+                        name: "BadController",
+                    },
+                },
+            ],
             options: [
                 {
                     src: [path.join(__dirname + "../../../fixtures", "*.ts")],
