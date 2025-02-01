@@ -5,15 +5,24 @@ import rules from "./rules/index.js";
 import {TSESLint} from "@typescript-eslint/utils";
 import * as parserBase from "@typescript-eslint/parser";
 import pluginBase from "@typescript-eslint/eslint-plugin";
+import {fileURLToPath} from "url";
+import {readFileSync} from "fs";
+import {dirname, resolve} from "path";
 
-// Most of this is copied and simplified from https://github.com/typescript-eslint/typescript-eslint/blob/v8.22.0/packages/typescript-eslint/src/configs/recommended.ts
-
-// note - cannot migrate this to an import statement because it will make TSC copy the package.json to the dist folder
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const {name, version} = require("../package.json") as {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __filename = fileURLToPath(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = dirname(__filename);
+const {name, version} = JSON.parse(
+    readFileSync(resolve(__dirname, "../package.json"), "utf8")
+) as {
     name: string;
     version: string;
 };
+// Most of this is copied and simplified from https://github.com/typescript-eslint/typescript-eslint/blob/v8.22.0/packages/typescript-eslint/src/configs/recommended.ts
+
+// note - cannot migrate this to an import statement because it will make TSC copy the package.json to the dist folder
+
 const meta = {
     name,
     version,
