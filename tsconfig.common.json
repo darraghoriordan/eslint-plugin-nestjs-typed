@@ -2,16 +2,11 @@
     "compilerOptions": {
         "target": "ES2021" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */,
         "module": "Node16",
-        "typeRoots": [
-            "./src/typings",
-            "node_modules/@types"
-        ],
+        "typeRoots": ["./src/typings", "node_modules/@types"],
         "moduleResolution": "node16",
-        "lib": [
-            "ES2021"
-        ],
+        "lib": ["ES2021"],
         "rootDir": "./src",
-        "declaration": false /* Generates corresponding '.d.ts' file. */,
+
         "declarationMap": false,
         "outDir": "dist" /* Redirect output structure to the directory. */,
         "removeComments": false /* Do not emit comments to output. */,
@@ -36,6 +31,7 @@
         "skipDefaultLibCheck": true,
         "resolveJsonModule": true /* Allow importing of .JSON modules */,
         "allowJs": false,
+        "declaration": true,
         /* ModuleMock Resolution Options */
         // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
         // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */

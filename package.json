@@ -47,7 +47,15 @@
         "url": "https://darraghoriordan.com"
     },
     "main": "dist/index.js",
-    "types": "index.d.ts",
+    "type": "commonjs",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "types": "./dist/index.d.ts",
     "dependencies": {
         "@typescript-eslint/scope-manager": "^8.21.0",
         "@typescript-eslint/utils": "^8.21.0",
