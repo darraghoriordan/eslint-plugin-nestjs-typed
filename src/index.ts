@@ -74,6 +74,11 @@ const flatRecommended = flatRecommendedConfig(plugin, parser);
 const flatNoSwagger = flatNoSwaggerConfig();
 // export the classic plugin configs
 export {classicPlugin};
-
+export type ConfigArray = TSESLint.FlatConfig.ConfigArray;
 // export the flat configs
-export default {configs: {flatRecommended, flatNoSwagger}};
+export default {configs: {flatRecommended, flatNoSwagger}} as {
+    configs: {
+        flatRecommended: ConfigArray;
+        flatNoSwagger: ConfigArray;
+    };
+};
