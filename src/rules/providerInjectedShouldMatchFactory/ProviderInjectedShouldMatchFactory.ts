@@ -11,13 +11,9 @@ export const hasMismatchedInjected = (
     // edit 03/06/2023 - it was annoying and someone complained on github so I added a check for a "useFactory" property on the Provider declaration
     const isNestProvider =
         (
-            (
-            node.id.typeAnnotation
-                ?.typeAnnotation as TSESTree.TSTypeReference
-      // prettier-ignore
-       
-        ).typeName as TSESTree.Identifier
-        ).name === "Provider" &&
+            (node.id.typeAnnotation?.typeAnnotation as TSESTree.TSTypeReference)
+                ?.typeName as TSESTree.Identifier
+        )?.name === "Provider" &&
         // and there is a useFactory property in the declaration
         nestProviderAstParser.findProvideProperty(node, "useFactory");
 
