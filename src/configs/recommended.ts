@@ -29,7 +29,7 @@ const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/sort-module-metadata-arrays": "off",
     "@darraghor/nestjs-typed/no-duplicate-decorators": "error",
 };
-export = {
+export default {
     extends: ["./configs/base"],
     rules,
 };
