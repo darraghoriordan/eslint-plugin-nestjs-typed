@@ -1,6 +1,6 @@
 import IsFilteredPath from "./isFilteredPath";
 
-describe("FileEnumerationWrapper", () => {
+describe("IsFilteredPath", () => {
     test.each([
         ["/blah/src/file.test.ts", true],
         ["/blah/src/file.d.ts", false],

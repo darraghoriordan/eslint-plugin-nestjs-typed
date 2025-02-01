@@ -48,7 +48,6 @@ const rule = createRule<
 
         const checker = service.program.getTypeChecker();
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node: TSESTree.ClassDeclaration) {
                 const propertyDefinitionsWithDecoratorsStatus: [
                     TSESTree.PropertyDefinition,

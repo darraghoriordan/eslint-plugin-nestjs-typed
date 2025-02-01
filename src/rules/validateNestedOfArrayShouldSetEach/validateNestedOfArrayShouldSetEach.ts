@@ -16,7 +16,7 @@ export const shouldSetArrayProperty = (
 
     const firstArgumentToDecorator = (
         decorators[0].expression as TSESTree.CallExpression
-    )?.arguments[0] as TSESTree.ObjectExpression;
+    ).arguments[0] as TSESTree.ObjectExpression;
 
     const hasEachSetInOptions =
         typedTokenHelpers.getPropertyValueEqualsExpected(
@@ -62,7 +62,6 @@ const rule = createRule<
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition: (node: TSESTree.Node) => {
                 const shouldSetArrayResults = shouldSetArrayProperty(
                     node as TSESTree.PropertyDefinition

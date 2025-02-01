@@ -2,7 +2,6 @@ import {TSESLint, TSESTree} from "@typescript-eslint/utils";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as unambiguous from "eslint-module-utils/unambiguous";
-import {FilePath} from "eslint/use-at-your-own-risk";
 import fs from "fs";
 import {typedTokenHelpers} from "../typedTokenHelpers";
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
@@ -34,7 +33,10 @@ const NestProvidedInjectableMapper = {
         return [currentWorkingDirectory];
     },
     parseFileList(
-        files: FilePath[],
+        files: {
+            ignored: boolean;
+            filename: string;
+        }[],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         context: Readonly<TSESLint.RuleContext<never, any>>
     ): Map<string, NestProvidedInjectablesMap> {
@@ -90,14 +92,7 @@ const NestProvidedInjectableMapper = {
         path: string
     ): [string, NestProvidedInjectablesMap] | null {
         try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-            if (
-                // eslint-disable-next-line no-constant-condition, @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                !unambiguous.isModule(ast)
-            ) {
+            if (!unambiguous.isModule(ast)) {
                 return null;
             }
             // This does too much and should probably be split up

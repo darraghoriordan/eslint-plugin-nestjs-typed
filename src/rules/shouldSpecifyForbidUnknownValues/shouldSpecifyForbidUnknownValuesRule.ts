@@ -4,7 +4,7 @@ import {ASTUtils} from "@typescript-eslint/utils";
 
 export const isValidationPipeNewExpression = (node: TSESTree.Node): boolean => {
     const newExpression = node as TSESTree.NewExpression;
-    const callee = newExpression?.callee as TSESTree.Identifier;
+    const callee = newExpression.callee as TSESTree.Identifier;
     if (callee && callee.name === "ValidationPipe") {
         return true;
     }
@@ -17,8 +17,8 @@ export const checkObjectExpression = (
         return false;
     }
     // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-    const forbidUnknownValuesProperty = os?.properties
-        ?.filter(ASTUtils.isNodeOfType(TSESTree.AST_NODE_TYPES.Property))
+    const forbidUnknownValuesProperty = os.properties
+        .filter(ASTUtils.isNodeOfType(TSESTree.AST_NODE_TYPES.Property))
         .find(
             (p) => (p.key as TSESTree.Identifier).name === "forbidUnknownValues"
         ) as TSESTree.Property;
@@ -28,8 +28,7 @@ export const checkObjectExpression = (
     }
     // property is explicitly false. this is wrong.
     const isPropertyValueExplicitlyFalse =
-        (forbidUnknownValuesProperty?.value as TSESTree.Literal).raw ===
-        "false";
+        (forbidUnknownValuesProperty.value as TSESTree.Literal).raw === "false";
     if (isPropertyValueExplicitlyFalse) {
         return true;
     }
@@ -49,7 +48,7 @@ export const shouldTriggerNewExpressionHasProperty = (
     // we also ignore parameters that are not explicit object expressions
     // or if the properties are spread
     if (
-        newExpression.arguments?.length === 0 ||
+        newExpression.arguments.length === 0 ||
         newExpression.arguments[0].type !==
             TSESTree.AST_NODE_TYPES.ObjectExpression ||
         newExpression.arguments[0].properties.some(
@@ -68,9 +67,9 @@ export const shouldTriggerForVariableDeclaratorExpression = (
 ): boolean => {
     // if the developer hasn't annotated the object we can't continue to check these rules correctly (we don't know if anonymous objects need to have any props)
     const variableDeclarator = node;
-    const asExpression = variableDeclarator?.init as TSESTree.TSAsExpression;
+    const asExpression = variableDeclarator.init as TSESTree.TSAsExpression;
     const typeAnnotation =
-        asExpression?.typeAnnotation as TSESTree.TSTypeReference;
+        asExpression.typeAnnotation as TSESTree.TSTypeReference;
     const typeName = typeAnnotation?.typeName as TSESTree.Identifier;
     if (typeName === undefined || typeName.name !== "ValidationPipeOptions") {
         return false;
@@ -99,7 +98,6 @@ const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             NewExpression(node: TSESTree.NewExpression): void {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result = shouldTriggerNewExpressionHasProperty(node);
@@ -111,7 +109,7 @@ const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
                     });
                 }
             },
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             VariableDeclarator(node: TSESTree.VariableDeclarator): void {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result =

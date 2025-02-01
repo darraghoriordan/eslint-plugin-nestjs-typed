@@ -1,6 +1,5 @@
 export = {
-    parser: "@typescript-eslint/parser",
-    parserOptions: {sourceType: "module"},
+    extends: "./base",
     rules: {
         "@darraghor/nestjs-typed/provided-injected-should-match-factory-parameters":
             "error",

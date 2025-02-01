@@ -6,9 +6,11 @@ const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({
     languageOptions: {
         parserOptions: {
-            ecmaVersion: 2015,
+            projectService: {
+                defaultProject: "tsconfig.json",
+            },
             tsconfigRootDir: tsRootDirectory,
-            project: "./tsconfig.json",
+            allowDefaultProject: false,
         },
     },
 });

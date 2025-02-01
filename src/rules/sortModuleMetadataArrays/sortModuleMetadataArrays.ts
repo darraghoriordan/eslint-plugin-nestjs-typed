@@ -10,7 +10,7 @@ const DEFAULT_LOCALE = "en-US";
 export type RuleOptions = [
     {
         locale?: string;
-    }
+    },
 ];
 
 export type ValidModuleNodeTypes =
@@ -92,7 +92,7 @@ export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
                   >);
 
         const {locale} = context.options[0];
-        const sourceCode = context.getSourceCode();
+        const sourceCode = context.sourceCode;
         return {
             [`${MODULE_CLASS_DECORATOR} Property > ArrayExpression`]({
                 elements,

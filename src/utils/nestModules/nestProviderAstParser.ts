@@ -6,8 +6,7 @@ export const nestProviderAstParser = {
         n: TSESTree.Property,
         path: string
     ): [string, NestProvidedInjectablesMap] | null {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const propertyName = (n.value as TSESTree.Identifier).name;
+        const propertyName = (n.value as TSESTree.Identifier)?.name;
         if (propertyName) {
             return [
                 path,
@@ -28,7 +27,6 @@ export const nestProviderAstParser = {
                 providerDeclaration.init as TSESTree.ObjectExpression
             ).properties.find(
                 (p) =>
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     ((p as TSESTree.Property).key as TSESTree.Identifier)
                         .name === propertyName
             ) as TSESTree.Property;

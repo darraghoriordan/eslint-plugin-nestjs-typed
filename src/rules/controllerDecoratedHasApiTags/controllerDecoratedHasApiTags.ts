@@ -35,7 +35,6 @@ const rule = createRule<[], "shouldUseApiTagDecorator">({
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node: TSESTree.ClassDeclaration): void {
                 if (shouldUseApiTagDecorator(node)) {
                     context.report({

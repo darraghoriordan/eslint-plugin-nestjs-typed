@@ -30,7 +30,6 @@ describe("nest module ast mapper", () => {
 
         expect(result).not.toBeUndefined();
         expect(
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             (
                 (typeAnnotation?.typeAnnotation as TSESTree.TSTypeReference)
                 // prettier-ignore

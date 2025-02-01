@@ -6,7 +6,7 @@
         "clean": "rm -Rf ./dist/",
         "build:ci": "npm run build",
         "build": "npm run clean && mkdir ./dist && tsc --project tsconfig.build.json",
-        "lint": "npx eslint --no-error-on-unmatched-pattern --no-ignore ./src/**/*.ts",
+        "lint": "npx eslint --no-error-on-unmatched-pattern",
         "test": "export NODE_OPTIONS=\"--max-old-space-size=8192\" && npx jest --runInBand --colors --reporters=default --no-cache --coverage=false --silent=false -c jest.config.ts",
         "test:watch": "npm run test -- --watch",
         "pre-commit": "npx lint-staged",
@@ -17,7 +17,12 @@
     },
     "release": {
         "branches": [
-            "main"
+            "main",
+            {
+                "name": "release/*",
+                "prerelease": "rc",
+                "channel": "next"
+            }
         ]
     },
     "publishConfig": {
@@ -47,27 +52,27 @@
         "@typescript-eslint/scope-manager": "^8.21.0",
         "@typescript-eslint/utils": "^8.21.0",
         "eslint-module-utils": "2.12.0",
+        "glob": "11.0.1",
         "reflect-metadata": "0.2.2"
     },
     "devDependencies": {
         "@commitlint/cli": "19.6.1",
         "@commitlint/config-conventional": "19.6.0",
-        "@eslint/eslintrc": "^3.2.0",
-        "@eslint/js": "^9.19.0",
+        "@eslint/js": "9.19.0",
         "@semantic-release/changelog": "6.0.3",
-        "@semantic-release/exec": "6.0.3",
+        "@semantic-release/exec": "7.0.2",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
         "@types/node": "20.17.16",
-        "@typescript-eslint/eslint-plugin": "8.21.0",
-        "@typescript-eslint/parser": "8.21.0",
-        "@typescript-eslint/rule-tester": "8.21.0",
-        "class-validator": "^0.14.1",
-        "eslint": "8.57.1",
+        "@typescript-eslint/eslint-plugin": "8.22.0",
+        "@typescript-eslint/parser": "8.22.0",
+        "@typescript-eslint/rule-tester": "8.22.0",
+        "class-validator": "0.14.1",
+        "eslint": "9.19.0",
         "eslint-config-prettier": "10.0.1",
         "eslint-plugin-prefer-arrow": "1.2.3",
         "eslint-plugin-unicorn": "56.0.1",
-        "globals": "^15.14.0",
+        "globals": "15.14.0",
         "husky": "9.1.7",
         "jest": "29.7.0",
         "jest-create-mock-instance": "2.0.0",
@@ -77,12 +82,13 @@
         "semantic-release": "24.2.1",
         "ts-jest": "29.2.5",
         "ts-node": "10.9.2",
-        "typescript": "5.7.3"
+        "typescript": "5.7.3",
+        "typescript-eslint": "8.22.0"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
         "class-validator": "*",
-        "eslint": "^8.56.0"
+        "eslint": "^9.0.0"
     },
     "keywords": [
         "eslint",

@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/filename-case */
-
 export const pathPartTestCases = [
     {
         moduleCode: `
