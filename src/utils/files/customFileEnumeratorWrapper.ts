@@ -19,21 +19,21 @@ export class FileEnumerator {
         filterFromPaths: string[];
     }): FilePath[] {
         // Create glob pattern that includes extensions
-        const patterns = sourceGlobs.flatMap((pattern) => {
-            if (path.extname(pattern)) {
-                return pattern;
+        const patterns = sourceGlobs.flatMap((filePath) => {
+            if (path.extname(filePath)) {
+                return filePath;
             }
             return extensions.map(
-                (extension: string) => `${pattern}/**/*${extension}`
+                (extension: string) => `${filePath}/**/*${extension}`
             );
         });
-
+        console.log("globPatterns", patterns);
         // Find all files matching the patterns
         const files = glob.sync(patterns, {
             ignore: ["**/node_modules/**"],
             nodir: true,
         });
-
+        console.log("files", files);
         // Map to the expected format and filter
         return files
             .map(
@@ -42,9 +42,14 @@ export class FileEnumerator {
                     filename: filePath,
                 })
             )
-            .filter(
-                (file) => !IsFilteredPath.test(file.filename, filterFromPaths)
-            );
+            .filter((file) => {
+                const isFiltered = IsFilteredPath.test(
+                    file.filename,
+                    filterFromPaths
+                );
+                console.log("isFiltered", file.filename, isFiltered);
+                return !isFiltered;
+            });
     }
 }
 
