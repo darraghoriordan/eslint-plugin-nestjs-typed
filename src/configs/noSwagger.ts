@@ -12,5 +12,6 @@ const rules: Partial<Linter.RulesRecord> = {
 };
 
 export = {
+    extends: ["./configs/base"],
     rules,
 };

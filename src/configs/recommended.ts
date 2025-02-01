@@ -30,5 +30,6 @@ const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/no-duplicate-decorators": "error",
 };
 export = {
+    extends: ["./configs/base"],
     rules,
 };
