@@ -1,7 +1,7 @@
 import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
 import {parse, ParserServices} from "@typescript-eslint/parser";
 import ts from "typescript";
-import * as tsutils from "ts-api-utils";
+import tsutils from "ts-api-utils";
 
 export const typedTokenHelpers = {
     decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
