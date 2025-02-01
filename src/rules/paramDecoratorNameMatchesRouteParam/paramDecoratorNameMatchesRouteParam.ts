@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
+import {createRule} from "../../utils/createRule.js";
 
 interface ResultModel {
     hasColonInName: boolean;
@@ -41,8 +41,8 @@ export const parsePathParts = (decorator: TSESTree.Decorator): string[] => {
         return decoratorArgument.properties
             .filter(
                 (x) =>
-                    ((x as TSESTree.Property)?.key as TSESTree.Identifier)
-                        ?.name === "path"
+                    ((x as TSESTree.Property).key as TSESTree.Identifier)
+                        .name === "path"
             )
             .map(
                 (x) => ((x as TSESTree.Property).value as TSESTree.Literal).raw
@@ -59,7 +59,7 @@ export const hasPathPartsAnyRegexParams = (
     pathPartsToCheck: string[]
 ): boolean => {
     // prettier-ignore
-    // eslint-disable-next-line no-useless-escape
+
     const specialCharacterRegex = /(dareslint__skip|\*|\+|\?|\(|\)|_)/ //new RegExp("([\?\+\*\_\(\)])")
     return pathPartsToCheck.some((pathPart) => {
         return specialCharacterRegex.test(pathPart);
@@ -99,8 +99,8 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     }
     // grab the param name
     const paramName = (
-        (decorator.expression as TSESTree.CallExpression)
-            ?.arguments[0] as TSESTree.Literal
+        (decorator?.expression as TSESTree.CallExpression)
+            .arguments[0] as TSESTree.Literal
     )?.value as string;
 
     // if there's no param name get out of here
@@ -123,14 +123,14 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     // grab any controller path parts
     // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
     const controllerDecorator = (
-        decorator.parent?.parent?.parent?.parent
+        decorator.parent.parent?.parent?.parent
             ?.parent as TSESTree.ClassDeclaration
-    )?.decorators?.find((d) => {
+    ).decorators.find((d) => {
         return (
             (
                 (d.expression as TSESTree.CallExpression)
                     .callee as TSESTree.Identifier
-            )?.name === "Controller"
+            ).name === "Controller"
         );
     }) as TSESTree.Decorator;
 
@@ -139,16 +139,16 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     );
 
     // grab any api method path parts from method decorator
-    const methodDefinition = decorator.parent?.parent
+    const methodDefinition = decorator.parent.parent
         ?.parent as TSESTree.MethodDefinition;
 
     // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-    const methodDecorator = methodDefinition?.decorators?.find((d) => {
+    const methodDecorator = methodDefinition.decorators.find((d) => {
         return nestRequestMethodDecoratorNames.has(
             (
                 (d.expression as TSESTree.CallExpression)
                     .callee as TSESTree.Identifier
-            )?.name
+            ).name
         );
     }) as TSESTree.Decorator;
 
@@ -199,18 +199,16 @@ const rule = createRule<
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             Decorator(node: TSESTree.Decorator): void {
                 if (
                     (
                         (node.expression as TSESTree.CallExpression)
-                            ?.callee as TSESTree.Identifier
-                    )?.name !== "Param"
+                            .callee as TSESTree.Identifier
+                    ).name !== "Param"
                 ) {
                     return;
                 }
 
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 const result = shouldTrigger(node);
 
                 if (result.paramNameNotMatchedInPath) {

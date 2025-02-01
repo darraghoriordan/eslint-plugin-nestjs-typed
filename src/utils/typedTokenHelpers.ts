@@ -1,7 +1,9 @@
 import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
 import {parse, ParserServices} from "@typescript-eslint/parser";
 import ts from "typescript";
-import * as tsutils from "ts-api-utils";
+import * as tsutilsImp from "ts-api-utils";
+
+const tsutils = tsutilsImp;
 
 export const typedTokenHelpers = {
     decoratorsThatCouldMeanTheDevIsValidatingAnArray: [
@@ -19,8 +21,8 @@ export const typedTokenHelpers = {
         checker: ts.TypeChecker
     ): boolean {
         if (
-            (node as TSESTree.PropertyDefinition)?.typeAnnotation
-                ?.typeAnnotation?.type === TSESTree.AST_NODE_TYPES.TSArrayType
+            (node as TSESTree.PropertyDefinition).typeAnnotation?.typeAnnotation
+                .type === TSESTree.AST_NODE_TYPES.TSArrayType
         ) {
             return true;
         }
@@ -69,7 +71,7 @@ export const typedTokenHelpers = {
             didMatchExpectedValues =
                 foundPropertyOfName !== undefined &&
                 foundPropertyOfName.type === TSESTree.AST_NODE_TYPES.Property &&
-                (foundPropertyOfName.value as TSESTree.Literal)?.value ===
+                (foundPropertyOfName.value as TSESTree.Literal).value ===
                     expectedValue;
         }
         return didMatchExpectedValues;
@@ -101,13 +103,13 @@ export const typedTokenHelpers = {
             | TSESTree.MethodDefinition,
         decoratorNames: string[]
     ): TSESTree.Decorator[] {
-        const decorators = n.decorators?.filter((d) => {
+        const decorators = n.decorators.filter((d) => {
             const factoryMethodDecoratorIdentifier = (
                 (d.expression as TSESTree.CallExpression)
                     .callee as TSESTree.Identifier
             )?.name;
             const decoratorIdentifier = (d.expression as TSESTree.Identifier)
-                ?.name;
+                .name;
 
             return decoratorNames.includes(
                 factoryMethodDecoratorIdentifier ?? decoratorIdentifier ?? ""
@@ -252,7 +254,7 @@ export const typedTokenHelpers = {
         const {decorators} = node;
 
         return (
-            decorators?.filter((decorator): decorator is TSESTree.Decorator => {
+            decorators.filter((decorator): decorator is TSESTree.Decorator => {
                 const isClassValidatorDecorator =
                     typedTokenHelpers.decoratorIsClassValidatorDecorator(
                         program,

@@ -1,4 +1,4 @@
-// eslint-disable-next-line unicorn/no-static-only-class
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class IsFilteredPath {
     static test = (
         path: string | undefined,

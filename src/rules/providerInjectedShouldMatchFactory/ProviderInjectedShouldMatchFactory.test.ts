@@ -1,6 +1,6 @@
 import {RuleTester} from "@typescript-eslint/rule-tester";
-import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
-import rule from "./ProviderInjectedShouldMatchFactory";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup.js";
+import rule from "./ProviderInjectedShouldMatchFactory.js";
 
 const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({
@@ -15,6 +15,26 @@ const ruleTester = new RuleTester({
 
 ruleTester.run("provided-injected-should-match-factory-parameters", rule, {
     valid: [
+        {
+            // this threw on one of my projects
+            code: `@Injectable()
+export default class UserDiscriminatedCacheInterceptor extends CacheInterceptor {
+    private readonly logger = new Logger(
+        UserDiscriminatedCacheInterceptor.name
+    );
+
+    trackBy(context: ExecutionContext): string | undefined {
+         
+        const httpContext = context
+            .switchToHttp()
+            .getRequest<RequestWithUser>();
+
+        const cacheKey = "";
+        this.logger.debug({ cacheKey }, "Using cache key");
+        return cacheKey;
+    }
+}`,
+        },
         {
             code: `export const MyOtherInjectableProvider: Provider = {
                 provide: MyOtherInjectable,

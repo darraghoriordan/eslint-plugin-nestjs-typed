@@ -1,7 +1,7 @@
 import {ESLintUtils, TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
-import {EnumTestResultModel} from "./enumTestResultModel";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
+import {EnumTestResultModel} from "./enumTestResultModel.js";
 
 const noChangesRequiredResult = new EnumTestResultModel({
     needsEnumAdded: false,
@@ -83,7 +83,7 @@ export const needsEnumNameMatchingEnumType = (
 
     const isEnumNameMatchingEnumType =
         (enumNameProperty.value as TSESTree.Literal).value ===
-        (enumProperty.value as TSESTree.Identifier).name;
+        (enumProperty.value as TSESTree.Identifier)?.name;
 
     return !isEnumNameMatchingEnumType;
 };
@@ -115,7 +115,6 @@ const rule = createRule<
         const typeChecker = parserServices.program.getTypeChecker();
 
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition(node: TSESTree.Node): void {
                 const mappedNode =
                     parserServices.esTreeNodeToTSNodeMap.get(node);

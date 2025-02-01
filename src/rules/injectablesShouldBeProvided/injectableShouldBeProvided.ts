@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {TSESTree, TSESLint} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import FileEnumeratorWrapper from "../../utils/files/fileEnumerationWrapper";
-import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper";
-import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {createRule} from "../../utils/createRule.js";
+// import FileEnumeratorWrapper from "../../utils/files/fileEnumerationWrapper";
+import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper.js";
+import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 import {FilePath} from "eslint/use-at-your-own-risk";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
+import FileEnumeratorWrapper from "../../utils/files/customFileEnumeratorWrapper.js";
 
 let listOfPotentialNestModuleFiles: FilePath[];
 let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
@@ -30,8 +32,8 @@ const findModuleMapping = (
     return modules;
 };
 
-// super fragile types but whatevs
 const checkNode = (
+    // super fragile types but whatevs
     node: TSESTree.ClassDeclaration,
     decoratorName: "Injectable" | "Controller",
     propertyName: "controllers" | "providers",
@@ -84,6 +86,7 @@ function initializeModuleMappings(
             sourcePath,
             process.cwd()
         );
+
     listOfPotentialNestModuleFiles = FileEnumeratorWrapper.enumerateFiles(
         mappedSourceDirectory,
         [".ts"],
@@ -143,6 +146,8 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
     defaultOptions: defaultOptions,
 
     create(contextWithoutDefaults) {
+        // @ts-ignore
+
         const context =
             contextWithoutDefaults.options &&
             contextWithoutDefaults.options.length > 0
@@ -160,20 +165,13 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
                       >
                   >);
 
-        const {
-            src,
-            filterFromPaths,
-            // ignoreExports = [],
-            // missingExports,
-            // unusedExports,
-        } = context.options[0] || {};
+        const {src, filterFromPaths} = context.options[0] || {};
 
         if (nestModuleMap === undefined || nestModuleMap.size === 0) {
             initializeModuleMappings(src[0], filterFromPaths, context);
         }
 
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             ClassDeclaration(node: TSESTree.ClassDeclaration): void {
                 checkNode(
                     node,
@@ -190,14 +188,13 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
                     context
                 );
             },
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             "Program:exit"(): void {
                 // map the source to a mapping thing
                 // if not undefined set it to the mapping set
                 const mappedProvidedInjectables =
                     NestProvidedInjectableMapper.mapAllProvidedInjectables(
-                        context.getSourceCode().ast,
-                        context.getFilename()
+                        context.sourceCode.ast,
+                        context.filename
                     );
                 if (mappedProvidedInjectables !== null) {
                     nestModuleMap.set(

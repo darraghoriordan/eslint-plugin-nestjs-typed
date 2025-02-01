@@ -1,6 +1,6 @@
 import {RuleTester} from "@typescript-eslint/rule-tester";
-import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
-import rule from "./apiMethodsShouldSpecifyApiResponse";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup.js";
+import rule from "./apiMethodsShouldSpecifyApiResponse.js";
 
 const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({

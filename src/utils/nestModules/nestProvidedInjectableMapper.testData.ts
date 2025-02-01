@@ -1,5 +1,5 @@
 import {TSESLint} from "@typescript-eslint/utils";
-import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap";
+import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
 export const fakeFilePath = "fake/path.ts";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 export const fakeContext = {

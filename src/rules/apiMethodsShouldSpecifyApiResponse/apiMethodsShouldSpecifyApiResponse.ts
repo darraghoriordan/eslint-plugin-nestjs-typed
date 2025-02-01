@@ -1,6 +1,6 @@
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 
 export const shouldUseApiResponseDecorator = (
     node: TSESTree.MethodDefinition
@@ -64,7 +64,6 @@ const rule = createRule<[], "shouldSpecifyApiResponse">({
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             MethodDefinition(node: TSESTree.MethodDefinition): void {
                 if (shouldUseApiResponseDecorator(node)) {
                     context.report({

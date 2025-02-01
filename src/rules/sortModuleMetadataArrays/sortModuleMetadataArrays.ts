@@ -1,6 +1,6 @@
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {MODULE_CLASS_DECORATOR} from "../../utils/wellKnownSelectors";
+import {createRule} from "../../utils/createRule.js";
+import {MODULE_CLASS_DECORATOR} from "../../utils/wellKnownSelectors.js";
 import {ASTUtils} from "@typescript-eslint/utils";
 import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
 // Inspired by https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin/src/rules/sort-ngmodule-metadata-arrays.ts
@@ -10,7 +10,7 @@ const DEFAULT_LOCALE = "en-US";
 export type RuleOptions = [
     {
         locale?: string;
-    }
+    },
 ];
 
 export type ValidModuleNodeTypes =
@@ -92,7 +92,7 @@ export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
                   >);
 
         const {locale} = context.options[0];
-        const sourceCode = context.getSourceCode();
+        const sourceCode = context.sourceCode;
         return {
             [`${MODULE_CLASS_DECORATOR} Property > ArrayExpression`]({
                 elements,

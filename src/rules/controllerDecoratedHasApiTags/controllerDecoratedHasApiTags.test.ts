@@ -1,14 +1,16 @@
 import {RuleTester} from "@typescript-eslint/rule-tester";
-import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
-import rule from "./controllerDecoratedHasApiTags";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup.js";
+import rule from "./controllerDecoratedHasApiTags.js";
 
 const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({
     languageOptions: {
         parserOptions: {
-            ecmaVersion: 2015,
+            projectService: {
+                defaultProject: "tsconfig.json",
+            },
             tsconfigRootDir: tsRootDirectory,
-            project: "./tsconfig.json",
+            allowDefaultProject: false,
         },
     },
 });

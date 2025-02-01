@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 import {AST_NODE_TYPES, TSESTree, ESLintUtils} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-import {typedTokenHelpers} from "../../utils/typedTokenHelpers";
+import {createRule} from "../../utils/createRule.js";
+import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 
 const primitiveTypes = new Set([
@@ -87,7 +87,6 @@ const rule = createRule<
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             PropertyDefinition(node: TSESTree.PropertyDefinition): void {
                 // if it's an array get the element type
                 let mainType: AST_NODE_TYPES | undefined;
@@ -102,14 +101,14 @@ const rule = createRule<
                     const mainTypeInShortArray = (
                         node.typeAnnotation
                             ?.typeAnnotation as TSESTree.TSArrayType
-                    )?.elementType?.type;
-                    // eslint-disable-next-line unicorn/no-negated-condition
+                    ).elementType?.type;
+
                     if (!mainTypeInShortArray) {
                         // try to get the type of Array<type> syntax
                         const foundParams = (
                             node.typeAnnotation
                                 ?.typeAnnotation as TSESTree.TSTypeReference
-                        )?.typeArguments?.params;
+                        ).typeArguments?.params;
                         if (foundParams && foundParams.length === 1) {
                             mainType = foundParams[0].type;
                         }
@@ -117,7 +116,7 @@ const rule = createRule<
                         mainType = mainTypeInShortArray;
                     }
                 } else {
-                    mainType = node.typeAnnotation?.typeAnnotation?.type;
+                    mainType = node.typeAnnotation?.typeAnnotation.type;
                 }
 
                 if (!mainType) {
@@ -136,7 +135,7 @@ const rule = createRule<
                     (
                         node.typeAnnotation
                             ?.typeAnnotation as TSESTree.TSUnionType
-                    ).types?.some((x) => primitiveTypes.has(x.type));
+                    )?.types?.some((x) => primitiveTypes.has(x.type));
                 if (isNodeAUnionWithAPrimitive) {
                     return;
                 }
@@ -222,7 +221,7 @@ const rule = createRule<
                                 const foundParams = (
                                     node.typeAnnotation
                                         ?.typeAnnotation as TSESTree.TSTypeReference
-                                )?.typeArguments?.params;
+                                ).typeArguments?.params;
 
                                 if (foundParams && foundParams.length === 1) {
                                     const typeName = (

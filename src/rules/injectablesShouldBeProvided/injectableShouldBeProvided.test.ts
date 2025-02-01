@@ -1,14 +1,10 @@
-/* eslint-disable unicorn/prefer-module */
-/* eslint-disable unicorn/prevent-abbreviations */
-
-import rule from "./injectableShouldBeProvided";
+import rule from "./injectableShouldBeProvided.js";
 import {RuleTester} from "@typescript-eslint/rule-tester";
 
-import {getFixturesRootDirectory} from "../../testing/fixtureSetup";
+import {getFixturesRootDirectory} from "../../testing/fixtureSetup.js";
 import path from "path";
 
 const tsRootDirectory = getFixturesRootDirectory();
-console.debug("Using tsrootdirectory", {tsRootDirectory});
 
 const ruleTester = new RuleTester({
     languageOptions: {
@@ -16,6 +12,7 @@ const ruleTester = new RuleTester({
             ecmaVersion: 2015,
             tsconfigRootDir: tsRootDirectory,
             project: "tsconfig-withMeta.json",
+            allowDefaultProject: false,
         },
     },
 });

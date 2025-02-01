@@ -1,9 +1,8 @@
 {
     "extends": "./tsconfig.common",
-    "include": [
-        "src",
-    ],
+    "include": ["src"],
     "exclude": [
+        "src/fixtures/**/*",
         "**/*.test.ts",
         "**/*.spec.ts",
         "**/*.test-data.ts",

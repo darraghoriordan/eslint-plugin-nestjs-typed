@@ -1,8 +1,8 @@
 import {TSESTree} from "@typescript-eslint/utils";
-import {createRule} from "../../utils/createRule";
-// eslint-disable-next-line unicorn/import-style
+import {createRule} from "../../utils/createRule.js";
+
 //import util from "util";
-import {nestProviderAstParser} from "../../utils/nestModules/nestProviderAstParser";
+import {nestProviderAstParser} from "../../utils/nestModules/nestProviderAstParser.js";
 
 export const hasMismatchedInjected = (
     node: TSESTree.VariableDeclarator
@@ -11,12 +11,8 @@ export const hasMismatchedInjected = (
     // edit 03/06/2023 - it was annoying and someone complained on github so I added a check for a "useFactory" property on the Provider declaration
     const isNestProvider =
         (
-            (
-            node.id.typeAnnotation
-                ?.typeAnnotation as TSESTree.TSTypeReference
-      // prettier-ignore
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        )?.typeName as TSESTree.Identifier
+            (node.id.typeAnnotation?.typeAnnotation as TSESTree.TSTypeReference)
+                ?.typeName as TSESTree.Identifier
         )?.name === "Provider" &&
         // and there is a useFactory property in the declaration
         nestProviderAstParser.findProvideProperty(node, "useFactory");
@@ -29,7 +25,7 @@ export const hasMismatchedInjected = (
     const factoryParameterCount = (
         nestProviderAstParser.findProvideProperty(node, "useFactory")
             ?.value as TSESTree.ArrowFunctionExpression
-    )?.params?.length;
+    ).params.length;
 
     // Count number of injected params
     const injectedParameter = nestProviderAstParser.findProvideProperty(
@@ -62,7 +58,6 @@ const rule = createRule<[], "mainMessage">({
 
     create(context) {
         return {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             VariableDeclarator(node: TSESTree.VariableDeclarator): void {
                 if (hasMismatchedInjected(node)) {
                     context.report({

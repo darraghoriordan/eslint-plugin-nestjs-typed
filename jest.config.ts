@@ -1,18 +1,18 @@
 import type {Config} from "@jest/types";
 
 const config: Config.InitialOptions = {
-    // eslint-disable-next-line unicorn/prefer-module
     cacheDirectory: `${__dirname}/.jest_cache`,
     roots: ["<rootDir>/src"],
     preset: "ts-jest",
     testRegex: "(.*.(test|spec)).(jsx?|tsx?|ts?)$",
+
     moduleFileExtensions: ["ts", "js", "json"],
     setupFiles: ["./src/testing/preRun.ts"],
     collectCoverage: true,
     transform: {
         "^.+\\.(tsx?|ts?)$": ["ts-jest", {tsconfig: `tsconfig.test.json`}],
     },
-
+    // transformIgnorePatterns: ["node_modules/(?!(cliui|string-width)/)"],
     silent: false,
     verbose: true,
     collectCoverageFrom: [

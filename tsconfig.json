@@ -1,11 +1,5 @@
 {
     "extends": "./tsconfig.common",
-    "include": [
-        "src",
-    ],
-    "exclude": [
-        "jest.config.ts",
-        "dist",
-        "**/*.test-data.ts"
-    ]
+    "include": ["src", "vitest.config.ts"],
+    "exclude": ["jest.config.ts", "dist", "**/*.test-data.ts"]
 }
