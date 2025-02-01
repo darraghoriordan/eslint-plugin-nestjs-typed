@@ -3,7 +3,7 @@ on:
     push:
         branches:
             - main
-            - feature/*
+            - release/*
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
     publish:
