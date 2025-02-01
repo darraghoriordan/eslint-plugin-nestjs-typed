@@ -23,6 +23,9 @@ importers:
       reflect-metadata:
         specifier: 0.2.2
         version: 0.2.2
+      ts-api-utils:
+        specifier: 2.0.0
+        version: 2.0.0(typescript@5.7.3)
     devDependencies:
       '@commitlint/cli':
         specifier: 19.6.1
