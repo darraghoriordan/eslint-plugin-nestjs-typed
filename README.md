@@ -6,13 +6,11 @@
 
 ## A note on versions
 
-Note: doesn't support eslint 9 yet!
-
--   Version `6.x` supports Eslint version `>=8.x` and typescript eslint parser `^8`
--   Version `5.x` supports Eslint version `>=8.x` and typescript eslint parser `^7`
--   Version `4.x` supports Eslint version `>=8.x` and typescript eslint parser `^6`
--   Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
--   Version `2.x` supports Eslint version `<=7.x` and typescript eslint parser `^4`
+- Version `6.x` supports Eslint version `>=9.x` and typescript eslint parser `^8`
+- Version `5.x` supports Eslint version `>=8.x` and typescript eslint parser `^7` and `^8`
+- Version `4.x` supports Eslint version `>=8.x` and typescript eslint parser `^6`
+- Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
+- Version `2.x` supports Eslint version `<=7.x` and typescript eslint parser `^4`
 
 There are breaking changes between versions of ts-eslint.
 
