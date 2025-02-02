@@ -178,17 +178,11 @@ For ESlint 8 I export the old style config in the "classicConfig" export.
 I believe it would work something like this...
 
 ```ts
-import {
-    classicPlugin,
-} from "@darraghor/eslint-plugin-nestjs-typed";
-
+import {classicPlugin} from "@darraghor/eslint-plugin-nestjs-typed";
 
 module.exports = {
-    plugins: [
-        classicPlugin,
-    ],
+    plugins: [classicPlugin],
 };
-
 ```
 
 ## Injectables rule scans everything
@@ -201,11 +195,12 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
 
 ```ts
 // all the other config
-    extends: ["plugin:@darraghor/nestjs-typed/recommended",
-    "plugin:@darraghor/nestjs-typed/no-swagger"
+    extends: [
+       "plugin:@darraghor/nestjs-typed/recommended",
+       "plugin:@darraghor/nestjs-typed/no-swagger"
     ],
  // more config
-````
+```
 
 ## Disabling a rule
 
