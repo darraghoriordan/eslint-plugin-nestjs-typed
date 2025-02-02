@@ -10,6 +10,14 @@ If you use NestJs (https://nestjs.com/) these ESLint rules will help you to prev
 
 Skip to [How to configure](#to-configure) but if you have issues come back and read this whole document.
 
+## Support this plugin
+
+If you use this plugin in commercial setting consider submitting PRs on work time. It saves your business money, so it makes your business money!
+
+If you really want to support me directly you can use https://www.buymeacoffee.com/darraghor
+
+But please, just submit PRs to help all NestJS devs. This is the way.
+
 ## A note on versions
 
 - Version `6.x` supports Eslint version `>=9.x` and typescript eslint parser `^7` and `^8`
