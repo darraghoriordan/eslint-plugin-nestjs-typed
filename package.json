@@ -58,8 +58,8 @@
     "types": "./dist/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@typescript-eslint/scope-manager": "^8.21.0",
-        "@typescript-eslint/utils": "^8.21.0",
+        "@typescript-eslint/scope-manager": "^8.22.0",
+        "@typescript-eslint/utils": "^8.22.0",
         "eslint-module-utils": "2.12.0",
         "glob": "11.0.1",
         "reflect-metadata": "0.2.2",
@@ -111,6 +111,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@9.15.2",
+    "packageManager": "pnpm@9.15.4",
     "license": "ISC"
 }
