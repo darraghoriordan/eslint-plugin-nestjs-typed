@@ -20,11 +20,11 @@ But please, just submit PRs to help all NestJS devs. This is the way.
 
 ## A note on versions
 
-- Version `6.x` supports Eslint version `>=9.x` and typescript eslint parser `^7` and `^8`
-- Version `5.x` supports Eslint version `>=8.x` and typescript eslint parser `^7` and `^8`
-- Version `4.x` supports Eslint version `>=8.x` and typescript eslint parser `^6`
-- Version `3.x` supports Eslint version `>=8.x` and typescript eslint parser `^5`
-- Version `2.x` supports Eslint version `<=7.x` and typescript eslint parser `^4`
+- Version `6.x` supports Eslint version `^9` and typescript eslint parser `^7` and `^8`
+- Version `5.x` supports Eslint version `^8` and typescript eslint parser `^7` and `^8`
+- Version `4.x` supports Eslint version `^8` and typescript eslint parser `^6`
+- Version `3.x` supports Eslint version `^8` and typescript eslint parser `^5`
+- Version `2.x` supports Eslint version `^7.x` and typescript eslint parser `^4`
 
 ## Eslint 9.x support
 
