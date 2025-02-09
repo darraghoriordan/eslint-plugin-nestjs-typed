@@ -111,6 +111,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@9.15.5",
+    "packageManager": "pnpm@10.2.1",
     "license": "ISC"
 }
