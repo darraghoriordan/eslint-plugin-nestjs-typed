@@ -16,6 +16,7 @@ const nestRequestMethodDecoratorNames = new Set([
     "Options",
     "Head",
     "All",
+    "Sse",
 ]);
 
 export const parsePathParts = (decorator: TSESTree.Decorator): string[] => {

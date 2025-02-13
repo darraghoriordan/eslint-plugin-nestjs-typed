@@ -254,6 +254,15 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
               @Param('id') periodId: string){}
             }`,
         },
+        {
+            // @Sse() decorator is supported
+            code: `
+            export class CustomBotController {
+                @Sse(':chatId/message')
+                async streamMessages(
+                  @Param('chatId') chatId: string){}
+            }`,
+        },
     ],
     invalid: [
         {
