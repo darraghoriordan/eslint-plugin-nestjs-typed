@@ -73,7 +73,7 @@
         "@semantic-release/exec": "7.0.3",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
-        "@types/node": "20.17.17",
+        "@types/node": "20.17.18",
         "@typescript-eslint/eslint-plugin": "8.22.0",
         "@typescript-eslint/parser": "8.22.0",
         "@typescript-eslint/rule-tester": "8.22.0",
