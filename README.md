@@ -14,9 +14,9 @@ Skip to [How to configure](#to-configure) but if you have issues come back and r
 
 If you use this plugin in commercial setting consider submitting PRs on work time. It saves your business money, so it makes your business money!
 
-If you really want to support me directly you can use https://www.buymeacoffee.com/darraghor
+If you really want to support me directly you can use https://darraghoriordan.gumroad.com/coffee
 
-But please, just submit PRs to help all NestJS devs. This is the way.
+But please, just submit PRs to help all NestJS devs. This is the way!
 
 ## A note on versions
 
@@ -165,7 +165,8 @@ export default tseslint.config(
             ecmaVersion: 2022,
             sourceType: "module",
             parserOptions: {
-                project: "tsconfig.json",
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
             },
         },
     },
