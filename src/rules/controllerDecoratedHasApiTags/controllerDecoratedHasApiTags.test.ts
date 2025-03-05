@@ -29,6 +29,13 @@ ruleTester.run("controllers-should-supply-api-tags", rule, {
             class TestClass {
           }`,
         },
+        {
+            code: `
+            @ApiExcludeController()
+            @Controller("my-controller")
+            class TestClass {
+          }`,
+        },
     ],
     invalid: [
         {

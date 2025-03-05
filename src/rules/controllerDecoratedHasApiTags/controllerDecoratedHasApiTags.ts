@@ -14,7 +14,16 @@ export const shouldUseApiTagDecorator = (
         "ApiTags",
     ]);
 
-    return hasControllerDecorator && !hasApiTagDecorator;
+    const hasApiExcludeControllerDecorator =
+        typedTokenHelpers.nodeHasDecoratorsNamed(node, [
+            "ApiExcludeController",
+        ]);
+
+    return (
+        hasControllerDecorator &&
+        !hasApiTagDecorator &&
+        !hasApiExcludeControllerDecorator
+    );
 };
 
 const rule = createRule<[], "shouldUseApiTagDecorator">({

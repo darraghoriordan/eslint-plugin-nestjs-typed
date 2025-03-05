@@ -43,7 +43,18 @@ export const shouldUseApiResponseDecorator = (
         ]
     );
 
-    return hasApiMethodDecorator && !hasApiResponseDecorator;
+    // check if the containing class has ApiExcludeController decorator
+    const containingClass = node.parent?.parent as TSESTree.ClassDeclaration;
+    const hasApiExcludeControllerDecorator =
+        typedTokenHelpers.nodeHasDecoratorsNamed(containingClass, [
+            "ApiExcludeController",
+        ]);
+
+    return (
+        hasApiMethodDecorator &&
+        !hasApiResponseDecorator &&
+        !hasApiExcludeControllerDecorator
+    );
 };
 
 const rule = createRule<[], "shouldSpecifyApiResponse">({
