@@ -42,6 +42,16 @@ ruleTester.run("api-method-should-specify-api-response", rule, {
                 }
             }`,
         },
+        {
+            // controller with ApiExcludeController
+            code: `@ApiExcludeController()
+            class TestClass {
+                @Get()
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+        },
     ],
     invalid: [
         {
