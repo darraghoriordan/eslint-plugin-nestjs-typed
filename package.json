@@ -73,13 +73,13 @@
         "@semantic-release/exec": "7.0.3",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
-        "@types/node": "20.17.18",
+        "@types/node": "20.17.23",
         "@typescript-eslint/eslint-plugin": "8.26.0",
         "@typescript-eslint/parser": "8.26.0",
         "@typescript-eslint/rule-tester": "8.26.0",
         "class-validator": "0.14.1",
         "eslint": "9.21.0",
-        "eslint-config-prettier": "10.0.1",
+        "eslint-config-prettier": "10.0.2",
         "eslint-plugin-prefer-arrow": "1.2.3",
         "eslint-plugin-unicorn": "56.0.1",
         "globals": "15.15.0",
@@ -88,14 +88,14 @@
         "jest-create-mock-instance": "2.0.0",
         "jest-junit": "16.0.0",
         "lint-staged": "15.4.3",
-        "prettier": "3.5.0",
-        "semantic-release": "24.2.2",
-        "ts-jest": "29.2.5",
+        "prettier": "3.5.3",
+        "semantic-release": "24.2.3",
+        "ts-jest": "29.2.6",
         "ts-node": "10.9.2",
         "typescript": "5.8.2",
         "typescript-eslint": "8.26.0",
         "vite": "6.2.0",
-        "vitest": "3.0.5"
+        "vitest": "3.0.7"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
@@ -111,6 +111,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@9.15.5",
+    "packageManager": "pnpm@9.15.6",
     "license": "ISC"
 }
