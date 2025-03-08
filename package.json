@@ -60,6 +60,7 @@
     "dependencies": {
         "@typescript-eslint/scope-manager": "^8.26.0",
         "@typescript-eslint/utils": "^8.26.0",
+        "@typescript-eslint/type-utils": "^8.26.0",
         "eslint-module-utils": "2.12.0",
         "glob": "11.0.1",
         "reflect-metadata": "0.2.2",
