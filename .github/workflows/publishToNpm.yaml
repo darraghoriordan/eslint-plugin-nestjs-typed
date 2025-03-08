@@ -18,7 +18,7 @@ jobs:
               with:
                   node-version-file: ".nvmrc"
                   cache: pnpm
-            - run: pnpm install
+            - run: pnpm install --frozen-lockfile
             - run: pnpm test
             - run: pnpm build
             - name: Release
