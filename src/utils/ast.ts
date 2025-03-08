@@ -1,4 +1,4 @@
-import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/types";
+import {AST_NODE_TYPES, TSESTree} from "@typescript-eslint/utils";
 
 export function getPropertiesDefinitions(
     classDeclaration: TSESTree.ClassDeclaration
