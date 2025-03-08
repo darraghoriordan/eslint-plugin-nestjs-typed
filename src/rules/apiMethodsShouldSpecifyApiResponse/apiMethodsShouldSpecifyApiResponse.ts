@@ -40,6 +40,7 @@ export const shouldUseApiResponseDecorator = (
             "ApiUnprocessableEntityResponse",
             "ApiUnsupportedMediaTypeResponse",
             "ApiDefaultResponse",
+            "HealthCheck",
         ]
     );
 
