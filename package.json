@@ -58,9 +58,9 @@
     "types": "./dist/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@typescript-eslint/scope-manager": "^8.26.0",
-        "@typescript-eslint/utils": "^8.26.0",
-        "@typescript-eslint/type-utils": "^8.26.0",
+        "@typescript-eslint/scope-manager": "^8.26.1",
+        "@typescript-eslint/utils": "^8.26.1",
+        "@typescript-eslint/type-utils": "^8.26.1",
         "eslint-module-utils": "2.12.0",
         "glob": "11.0.1",
         "reflect-metadata": "0.2.2",
@@ -75,9 +75,9 @@
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
         "@types/node": "22.13.10",
-        "@typescript-eslint/eslint-plugin": "8.26.0",
-        "@typescript-eslint/parser": "8.26.0",
-        "@typescript-eslint/rule-tester": "8.26.0",
+        "@typescript-eslint/eslint-plugin": "8.26.1",
+        "@typescript-eslint/parser": "8.26.1",
+        "@typescript-eslint/rule-tester": "8.26.1",
         "class-validator": "0.14.1",
         "eslint": "9.22.0",
         "eslint-config-prettier": "10.1.1",
@@ -94,7 +94,7 @@
         "ts-jest": "29.2.6",
         "ts-node": "10.9.2",
         "typescript": "5.8.2",
-        "typescript-eslint": "8.26.0",
+        "typescript-eslint": "8.26.1",
         "vite": "6.2.1",
         "vitest": "3.0.8"
     },
@@ -112,6 +112,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@10.6.1",
+    "packageManager": "pnpm@10.6.2",
     "license": "ISC"
 }
