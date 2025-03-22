@@ -96,7 +96,7 @@
         "typescript": "5.8.2",
         "typescript-eslint": "8.26.1",
         "vite": "6.2.2",
-        "vitest": "3.0.8"
+        "vitest": "3.0.9"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
@@ -112,6 +112,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@10.6.3",
+    "packageManager": "pnpm@10.6.5",
     "license": "ISC"
 }
