@@ -74,7 +74,7 @@
         "@semantic-release/exec": "7.0.3",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
-        "@types/node": "22.13.10",
+        "@types/node": "22.13.13",
         "@typescript-eslint/eslint-plugin": "8.26.1",
         "@typescript-eslint/parser": "8.26.1",
         "@typescript-eslint/rule-tester": "8.26.1",
@@ -95,8 +95,8 @@
         "ts-node": "10.9.2",
         "typescript": "5.8.2",
         "typescript-eslint": "8.26.1",
-        "vite": "6.2.2",
-        "vitest": "3.0.8"
+        "vite": "6.2.3",
+        "vitest": "3.0.9"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
@@ -112,6 +112,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@10.6.3",
+    "packageManager": "pnpm@10.6.5",
     "license": "ISC"
 }
