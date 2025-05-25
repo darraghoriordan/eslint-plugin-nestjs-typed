@@ -1,11 +1,19 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule.js";
+import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
+import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 
 interface ResultModel {
     hasColonInName: boolean;
     paramNameNotMatchedInPath: boolean;
 }
+
+type RuleOptions = [
+    {
+        shouldCheckController: boolean;
+    },
+];
 
 const nestRequestMethodDecoratorNames = new Set([
     "Get",
@@ -91,7 +99,10 @@ export const isParameterNameIncludedInAPathPart = (
     });
 };
 
-export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
+export const shouldTrigger = (
+    decorator: TSESTree.Decorator,
+    ruleOptions: RuleOptions
+): ResultModel => {
     if (!decorator) {
         return {
             hasColonInName: false,
@@ -122,22 +133,24 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     let pathPartsToCheck: string[] = [];
 
     // grab any controller path parts
-    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-    const controllerDecorator = (
-        decorator.parent.parent?.parent?.parent
-            ?.parent as TSESTree.ClassDeclaration
-    ).decorators.find((d) => {
-        return (
-            (
-                (d.expression as TSESTree.CallExpression)
-                    .callee as TSESTree.Identifier
-            ).name === "Controller"
-        );
-    }) as TSESTree.Decorator;
+    if (ruleOptions[0].shouldCheckController) {
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+        const controllerDecorator = (
+            decorator.parent.parent?.parent?.parent
+                ?.parent as TSESTree.ClassDeclaration
+        ).decorators.find((d) => {
+            return (
+                (
+                    (d.expression as TSESTree.CallExpression)
+                        .callee as TSESTree.Identifier
+                ).name === "Controller"
+            );
+        }) as TSESTree.Decorator;
 
-    pathPartsToCheck = pathPartsToCheck.concat(
-        parsePathParts(controllerDecorator)
-    );
+        pathPartsToCheck = pathPartsToCheck.concat(
+            parsePathParts(controllerDecorator)
+        );
+    }
 
     // grab any api method path parts from method decorator
     const methodDefinition = decorator.parent.parent
@@ -176,8 +189,10 @@ export const shouldTrigger = (decorator: TSESTree.Decorator): ResultModel => {
     };
 };
 
+const defaultRuleOptions: RuleOptions = [{shouldCheckController: true}];
+
 const rule = createRule<
-    [],
+    RuleOptions,
     "paramIdentifierDoesntNeedColon" | "paramIdentifierShouldMatch"
 >({
     name: "param-decorator-name-matches-route-param",
@@ -192,13 +207,41 @@ const rule = createRule<
             paramIdentifierShouldMatch:
                 'Param decorators with identifiers e.g. Param("myvar") should match a specified route parameter - e.g. Get(":myvar")',
         },
-        schema: [],
+        schema: [
+            {
+                type: "object" as JSONSchema4TypeName,
+                properties: {
+                    shouldCheckController: {
+                        description: "If the name in the @Controller() decorator should be checked for route param matches or not. Turn this option off if you use variable for Controller paths that do not contain route params.",
+                        type: "boolean",
+                    },
+                },
+            },
+        ],
         hasSuggestions: false,
         type: "suggestion",
     },
-    defaultOptions: [],
+    defaultOptions: defaultRuleOptions,
 
-    create(context) {
+    create(contextWithoutDefaults) {
+        const context =
+            contextWithoutDefaults.options &&
+            contextWithoutDefaults.options.length > 0
+                ? contextWithoutDefaults
+                : // only apply the defaults when the user provides no config
+                  (Object.setPrototypeOf(
+                      {
+                          options: defaultRuleOptions,
+                      },
+                      contextWithoutDefaults
+                  ) as Readonly<
+                      RuleContext<
+                          | "paramIdentifierDoesntNeedColon"
+                          | "paramIdentifierShouldMatch",
+                          RuleOptions
+                      >
+                  >);
+
         return {
             Decorator(node: TSESTree.Decorator): void {
                 if (
@@ -210,7 +253,7 @@ const rule = createRule<
                     return;
                 }
 
-                const result = shouldTrigger(node);
+                const result = shouldTrigger(node, context.options);
 
                 if (result.paramNameNotMatchedInPath) {
                     context.report({
