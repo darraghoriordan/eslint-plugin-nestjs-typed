@@ -1,6 +1,6 @@
 ### Rule: param-decorator-name-matches-route-param
 
-This rule will verify you have entered a `Param("name")` that has a matching url parameter in a controller or method decorator
+This rule will verify you have entered a `Param("name")` that has a matching url parameter in a `@Controller()` or method decorator (like `@Get()` or `@Post()`)
 
 NOTE: nestjs allows for fuzzy matching params in paths with `_+?()*` as regex params. This rule doesn't support parsing paths with regex so we will ignore any routes with these characters in them.
 
@@ -71,6 +71,41 @@ export class CustomBotController {
     @ApiOkResponse({type: CustomBot})
     findOne(
         @Param(":uuid") uuid: string,
+        @Request() request: RequestWithUser
+    ): Promise<CustomBot> {
+        return this.customBotService.findOne(uuid, request.user.uuid);
+    }
+}
+```
+
+-----
+
+### Configuration
+
+This rule has one option that can be configured: `shouldCheckController` which defaults to `true`.
+
+If you want to skip checking the `@Controller()` name for route param matches, you can use this configuration
+
+```ts
+    "@darraghor/param-decorator-name-matches-route-param": [
+            "error",
+            { shouldCheckController: false },
+        ],
+```
+
+With the `shouldCheckController: false` option set, the following rule will FAIL since the param `uui` does not match what is in the `@Get`. Normally this would be ignored since the `@Controller` contains a variable, which this rule cannot check the contents of.
+
+```ts
+import { SOME_PATH } from '../shared-paths';
+
+@Controller(SOME_PATH)
+export class CustomBotController {
+    constructor() {}
+
+    @Get(":uuid")
+    @ApiOkResponse({type: CustomBot})
+    findOne(
+        @Param("uui") uuid: string,
         @Request() request: RequestWithUser
     ): Promise<CustomBot> {
         return this.customBotService.findOne(uuid, request.user.uuid);

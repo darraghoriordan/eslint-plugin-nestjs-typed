@@ -206,7 +206,7 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             `,
         },
         {
-            // asterix in route means path is ignored by rule
+            // asterisk in route means path is ignored by rule
             code: `
             @ApiTags("Custom Bot")
             @ApiBearerAuth()
@@ -228,7 +228,25 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             `,
         },
         {
-            // variables are ignored by rule
+            // variables in controller cause all to be ignored by rule, by default
+            code: `
+            const MY_VAR = "custom-bot/my-controller"
+
+            @ApiTags("Custom Bot")
+            @ApiBearerAuth()
+            @UseGuards(DefaultAuthGuard)
+            @Controller(MY_VAR)
+            export class CustomBotController {
+                constructor(
+                ) {}
+
+                @Get(":uuid") //This mismatch is purposely ignored since the controller contains a variable
+                async getMajorMedicalPlanFilters(
+                  @Param('employerId', new ParseUUIDPipe()) employerId: string){}
+            }`,
+        },
+        {
+            // variables in route are ignored by rule
             code: `
             const MY_VAR="some/route"
 
@@ -363,6 +381,35 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
                 }
             }
             `,
+            errors: [
+                {
+                    messageId: "paramIdentifierShouldMatch",
+                },
+            ],
+        },
+        { 
+            code: `
+            var SOME_PATH = "custom-bot/my-controller";
+
+            @ApiTags("Custom Bot")
+            @ApiBearerAuth()
+            @UseGuards(DefaultAuthGuard)
+            @Controller(SOME_PATH)
+            export class CustomBotController {
+                constructor(
+                ) {}
+
+                @Get(":uuidd")
+                @ApiOkResponse({ type: CustomBot })
+                findOne(
+                    @Param("uuid") uuid: string,
+                    @Request() request: RequestWithUser
+                ): Promise<CustomBot> {
+                    return this.customBotService.findOne(uuid, request.user.uuid);
+                }
+            }
+            `,
+            options: [{shouldCheckController: false}],
             errors: [
                 {
                     messageId: "paramIdentifierShouldMatch",
