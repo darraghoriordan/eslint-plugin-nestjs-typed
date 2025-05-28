@@ -356,6 +356,31 @@ class Foo {
             }
     `,
         },
+        {
+            // Shouldn't error out for untyped properties, inferred types, or undecorated properties
+            //https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/289
+            code: `
+            import { Allow } from 'class-validator';
+            
+            export class CreateOrganisationDto {
+                EXAMPLE1 = [];
+                EXAMPLE2: object[] = [];
+                EXAMPLE3: Array<object> = [];
+
+                @ApiProperty({isArray: true })    
+                @Allow()
+                EXAMPLE4 = [];
+
+                @ApiProperty({isArray: true })    
+                @Allow()
+                EXAMPLE5: object[] = [];
+
+                @ApiProperty({isArray: true})    
+                @Allow()
+                EXAMPLE6!: Array<object> = [];
+            }
+    `,
+        },
     ],
     invalid: [
         {

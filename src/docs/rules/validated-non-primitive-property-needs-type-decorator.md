@@ -25,7 +25,7 @@ This rule accepts 2 options:
 This PASSES because we're validating a Person class and we have added the @Type decorator.
 
 ```ts
-export class CreateOrganisationDto {
+export class CreateOrganizationDto {
     @ApiProperty({type: Person, isArray: true})
     @IsDefined()
     @Type(() => Person)
@@ -36,7 +36,7 @@ export class CreateOrganisationDto {
 This PASSES because it is a primitive type (boolean, string, number). We don't need to tell class-transformer how to transform those.
 
 ```ts
-export class CreateOrganisationDto {
+export class CreateOrganizationDto {
     @ApiProperty({type: Person, isArray: true})
     @ValidateNested({each: true})
     @IsBoolean()
@@ -47,7 +47,7 @@ export class CreateOrganisationDto {
 This PASSES because we only check properties that have a class-validator decorator (e.g. `@IsDefined()`)
 
 ```ts
-export class CreateOrganisationDto {
+export class CreateOrganizationDto {
     @ApiProperty({type: Person, isArray: true})
     members!: Person | Date;
 }
@@ -55,31 +55,31 @@ export class CreateOrganisationDto {
 
 This PASSES because it is a primitive array. These don't need `@Type()` decorators.
 
-````ts
+```ts
 class ExampleDto {
     @ApiProperty({
       isArray: true,
     })
     @Allow()
-   exampleProperty!: string[];
+    exampleProperty!: string[];
   }
-    ```
+```
 
 This FAILS because you should always tell class-transformer the type for an array
 
 ```ts
-export class CreateOrganisationDto {
+export class CreateOrganizationDto {
     @ApiProperty({type: Person, isArray: true})
     @ValidateNested({each: true})
     @IsArray()
     members!: (Person | Date)[];
 }
-````
+```
 
 This FAILS because Date is not a primitive type (string, number, boolean)
 
 ```ts
-export class CreateOrganisationDto {
+export class CreateOrganizationDto {
     @ApiProperty({type: Person, isArray: true})
     @ValidateNested({each: true})
     @IsDate()
