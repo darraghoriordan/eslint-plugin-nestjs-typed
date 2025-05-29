@@ -64,7 +64,6 @@ const NestProvidedInjectableMapper = {
             })
             // eslint-disable-next-line @typescript-eslint/unbound-method
             .filter(NestProvidedInjectableMapper.notEmpty)
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             .forEach((m) => moduleMaps.set(m[0], m[1]));
 
         return moduleMaps;
