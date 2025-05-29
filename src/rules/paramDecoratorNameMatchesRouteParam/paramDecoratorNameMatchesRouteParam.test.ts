@@ -331,7 +331,8 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             `,
             errors: [
                 {
-                    messageId: "paramIdentifierShouldMatch",
+                    data: {paramName: "uui"},
+                    messageId: "paramIdentifierShouldMatchRouteOrController",
                 },
             ],
         },
@@ -357,7 +358,8 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             `,
             errors: [
                 {
-                    messageId: "paramIdentifierShouldMatch",
+                    data: {paramName: "uuid"},
+                    messageId: "paramIdentifierShouldMatchRouteOrController",
                 },
             ],
         },
@@ -383,11 +385,12 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             `,
             errors: [
                 {
-                    messageId: "paramIdentifierShouldMatch",
+                    data: {paramName: "uuid"},
+                    messageId: "paramIdentifierShouldMatchRouteOrController",
                 },
             ],
         },
-        { 
+        {
             code: `
             var SOME_PATH = "custom-bot/my-controller";
 
@@ -412,7 +415,8 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
             options: [{shouldCheckController: false}],
             errors: [
                 {
-                    messageId: "paramIdentifierShouldMatch",
+                    data: {paramName: "uuid"},
+                    messageId: "paramIdentifierShouldMatchRouteOnly",
                 },
             ],
         },
