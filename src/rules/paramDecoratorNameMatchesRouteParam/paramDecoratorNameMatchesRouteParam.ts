@@ -7,7 +7,13 @@ import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 interface ResultModel {
     hasColonInName: boolean;
     paramNameNotMatchedInPath: boolean;
+    paramName?: string;
 }
+
+type RuleMessageIds =
+    | "paramIdentifierDoesntNeedColon"
+    | "paramIdentifierShouldMatchRouteOrController"
+    | "paramIdentifierShouldMatchRouteOnly";
 
 type RuleOptions = [
     {
@@ -186,15 +192,13 @@ export const shouldTrigger = (
             paramName,
             pathPartsToCheck
         ),
+        paramName,
     };
 };
 
 const defaultRuleOptions: RuleOptions = [{shouldCheckController: true}];
 
-const rule = createRule<
-    RuleOptions,
-    "paramIdentifierDoesntNeedColon" | "paramIdentifierShouldMatch"
->({
+const rule = createRule<RuleOptions, RuleMessageIds>({
     name: "param-decorator-name-matches-route-param",
     meta: {
         docs: {
@@ -204,15 +208,18 @@ const rule = createRule<
         messages: {
             paramIdentifierDoesntNeedColon:
                 "You don't need to specify the colon (:) in a Param decorator",
-            paramIdentifierShouldMatch:
-                'Param decorators with identifiers e.g. Param("myvar") should match a specified route parameter - e.g. Get(":myvar")',
+            paramIdentifierShouldMatchRouteOrController:
+                'The Param "{{paramName}}" could not be found in the related route or controller',
+            paramIdentifierShouldMatchRouteOnly:
+                'The Param "{{paramName}}" could not be found in the related route',
         },
         schema: [
             {
                 type: "object" as JSONSchema4TypeName,
                 properties: {
                     shouldCheckController: {
-                        description: "If the name in the @Controller() decorator should be checked for route param matches or not. Turn this option off if you use variable for Controller paths that do not contain route params.",
+                        description:
+                            "If the name in the @Controller() decorator should be checked for route param matches or not. Turn this option off if you use variable for Controller paths that do not contain route params.",
                         type: "boolean",
                     },
                 },
@@ -234,13 +241,7 @@ const rule = createRule<
                           options: defaultRuleOptions,
                       },
                       contextWithoutDefaults
-                  ) as Readonly<
-                      RuleContext<
-                          | "paramIdentifierDoesntNeedColon"
-                          | "paramIdentifierShouldMatch",
-                          RuleOptions
-                      >
-                  >);
+                  ) as Readonly<RuleContext<RuleMessageIds, RuleOptions>>);
 
         return {
             Decorator(node: TSESTree.Decorator): void {
@@ -258,7 +259,10 @@ const rule = createRule<
                 if (result.paramNameNotMatchedInPath) {
                     context.report({
                         node: node,
-                        messageId: "paramIdentifierShouldMatch",
+                        messageId: context.options[0].shouldCheckController
+                            ? "paramIdentifierShouldMatchRouteOrController"
+                            : "paramIdentifierShouldMatchRouteOnly",
+                        data: {paramName: result.paramName},
                     });
                 }
 
