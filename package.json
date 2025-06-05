@@ -58,9 +58,9 @@
     "types": "./dist/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@typescript-eslint/scope-manager": "^8.33.0",
-        "@typescript-eslint/utils": "^8.33.0",
-        "@typescript-eslint/type-utils": "^8.33.0",
+        "@typescript-eslint/scope-manager": "^8.33.1",
+        "@typescript-eslint/utils": "^8.33.1",
+        "@typescript-eslint/type-utils": "^8.33.1",
         "eslint-module-utils": "2.12.0",
         "glob": "11.0.2",
         "reflect-metadata": "0.2.2",
@@ -74,10 +74,10 @@
         "@semantic-release/exec": "7.1.0",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
-        "@types/node": "22.15.21",
-        "@typescript-eslint/eslint-plugin": "8.33.0",
-        "@typescript-eslint/parser": "8.33.0",
-        "@typescript-eslint/rule-tester": "8.33.0",
+        "@types/node": "22.15.29",
+        "@typescript-eslint/eslint-plugin": "8.33.1",
+        "@typescript-eslint/parser": "8.33.1",
+        "@typescript-eslint/rule-tester": "8.33.1",
         "class-validator": "0.14.2",
         "eslint": "9.28.0",
         "eslint-config-prettier": "10.1.5",
@@ -94,7 +94,7 @@
         "ts-jest": "29.3.4",
         "ts-node": "10.9.2",
         "typescript": "5.8.3",
-        "typescript-eslint": "8.33.0",
+        "typescript-eslint": "8.33.1",
         "vite": "6.3.5",
         "vitest": "3.1.4"
     },
@@ -112,6 +112,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@10.11.0",
+    "packageManager": "pnpm@10.11.1",
     "license": "ISC"
 }
