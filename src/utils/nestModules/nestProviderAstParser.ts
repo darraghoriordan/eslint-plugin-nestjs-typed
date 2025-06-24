@@ -4,6 +4,12 @@ import {
     NestProvidedFilePath,
 } from "./models/NestProvidedInjectablesMap.js";
 
+function isObjectExpression(
+    node: TSESTree.Node
+): node is TSESTree.ObjectExpression {
+    return node.type === AST_NODE_TYPES.ObjectExpression;
+}
+
 export const nestProviderAstParser = {
     mapNestProviderObject(
         n: TSESTree.Property,
@@ -22,17 +28,27 @@ export const nestProviderAstParser = {
         return null;
     },
     findProvideProperty(
-        providerDeclaration: TSESTree.VariableDeclarator | undefined,
+        providerDeclaration:
+            | TSESTree.VariableDeclarator
+            | TSESTree.ObjectExpression
+            | undefined,
         propertyName: string
     ): TSESTree.Property | null {
         if (providerDeclaration) {
-            const foundProviderProperty = (
-                providerDeclaration.init as TSESTree.ObjectExpression
-            ).properties.find(
+            const properties = isObjectExpression(providerDeclaration)
+                ? providerDeclaration
+                : providerDeclaration.init;
+            // Type guard with isObjectExpression
+            if (properties === null || !isObjectExpression(properties)) {
+                console.log("null properties", properties);
+                return null;
+            }
+            const foundProviderProperty = properties.properties.find(
                 (p) =>
                     ((p as TSESTree.Property).key as TSESTree.Identifier)
                         .name === propertyName
             ) as TSESTree.Property;
+
             return foundProviderProperty;
         }
         return null;
