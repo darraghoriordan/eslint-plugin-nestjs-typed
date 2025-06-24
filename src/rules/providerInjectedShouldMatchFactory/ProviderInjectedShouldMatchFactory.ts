@@ -4,9 +4,7 @@ import {createRule} from "../../utils/createRule.js";
 //import util from "util";
 import {nestProviderAstParser} from "../../utils/nestModules/nestProviderAstParser.js";
 
-export const hasMismatchedInjected = (
-    node: TSESTree.VariableDeclarator
-): boolean => {
+const isNestProvider = (node: TSESTree.VariableDeclarator): boolean => {
     // should be a nest provider - note this doesn't check the Provider used is an import actually from nest. Assumes nest Provider. Will change if this is annoying:)
     // edit 03/06/2023 - it was annoying and someone complained on github so I added a check for a "useFactory" property on the Provider declaration
     const isNestProvider =
@@ -20,7 +18,26 @@ export const hasMismatchedInjected = (
     if (!isNestProvider) {
         return false;
     }
+    return true;
+};
+const isNestProviderWithFactory = (
+    node: TSESTree.ObjectExpression
+): boolean => {
+    // should be a nest provider - note this doesn't check the Provider used is an import actually from nest. Assumes nest Provider. Will change if this is annoying:)
+    // edit 03/06/2023 - it was annoying and someone complained on github so I added a check for a "useFactory" property on the Provider declaration
+    const isNestProvider =
+        // and there is a useFactory property in the declaration
+        nestProviderAstParser.findProvideProperty(node, "useFactory");
 
+    if (!isNestProvider) {
+        return false;
+    }
+    return true;
+};
+
+export const hasMismatchedInjected = (
+    node: TSESTree.VariableDeclarator | TSESTree.ObjectExpression
+): boolean => {
     // count number of factory params
     const factoryParameterCount = (
         nestProviderAstParser.findProvideProperty(node, "useFactory")
@@ -58,8 +75,21 @@ const rule = createRule<[], "mainMessage">({
 
     create(context) {
         return {
+            "Decorator Property:has(Identifier[name=providers]) > ArrayExpression > ObjectExpression"(
+                node: TSESTree.ObjectExpression
+            ): void {
+                if (
+                    isNestProviderWithFactory(node) &&
+                    hasMismatchedInjected(node)
+                ) {
+                    context.report({
+                        node: node,
+                        messageId: "mainMessage",
+                    });
+                }
+            },
             VariableDeclarator(node: TSESTree.VariableDeclarator): void {
-                if (hasMismatchedInjected(node)) {
+                if (isNestProvider(node) && hasMismatchedInjected(node)) {
                     context.report({
                         node: node,
                         messageId: "mainMessage",

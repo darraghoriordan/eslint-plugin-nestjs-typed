@@ -99,6 +99,15 @@ export default class UserDiscriminatedCacheInterceptor extends CacheInterceptor 
                 });
               };`,
         },
+        // No useFactory found, should be valid
+        {
+            code: `@Module({
+                      providers: [{
+                        provide: MyOtherInjectable,
+                      }],
+                    })
+                    export class JlContractModule {}`,
+        },
     ],
     invalid: [
         {
@@ -128,6 +137,27 @@ export default class UserDiscriminatedCacheInterceptor extends CacheInterceptor 
                 },
                 inject: [MyService],
             };`,
+            errors: [
+                {
+                    messageId: "mainMessage",
+                },
+            ],
+        },
+        // Inline factory in a module provider
+        {
+            code: `@Module({
+                      providers: [{
+                        provide: MyOtherInjectable,
+                        useFactory: async (
+                           config: MyService,
+                           configTwo: MySecondService
+                         ): Promise<MyOtherInjectable> => {
+                         return new MyOtherInjectable()
+                        },
+                        inject: [MyService],
+                      }],
+                    })
+                    export class MyModule {}`,
             errors: [
                 {
                     messageId: "mainMessage",
