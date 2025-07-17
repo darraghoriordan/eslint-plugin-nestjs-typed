@@ -9,13 +9,13 @@ importers:
   .:
     dependencies:
       '@typescript-eslint/scope-manager':
-        specifier: ^8.34.1
+        specifier: ^8.37.0
         version: 8.37.0
       '@typescript-eslint/type-utils':
-        specifier: ^8.34.1
+        specifier: ^8.37.0
         version: 8.37.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/utils':
-        specifier: ^8.34.1
+        specifier: ^8.37.0
         version: 8.37.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-module-utils:
         specifier: 2.12.1
