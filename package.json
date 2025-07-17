@@ -58,9 +58,9 @@
     "types": "./dist/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@typescript-eslint/scope-manager": "^8.34.1",
-        "@typescript-eslint/utils": "^8.34.1",
-        "@typescript-eslint/type-utils": "^8.34.1",
+        "@typescript-eslint/scope-manager": "^8.37.0",
+        "@typescript-eslint/utils": "^8.37.0",
+        "@typescript-eslint/type-utils": "^8.37.0",
         "eslint-module-utils": "2.12.1",
         "glob": "11.0.3",
         "reflect-metadata": "0.2.2",
