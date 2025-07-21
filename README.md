@@ -108,9 +108,7 @@ There are some tightly coupled but untyped decorators and things like that in ne
 
 ### 4. Security
 
-There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18413
-https://github.com/typestack/class-validator/issues/438
+There is a CVE for class-transformer when using random javascript objects. You need to be careful about configuring the ValidationPipe in NestJs. See [`should-specify-forbid-unknown-values`](./src/docs/rules/should-specify-forbid-unknown-values.md).
 
 ## To install
 
@@ -208,8 +206,7 @@ Note: You can easily turn off all the swagger rules if you don't use swagger by 
 Disable a single rule with the full name e.g. in your eslint configuration...
 
 ```ts
-   rules: {
-   "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
-            "off",
-   }
+    rules: {
+        "@darraghor/nestjs-typed/api-property-returning-array-should-set-array": "off",
+    }
 ```

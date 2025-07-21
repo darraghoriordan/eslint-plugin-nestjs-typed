@@ -1,6 +1,5 @@
-import {TSESTree} from "@typescript-eslint/utils";
+import {ASTUtils, TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule.js";
-import {ASTUtils} from "@typescript-eslint/utils";
 
 export const isValidationPipeNewExpression = (node: TSESTree.Node): boolean => {
     const newExpression = node as TSESTree.NewExpression;
@@ -82,7 +81,7 @@ export const shouldTriggerForVariableDeclaratorExpression = (
 };
 
 const rule = createRule<[], "shouldSpecifyForbidUnknownValues">({
-    name: "validation-pipe-should-use-forbid-unknown",
+    name: "should-specify-forbid-unknown-values",
     meta: {
         docs: {
             description:

@@ -13,7 +13,7 @@ const ruleTester = new RuleTester({
     },
 });
 
-ruleTester.run("validation-pipe-should-use-forbid-unknown", rule, {
+ruleTester.run("should-specify-forbid-unknown-values", rule, {
     valid: [
         {
             code: `
