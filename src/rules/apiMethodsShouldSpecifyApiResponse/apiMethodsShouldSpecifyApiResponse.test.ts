@@ -1,6 +1,8 @@
 import {RuleTester} from "@typescript-eslint/rule-tester";
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup.js";
-import rule from "./apiMethodsShouldSpecifyApiResponse.js";
+import rule, {
+    type ApiMethodShouldSpecifyApiResponseOptions,
+} from "./apiMethodsShouldSpecifyApiResponse.js";
 
 const tsRootDirectory = getFixturesRootDirectory();
 const ruleTester = new RuleTester({
@@ -52,6 +54,23 @@ ruleTester.run("api-method-should-specify-api-response", rule, {
                 }
             }`,
         },
+        {
+            // controller with custom response decorator
+            options: [
+                {
+                    additionalCustomApiResponseDecorators: [
+                        "ApiPaginatedResponse",
+                    ],
+                },
+            ] satisfies ApiMethodShouldSpecifyApiResponseOptions,
+            code: `class TestClass {
+                @Get()
+                @ApiPaginatedResponse({ type: TestDto, description: 'Paginated Response' })
+                public getAll(): Promise<PaginatedDto<TestDto>> {
+                    return new PaginatedDto([], 0);
+                }
+            }`,
+        },
     ],
     invalid: [
         {
@@ -70,6 +89,27 @@ ruleTester.run("api-method-should-specify-api-response", rule, {
         {
             code: `class TestClass {
                 @All()
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+            errors: [
+                {
+                    messageId: "shouldSpecifyApiResponse",
+                },
+            ],
+        },
+        {
+            // controller with custom response decorator
+            options: [
+                {
+                    additionalCustomApiResponseDecorators: [
+                        "ApiPaginatedResponse",
+                    ],
+                },
+            ] satisfies ApiMethodShouldSpecifyApiResponseOptions,
+            code: `class TestClass {
+                @Get()
                 public getAll(): Promise<string[]> {
                     return [];
                 }
