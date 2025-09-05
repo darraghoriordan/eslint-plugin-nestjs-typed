@@ -80,7 +80,7 @@
         "@typescript-eslint/rule-tester": "8.41.0",
         "class-validator": "0.14.2",
         "eslint": "9.34.0",
-        "eslint-config-prettier": "10.1.5",
+        "eslint-config-prettier": "10.1.8",
         "eslint-plugin-prefer-arrow": "1.2.3",
         "eslint-plugin-unicorn": "57.0.0",
         "globals": "16.3.0",
@@ -91,7 +91,7 @@
         "lint-staged": "15.5.2",
         "prettier": "3.6.2",
         "semantic-release": "24.2.7",
-        "ts-jest": "29.4.0",
+        "ts-jest": "29.4.1",
         "ts-node": "10.9.2",
         "typescript": "5.9.2",
         "typescript-eslint": "8.41.0",
@@ -112,6 +112,6 @@
         "lint",
         "style"
     ],
-    "packageManager": "pnpm@10.15.0",
+    "packageManager": "pnpm@10.15.1",
     "license": "ISC"
 }
