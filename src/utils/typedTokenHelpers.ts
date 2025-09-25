@@ -31,7 +31,7 @@ export const typedTokenHelpers = {
         if (checker.isArrayType(nodeType)) {
             return true;
         }
-        for (const t of tsutils.unionTypeParts(nodeType)) {
+        for (const t of tsutils.unionConstituents(nodeType)) {
             if (!checker.isArrayType(t)) {
                 return false;
             }
