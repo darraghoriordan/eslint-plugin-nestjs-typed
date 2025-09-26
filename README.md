@@ -10,6 +10,14 @@ If you use NestJs (https://nestjs.com/) these ESLint rules will help you to prev
 
 Skip to [How to configure](#to-configure) but if you have issues come back and read this whole document.
 
+```
+pnpm add -D @darraghor/eslint-plugin-nestjs-typed
+//or
+npm i -D @darraghor/eslint-plugin-nestjs-typed
+//or
+bun install -d @darraghor/eslint-plugin-nestjs-typed
+```
+
 ## Support this plugin
 
 If you use this plugin in commercial setting consider submitting PRs on work time. It saves your business money, so it makes your business money!
