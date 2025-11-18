@@ -1,7 +1,7 @@
-import {Linter} from "eslint";
+import {TSESLint} from "@typescript-eslint/utils";
 
 // Should turn off swagger rules for folks not using swagger typings
-export const rules: Partial<Linter.RulesRecord> = {
+export const rules: Partial<TSESLint.ClassicConfig.RulesRecord> = {
     "@darraghor/nestjs-typed/api-property-matches-property-optionality": "off",
     "@darraghor/nestjs-typed/api-method-should-specify-api-response": "off",
     "@darraghor/nestjs-typed/api-method-should-specify-api-operation": "off",
@@ -11,7 +11,9 @@ export const rules: Partial<Linter.RulesRecord> = {
         "off",
 };
 
-export default {
+const config = {
     extends: ["./configs/base"],
     rules,
 };
+
+export default config as TSESLint.ClassicConfig.Config;

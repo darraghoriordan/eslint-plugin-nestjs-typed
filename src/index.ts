@@ -31,14 +31,14 @@ export const parser: TSESLint.FlatConfig.Parser = {
     parseForESLint: parserBase.parseForESLint,
 };
 
-const classicPlugin = {
+const classicPlugin: Linter.Plugin = {
     configs: {
-        recommended: recommended,
-        "no-swagger": noSwagger,
+        recommended: recommended as unknown as TSESLint.ClassicConfig.Config,
+        "no-swagger": noSwagger as unknown as TSESLint.ClassicConfig.Config,
     },
     rules,
     meta,
-} satisfies Linter.Plugin;
+};
 
 export const plugin: TSESLint.FlatConfig.Plugin = classicPlugin as Omit<
     typeof classicPlugin,

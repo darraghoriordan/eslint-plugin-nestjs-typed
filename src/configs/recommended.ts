@@ -1,4 +1,4 @@
-import {Linter} from "eslint";
+import {Linter} from "@typescript-eslint/utils/ts-eslint";
 
 export const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/provided-injected-should-match-factory-parameters":
