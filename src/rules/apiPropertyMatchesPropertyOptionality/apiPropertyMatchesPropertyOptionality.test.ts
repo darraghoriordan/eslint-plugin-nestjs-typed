@@ -26,6 +26,24 @@ ruleTester.run("api-property-matches-property-optionality", rule, {
                 @ApiPropertyOptional()
                 thisIsAStringProp: string | undefined;}`,
         },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiPropertyOptional()
+                thisIsAStringProp?: string = 'default';}`,
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiPropertyOptional()
+                thisIsAStringProp: string = 'default';}`,
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty()
+                thisIsAStringProp!: string;}`,
+        },
     ],
     invalid: [
         {
@@ -65,6 +83,42 @@ ruleTester.run("api-property-matches-property-optionality", rule, {
             errors: [
                 {
                     messageId: "shouldUseOptionalDecorator",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty()
+                thisIsAStringProp: string = 'default';
+            }`,
+            errors: [
+                {
+                    messageId: "shouldUseOptionalDecorator",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty()
+                thisIsAStringProp?: string = 'default';
+            }`,
+            errors: [
+                {
+                    messageId: "shouldUseOptionalDecorator",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiPropertyOptional()
+                thisIsAStringProp!: string = 'default';
+            }`,
+            errors: [
+                {
+                    messageId: "shouldUseRequiredDecorator",
                 },
             ],
         },

@@ -31,7 +31,7 @@ export const typedTokenHelpers = {
         if (checker.isArrayType(nodeType)) {
             return true;
         }
-        for (const t of tsutils.unionTypeParts(nodeType)) {
+        for (const t of tsutils.unionConstituents(nodeType)) {
             if (!checker.isArrayType(t)) {
                 return false;
             }
@@ -161,8 +161,14 @@ export const typedTokenHelpers = {
                 (t) => t.type === AST_NODE_TYPES.TSUndefinedKeyword
             ) !== undefined;
 
+        const hasInitializer = node.value !== null && node.value !== undefined;
+
+        const isDefinite = node.definite;
+
         const isOptionalPropertyValue =
-            node.optional || isUndefinedType || false;
+            !isDefinite &&
+            (node.optional || isUndefinedType || hasInitializer || false);
+
         return isOptionalPropertyValue;
     },
     /**
