@@ -74,7 +74,7 @@
         "@semantic-release/exec": "7.1.0",
         "@types/eslint": "9.6.1",
         "@types/jest": "29.5.14",
-        "@types/node": "22.18.11",
+        "@types/node": "22.19.1",
         "@typescript-eslint/eslint-plugin": "8.46.4",
         "@typescript-eslint/parser": "8.46.4",
         "@typescript-eslint/rule-tester": "8.46.4",
@@ -96,7 +96,7 @@
         "typescript": "5.9.3",
         "typescript-eslint": "8.46.4",
         "vite": "6.4.1",
-        "vitest": "3.2.4"
+        "vitest": "4.0.9"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
