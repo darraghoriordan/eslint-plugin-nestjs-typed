@@ -1,4 +1,5 @@
 import type {FlatConfig, Linter} from "@typescript-eslint/utils/ts-eslint";
+import type {Linter as EslintLinter} from "eslint";
 import noSwagger from "./configs/noSwagger.js";
 import recommended from "./configs/recommended.js";
 import rules from "./rules/index.js";
@@ -63,23 +64,23 @@ const flatBaseConfig = (
 
 // export the classic plugin configs
 export {classicPlugin};
-export type ConfigArray = TSESLint.FlatConfig.ConfigArray;
+export type ConfigArray = EslintLinter.Config[];
 // export the flat configs
 export default {
     plugin,
     configs: {
         flatRecommended: [
-            flatBaseConfig(plugin, parser),
+            flatBaseConfig(plugin, parser) as unknown as EslintLinter.Config,
             {
                 name: "@darraghor/nestjs-typed/recommended",
                 rules: recommended.rules,
-            },
+            } as unknown as EslintLinter.Config,
         ],
         flatNoSwagger: [
             {
                 name: "@darraghor/nestjs-typed/no-swagger",
                 rules: noSwagger.rules,
-            },
+            } as unknown as EslintLinter.Config,
         ],
     } as {
         flatRecommended: ConfigArray;
