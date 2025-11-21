@@ -1,5 +1,5 @@
 import {AST_NODE_TYPES, TSESLint, TSESTree} from "@typescript-eslint/utils";
-import {parse, ParserServices} from "@typescript-eslint/parser";
+import {parse, ParserServices, withoutProjectParserOptions } from "@typescript-eslint/parser";
 import ts from "typescript";
 import * as tsutilsImp from "ts-api-utils";
 
@@ -123,12 +123,14 @@ export const typedTokenHelpers = {
         path: string,
         context: Readonly<TSESLint.RuleContext<never, never[]>>
     ): TSESTree.Program {
+        const parserOptions = withoutProjectParserOptions(context.languageOptions?.parserOptions ?? {});
+        
         return parse(code, {
             filePath: path,
             range: true,
             tokens: true,
             loc: true,
-            ...context.parserOptions,
+            ...parserOptions,
         });
     },
     isEnumType(type: ts.Type) {
