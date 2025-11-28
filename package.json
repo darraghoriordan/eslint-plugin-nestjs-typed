@@ -96,7 +96,7 @@
         "typescript": "5.9.3",
         "typescript-eslint": "8.48.0",
         "vite": "6.4.1",
-        "vitest": "4.0.13"
+        "vitest": "4.0.14"
     },
     "peerDependencies": {
         "@typescript-eslint/parser": "^7.0.0 || ^8.0.0",
