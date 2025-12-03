@@ -19,11 +19,15 @@ jobs:
             - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               with:
                   node-version-file: ".nvmrc"
+                  registry-url: "https://registry.npmjs.org"
+
                   cache: pnpm
             - run: pnpm install --frozen-lockfile
             - run: pnpm test
             - run: pnpm build
             - name: Release
               env:
+                  NPM_CONFIG_PROVENANCE: true
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
                   GH_TOKEN: ${{ secrets.GH_TOKEN }}
               run: npx semantic-release

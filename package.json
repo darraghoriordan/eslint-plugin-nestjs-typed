@@ -26,6 +26,7 @@
         ]
     },
     "publishConfig": {
+        "access": "public",
         "provenance": true
     },
     "homepage": "https://github.com/darraghoriordan/eslint-plugin-nestjs-typed",
