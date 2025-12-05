@@ -25,6 +25,7 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
         schema: [
             {
                 type: "object" as JSONSchema4TypeName,
+                additionalProperties: false,
                 properties: {
                     customList: {
                         description:
