@@ -43,6 +43,7 @@ const rule = createRule<
         schema: [
             {
                 type: "object" as JSONSchema4TypeName,
+                additionalProperties: false,
                 properties: {
                     additionalTypeDecorators: {
                         description:

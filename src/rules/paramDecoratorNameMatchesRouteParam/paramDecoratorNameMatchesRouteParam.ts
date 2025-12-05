@@ -216,6 +216,7 @@ const rule = createRule<RuleOptions, RuleMessageIds>({
         schema: [
             {
                 type: "object" as JSONSchema4TypeName,
+                additionalProperties: false,
                 properties: {
                     shouldCheckController: {
                         description:

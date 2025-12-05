@@ -87,6 +87,7 @@ const rule = createRule<
         schema: [
             {
                 type: "object",
+                additionalProperties: false,
                 properties: {
                     additionalCustomApiResponseDecorators: {
                         description:

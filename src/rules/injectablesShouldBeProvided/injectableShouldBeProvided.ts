@@ -133,6 +133,7 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
         schema: [
             {
                 type: "object" as JSONSchema4TypeName,
+                additionalProperties: false,
                 properties: {
                     src: {
                         description:
