@@ -66,3 +66,25 @@ The following code will pass because all arrays are alphabetical ASC.
 })
 export class MainModule {}
 ```
+
+### Factory Providers
+
+The rule correctly handles factory providers with `useFactory` and `inject` arrays. The `inject` array order must match the parameters of the `useFactory` function, so this array is **not sorted** by the rule.
+
+The following code will pass even though the `inject` array is not in alphabetical order, because it must match the `useFactory` parameters:
+
+```ts
+@Module({
+    providers: [
+        {
+            provide: 'EXAMPLE_PROVIDER',
+            useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
+                return new WhatEver();
+            },
+            // inject array is NOT sorted - it must match the useFactory parameters
+            inject: [BProvider, AProvider],
+        }
+    ]
+})
+export class MainModule {}
+```

@@ -28,6 +28,7 @@ export const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/api-method-should-specify-api-operation": "off",
     "@darraghor/nestjs-typed/sort-module-metadata-arrays": "off",
     "@darraghor/nestjs-typed/no-duplicate-decorators": "error",
+    "@darraghor/nestjs-typed/use-injectable-provided-token": "error",
 };
 export default {
     extends: ["./configs/base"],
