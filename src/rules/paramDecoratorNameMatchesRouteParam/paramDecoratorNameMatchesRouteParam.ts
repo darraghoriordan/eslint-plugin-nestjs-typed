@@ -39,7 +39,8 @@ export const parsePathParts = (decorator: TSESTree.Decorator): string[] => {
 
     if (
         decoratorArgument?.type === TSESTree.AST_NODE_TYPES.TemplateLiteral ||
-        decoratorArgument?.type === TSESTree.AST_NODE_TYPES.Identifier
+        decoratorArgument?.type === TSESTree.AST_NODE_TYPES.Identifier ||
+        decoratorArgument?.type === TSESTree.AST_NODE_TYPES.MemberExpression
     ) {
         return ["dareslint__skip"];
     }

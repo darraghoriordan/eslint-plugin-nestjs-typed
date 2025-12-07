@@ -281,6 +281,38 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
                   @Param('chatId') chatId: string){}
             }`,
         },
+        {
+            // enum values in decorators are ignored by rule
+            code: `
+            enum AppRoutes {
+                Root = 'app',
+                VerifyParams = ':id',
+            }
+
+            @Controller(AppRoutes.Root)
+            export class AppController {
+                @Post(AppRoutes.VerifyParams)
+                verifyParams(@Param('id') id: string) {
+                    return { token: id };
+                }
+            }`,
+        },
+        {
+            // static class properties in decorators are ignored by rule
+            code: `
+            class Routes {
+                static Root = 'app';
+                static VerifyParams = ':id';
+            }
+
+            @Controller(Routes.Root)
+            export class AppController {
+                @Post(Routes.VerifyParams)
+                verifyParams(@Param('id') id: string) {
+                    return { token: id };
+                }
+            }`,
+        },
     ],
     invalid: [
         {
