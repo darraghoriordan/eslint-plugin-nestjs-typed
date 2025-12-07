@@ -118,17 +118,27 @@ export const typedTokenHelpers = {
 
         return decorators || [];
     },
+    /**
+     * Parses code to AST without type information.
+     * This is used for scanning files to extract module metadata.
+     * We intentionally do NOT spread context.parserOptions here because
+     * that would include `project` or `projectService` settings which
+     * create a full TypeScript program for each file - extremely slow
+     * and unnecessary when we only need to parse decorators.
+     */
     parseStringToAst(
         code: string,
         path: string,
-        context: Readonly<TSESLint.RuleContext<never, never[]>>
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        _context: Readonly<TSESLint.RuleContext<never, never[]>>
     ): TSESTree.Program {
         return parse(code, {
             filePath: path,
             range: true,
             tokens: true,
             loc: true,
-            ...context.parserOptions,
+            // Note: We don't spread context.parserOptions here to avoid
+            // creating TypeScript programs for each scanned file
         });
     },
     isEnumType(type: ts.Type) {
