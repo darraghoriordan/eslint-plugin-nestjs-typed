@@ -15,6 +15,7 @@ import apiMethodsShouldBeGuarded from "./apiMethodsShouldBeGuarded/apiMethodsSho
 import apiMethodsShouldSpecifyApiOperation from "./apiMethodsShouldSpecifyApiOperation/apiMethodsShouldSpecifyApiOperation.js";
 import sortModuleMetadataArrays from "./sortModuleMetadataArrays/sortModuleMetadataArrays.js";
 import noDuplicateDecorators from "./noDuplicateDecorators/noDuplicateDecorators.js";
+import useInjectableProvidedToken from "./useInjectableProvidedToken/useInjectableProvidedToken.js";
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
@@ -41,6 +42,7 @@ const allRules = {
     "all-properties-are-whitelisted": allPropertiesAreWhitelisted,
     "api-methods-should-be-guarded": apiMethodsShouldBeGuarded,
     "sort-module-metadata-arrays": sortModuleMetadataArrays,
+    "use-injectable-provided-token": useInjectableProvidedToken,
 };
 
 export default allRules;
