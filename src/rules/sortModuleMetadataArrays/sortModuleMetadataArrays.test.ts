@@ -42,6 +42,37 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
             })
             export class MainModule {}`,
         },
+        {
+            // Factory provider with inject array should NOT be sorted
+            // The inject array order must match the useFactory parameters
+            code: `@Module({
+                providers: [
+                    {
+                        provide: 'EXAMPLE_PROVIDER',
+                        useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
+                            return new WhatEver();
+                        },
+                        inject: [BProvider, AProvider],
+                    }
+                ]
+            })
+            export class MainModule {}`,
+        },
+        {
+            // Factory provider with multiple dependencies in specific order
+            code: `@Module({
+                providers: [
+                    {
+                        provide: 'DATABASE_CONNECTION',
+                        useFactory: (config: ConfigService, logger: Logger, cache: CacheService) => {
+                            return createConnection(config, logger, cache);
+                        },
+                        inject: [ConfigService, Logger, CacheService],
+                    }
+                ]
+            })
+            export class MainModule {}`,
+        },
     ],
     invalid: [
         {
@@ -338,6 +369,59 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
                 ],
             })
             export class MainModule {}`,
+            errors: [
+                {
+                    messageId: "moduleMetadataArraysAreSorted",
+                },
+            ],
+        },
+        {
+            // Module with factory provider - should sort top-level providers array
+            // but NOT the inject array
+            code: `@Module({
+                providers: [
+                    BProvider,
+                    {
+                        provide: 'EXAMPLE_PROVIDER',
+                        useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
+                            return new WhatEver();
+                        },
+                        inject: [BProvider, AProvider],
+                    },
+                    AProvider,
+                ]
+            })
+            export class MainModule {}`,
+            output: [
+                `@Module({
+                providers: [
+                    {
+                        provide: 'EXAMPLE_PROVIDER',
+                        useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
+                            return new WhatEver();
+                        },
+                        inject: [BProvider, AProvider],
+                    },
+                    BProvider,
+                    AProvider,
+                ]
+            })
+            export class MainModule {}`,
+                `@Module({
+                providers: [
+                    {
+                        provide: 'EXAMPLE_PROVIDER',
+                        useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
+                            return new WhatEver();
+                        },
+                        inject: [BProvider, AProvider],
+                    },
+                    AProvider,
+                    BProvider,
+                ]
+            })
+            export class MainModule {}`,
+            ],
             errors: [
                 {
                     messageId: "moduleMetadataArraysAreSorted",
