@@ -381,6 +381,23 @@ class Foo {
             }
     `,
         },
+        {
+            // Array<{}> with inline object type - should not crash
+            code: `
+            import { IsArray } from 'class-validator';
+            
+            export class ExampleDto {
+                @ApiProperty({
+                    isArray: true,
+                })
+                @IsArray()
+                items: Array<{
+                    id: string;
+                    label: string;
+                }>;
+            }
+    `,
+        },
     ],
     invalid: [
         {

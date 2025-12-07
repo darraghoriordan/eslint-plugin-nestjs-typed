@@ -13,6 +13,7 @@ const primitiveTypes = new Set([
     AST_NODE_TYPES.TSUnknownKeyword,
     AST_NODE_TYPES.TSAnyKeyword,
     AST_NODE_TYPES.TSObjectKeyword,
+    AST_NODE_TYPES.TSTypeLiteral, // Inline object types like {id: string}
 ]);
 export type ValidateNonPrimitivePropertyTypeDecoratorOptions = [
     {
@@ -110,7 +111,7 @@ const rule = createRule<
                             node.typeAnnotation
                                 ?.typeAnnotation as TSESTree.TSTypeReference
                         )?.typeArguments?.params;
-                        if (foundParams && foundParams.length === 1) {
+                        if (foundParams?.length === 1) {
                             mainType = foundParams[0].type;
                         }
                     } else {
@@ -224,16 +225,17 @@ const rule = createRule<
                                         ?.typeAnnotation as TSESTree.TSTypeReference
                                 ).typeArguments?.params;
 
-                                if (foundParams && foundParams.length === 1) {
-                                    const typeName = (
-                                        foundParams[0] as TSESTree.TSTypeReference
-                                    ).typeName;
-
+                                if (foundParams?.length === 1) {
+                                    const firstParam = foundParams[0];
+                                    
+                                    // Check if the parameter is a type reference (not an inline type like {})
                                     if (
-                                        typeName.type ===
+                                        firstParam.type ===
+                                        AST_NODE_TYPES.TSTypeReference &&
+                                        firstParam.typeName.type ===
                                         AST_NODE_TYPES.Identifier
                                     ) {
-                                        typeIdentifier = typeName.name;
+                                        typeIdentifier = firstParam.typeName.name;
                                     }
                                 }
                             }
