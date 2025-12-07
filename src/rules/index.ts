@@ -17,7 +17,7 @@ import sortModuleMetadataArrays from "./sortModuleMetadataArrays/sortModuleMetad
 import noDuplicateDecorators from "./noDuplicateDecorators/noDuplicateDecorators.js";
 import useCorrectEndpointNamingConvention from "./useCorrectEndpointNamingConvention/useCorrectEndpointNamingConvention.js";
 import useInjectableProvidedToken from "./useInjectableProvidedToken/useInjectableProvidedToken.js";
-
+import apiPropertyShouldHaveApiExtraModels from "./apiPropertyShouldHaveApiExtraModels/apiPropertyShouldHaveApiExtraModels.js";
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
@@ -47,6 +47,8 @@ const allRules = {
     "use-correct-endpoint-naming-convention":
         useCorrectEndpointNamingConvention,
     "use-injectable-provided-token": useInjectableProvidedToken,
+    "api-property-should-have-api-extra-models":
+        apiPropertyShouldHaveApiExtraModels,
 };
 
 export default allRules;
