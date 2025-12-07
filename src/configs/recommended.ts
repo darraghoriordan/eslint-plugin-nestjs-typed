@@ -31,6 +31,8 @@ export const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/use-injectable-provided-token": "error",
     "@darraghor/nestjs-typed/api-property-should-have-api-extra-models":
         "error",
+    "@darraghor/nestjs-typed/api-operation-summary-description-capitalized":
+        "error",
     "@darraghor/nestjs-typed/use-dependency-injection": "off",
 };
 export default {

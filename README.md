@@ -71,6 +71,7 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 |                                       | [`api-method-should-specify-api-operation`](./src/docs/rules/api-method-should-specify-api-operation.md)                             | ✅                            |
 |                                       | [`api-enum-property-best-practices`](./src/docs/rules/api-enum-property-best-practices.md)                                           | ✅                            |
 |                                       | [`api-property-returning-array-should-set-array`](./src/docs/rules/api-property-returning-array-should-set-array.md)                 | ✅                            |
+|                                       | [`api-operation-summary-description-capitalized`](./src/docs/rules/api-operation-summary-description-capitalized.md)                 | ✅                            |
 |                                       |                                                                                                                                      |                               |
 | Preventing bugs                       | [`param-decorator-name-matches-route-param`](./src/docs/rules/param-decorator-name-matches-route-param.md)                           | ✅                            |
 |                                       | [`validate-nested-of-array-should-set-each`](./src/docs/rules/validate-nested-of-array-should-set-each.md)                           | ✅                            |
