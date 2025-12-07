@@ -63,6 +63,7 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 | Nest Modules and Dependency Injection | [`provided-injected-should-match-factory-parameters`](./src/docs/rules/provided-injected-should-match-factory-parameters.md)         | ✅                            |
 |                                       | [`injectable-should-be-provided`](./src/docs/rules/injectable-should-be-provided.md)                                                 | ✅                            |
 |                                       | [`use-injectable-provided-token`](./src/docs/rules/use-injectable-provided-token.md)                                                 | ✅                            |
+|                                       | [`use-dependency-injection`](./src/docs/rules/use-dependency-injection.md)                                                           | ❌                            |
 |                                       |                                                                                                                                      |                               |
 | Nest Swagger                          | [`api-property-matches-property-optionality`](./src/docs/rules/api-property-matches-property-optionality.md)                         | ✅                            |
 |                                       | [`controllers-should-supply-api-tags`](./src/docs/rules/controllers-should-supply-api-tags.md)                                       | ✅                            |
@@ -78,7 +79,7 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 |                                       | [`all-properties-are-whitelisted`](./src/docs/rules/all-properties-are-whitelisted.md)                                               | ✅                            |
 |                                       | [`all-properties-have-explicit-defined`](./src/docs/rules/all-properties-have-explicit-defined.md)                                   | ✅                            |
 |                                       | [`no-duplicate-decorators`](./src/docs/rules/no-duplicate-decorators.md)                                                             | ✅                            |
-|                                       | [`should-specify-forbid-unknown-values`](./src/docs/rules/should-specify-forbid-unknown-values.md)                                   | ✅                            |
+|                                       | [`validation-pipe-should-use-forbid-unknown`](./src/docs/rules/validation-pipe-should-use-forbid-unknown.md)                                   | ✅                            |
 |                                       |                                                                                                                                      |                               |
 | Security                              | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | ❌                            |
 |                                       |                                                                                                                                      |                               |

@@ -19,6 +19,7 @@ import useCorrectEndpointNamingConvention from "./useCorrectEndpointNamingConven
 import useInjectableProvidedToken from "./useInjectableProvidedToken/useInjectableProvidedToken.js";
 import apiPropertyShouldHaveApiExtraModels from "./apiPropertyShouldHaveApiExtraModels/apiPropertyShouldHaveApiExtraModels.js";
 import apiOperationSummaryDescriptionCapitalized from "./apiOperationSummaryDescriptionCapitalized/apiOperationSummaryDescriptionCapitalized.js";
+import useDependencyInjection from "./useDependencyInjection/useDependencyInjection.js";
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
@@ -52,6 +53,7 @@ const allRules = {
         apiPropertyShouldHaveApiExtraModels,
     "api-operation-summary-description-capitalized":
         apiOperationSummaryDescriptionCapitalized,
+    "use-dependency-injection": useDependencyInjection,
 };
 
 export default allRules;

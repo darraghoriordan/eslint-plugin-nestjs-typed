@@ -33,6 +33,7 @@ export const rules: Partial<Linter.RulesRecord> = {
         "error",
     "@darraghor/nestjs-typed/api-operation-summary-description-capitalized":
         "error",
+    "@darraghor/nestjs-typed/use-dependency-injection": "off",
 };
 export default {
     extends: ["./configs/base"],
