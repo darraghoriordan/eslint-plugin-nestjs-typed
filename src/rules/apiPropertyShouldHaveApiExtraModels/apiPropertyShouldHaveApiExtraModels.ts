@@ -21,7 +21,8 @@ const extractModelsFromSchemaReferences = (
             const referenceProperty = element.properties.find(
                 (property) =>
                     property.type === AST_NODE_TYPES.Property &&
-                    (property.key as TSESTree.Identifier).name === "$ref"
+                    property.key.type === AST_NODE_TYPES.Identifier &&
+                    property.key.name === "$ref"
             ) as TSESTree.Property | undefined;
 
             if (
@@ -31,8 +32,8 @@ const extractModelsFromSchemaReferences = (
                 const callExpression = referenceProperty.value;
                 // Check if it's a getSchemaPath call
                 if (
-                    (callExpression.callee as TSESTree.Identifier).name ===
-                        "getSchemaPath" &&
+                    callExpression.callee.type === AST_NODE_TYPES.Identifier &&
+                    callExpression.callee.name === "getSchemaPath" &&
                     callExpression.arguments.length > 0
                 ) {
                     const firstArgument = callExpression.arguments[0];
@@ -82,10 +83,8 @@ const getModelsFromApiPropertyDecorator = (
     for (const property of firstArgument.properties) {
         if (
             property.type === AST_NODE_TYPES.Property &&
-            (property.key as TSESTree.Identifier).name &&
-            ["oneOf", "allOf", "anyOf"].includes(
-                (property.key as TSESTree.Identifier).name
-            )
+            property.key.type === AST_NODE_TYPES.Identifier &&
+            ["oneOf", "allOf", "anyOf"].includes(property.key.name)
         ) {
             // The value should be an array expression
             if (property.value.type === AST_NODE_TYPES.ArrayExpression) {
@@ -137,10 +136,11 @@ const rule = createRule<[], "shouldUseApiExtraModels">({
                     let schemaType = "oneOf/allOf/anyOf";
                     if (firstArgument) {
                         for (const property of firstArgument.properties) {
-                            if (property.type === AST_NODE_TYPES.Property) {
-                                const key = (
-                                    property.key as TSESTree.Identifier
-                                ).name;
+                            if (
+                                property.type === AST_NODE_TYPES.Property &&
+                                property.key.type === AST_NODE_TYPES.Identifier
+                            ) {
+                                const key = property.key.name;
                                 if (["oneOf", "allOf", "anyOf"].includes(key)) {
                                     schemaType = key;
                                     break;
