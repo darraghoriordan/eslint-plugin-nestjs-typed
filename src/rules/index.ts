@@ -15,6 +15,7 @@ import apiMethodsShouldBeGuarded from "./apiMethodsShouldBeGuarded/apiMethodsSho
 import apiMethodsShouldSpecifyApiOperation from "./apiMethodsShouldSpecifyApiOperation/apiMethodsShouldSpecifyApiOperation.js";
 import sortModuleMetadataArrays from "./sortModuleMetadataArrays/sortModuleMetadataArrays.js";
 import noDuplicateDecorators from "./noDuplicateDecorators/noDuplicateDecorators.js";
+import useCorrectEndpointNamingConvention from "./useCorrectEndpointNamingConvention/useCorrectEndpointNamingConvention.js";
 import useInjectableProvidedToken from "./useInjectableProvidedToken/useInjectableProvidedToken.js";
 import apiPropertyShouldHaveApiExtraModels from "./apiPropertyShouldHaveApiExtraModels/apiPropertyShouldHaveApiExtraModels.js";
 const allRules = {
@@ -43,6 +44,8 @@ const allRules = {
     "all-properties-are-whitelisted": allPropertiesAreWhitelisted,
     "api-methods-should-be-guarded": apiMethodsShouldBeGuarded,
     "sort-module-metadata-arrays": sortModuleMetadataArrays,
+    "use-correct-endpoint-naming-convention":
+        useCorrectEndpointNamingConvention,
     "use-injectable-provided-token": useInjectableProvidedToken,
     "api-property-should-have-api-extra-models":
         apiPropertyShouldHaveApiExtraModels,
