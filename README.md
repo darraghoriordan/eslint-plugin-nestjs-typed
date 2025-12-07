@@ -78,7 +78,7 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 |                                       | [`all-properties-are-whitelisted`](./src/docs/rules/all-properties-are-whitelisted.md)                                               | ✅                            |
 |                                       | [`all-properties-have-explicit-defined`](./src/docs/rules/all-properties-have-explicit-defined.md)                                   | ✅                            |
 |                                       | [`no-duplicate-decorators`](./src/docs/rules/no-duplicate-decorators.md)                                                             | ✅                            |
-|                                       | [`should-specify-forbid-unknown-values`](./src/docs/rules/should-specify-forbid-unknown-values.md)                                   | ✅                            |
+|                                       | [`validation-pipe-should-use-forbid-unknown`](./src/docs/rules/validation-pipe-should-use-forbid-unknown.md)                                   | ✅                            |
 |                                       |                                                                                                                                      |                               |
 | Security                              | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | ❌                            |
 |                                       |                                                                                                                                      |                               |
