@@ -79,6 +79,8 @@ export const isFactoryProviderInjectArray = (
 
     // Check if this ObjectExpression has a `useFactory` property
     // If it does, this is a factory provider and the inject array should NOT be sorted
+    // Note: In NestJS, `useFactory` and `inject` are always identifier properties,
+    // not computed properties or method definitions, so we only check for identifiers
     const hasUseFactory = objectExpression.properties.some((property) => {
         return (
             property.type === TSESTree.AST_NODE_TYPES.Property &&
