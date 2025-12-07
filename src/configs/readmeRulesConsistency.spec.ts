@@ -58,9 +58,24 @@ describe("README rules table consistency", () => {
         const readmePath = resolve(repoRoot, "README.md");
         const readmeContent = readFileSync(readmePath, "utf8");
 
-        // Extract rule links from README table
+        // Extract only the table section to avoid false positives from other parts of README
+        const tableSectionRegex =
+            /## Index of available rules\s+([\s\S]*?)(?=\n##|\n\n\*\*|$)/;
+        const tableSectionMatch = tableSectionRegex.exec(readmeContent);
+        expect(
+            tableSectionMatch,
+            "Could not find 'Index of available rules' table section in README"
+        ).not.toBeNull();
+
+        if (!tableSectionMatch) {
+            return; // This line won't be reached due to the expect above, but it satisfies TypeScript
+        }
+
+        const tableContent = tableSectionMatch[1];
+
+        // Extract rule links from README table section only
         const readmeRuleMatches = Array.from(
-            readmeContent.matchAll(/\[`([^`]+)`\]/g)
+            tableContent.matchAll(/\[`([^`]+)`\]/g)
         );
         const readmeRules = Array.from(
             new Set(readmeRuleMatches.map((match) => match[1]))
@@ -103,6 +118,9 @@ describe("README rules table consistency", () => {
         });
 
         // Extract the table section
+        // NOTE: This test depends on the README having a "## Index of available rules" section
+        // followed by a markdown table. If the README format changes significantly, this test
+        // may need to be updated to match the new structure.
         const tableSectionRegex =
             /## Index of available rules\s+([\s\S]*?)(?=\n##|\n\n\*\*|$)/;
         const tableSection = tableSectionRegex.exec(readmeContent);
@@ -154,8 +172,15 @@ describe("README rules table consistency", () => {
 
         const readmePath = resolve(repoRoot, "README.md");
         const readmeContent = readFileSync(readmePath, "utf8");
+
+        // Extract only the table section to count rules
+        const tableSectionRegex =
+            /## Index of available rules\s+([\s\S]*?)(?=\n##|\n\n\*\*|$)/;
+        const tableSectionMatch = tableSectionRegex.exec(readmeContent);
+        const tableContent = tableSectionMatch?.[1] ?? "";
+
         const readmeRuleMatches = Array.from(
-            readmeContent.matchAll(/\[`([^`]+)`\]/g)
+            tableContent.matchAll(/\[`([^`]+)`\]/g)
         );
         const readmeRuleCount = new Set(
             readmeRuleMatches.map((match) => match[1])

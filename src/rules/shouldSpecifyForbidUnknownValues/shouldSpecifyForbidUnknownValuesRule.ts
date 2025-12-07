@@ -1,14 +1,13 @@
-import {TSESTree} from "@typescript-eslint/utils";
+import {TSESTree, AST_NODE_TYPES} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule.js";
 import {ASTUtils} from "@typescript-eslint/utils";
 
 export const isValidationPipeNewExpression = (node: TSESTree.Node): boolean => {
     const newExpression = node as TSESTree.NewExpression;
-    const callee = newExpression.callee as TSESTree.Identifier;
-    if (callee?.name === "ValidationPipe") {
-        return true;
+    if (newExpression.callee.type !== AST_NODE_TYPES.Identifier) {
+        return false;
     }
-    return false;
+    return newExpression.callee.name === "ValidationPipe";
 };
 export const checkObjectExpression = (
     os: TSESTree.ObjectExpression
