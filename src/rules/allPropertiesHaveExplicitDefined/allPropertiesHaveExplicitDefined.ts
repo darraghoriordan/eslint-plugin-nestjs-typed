@@ -15,7 +15,6 @@ const rule = createRule<
     | "missing-is-defined-decorator"
     | "missing-is-optional-decorator"
     | "conflicting-defined-decorators-defined-optional"
-    | "conflicting-defined-decorators-defined-validate-if"
     | "conflicting-defined-decorators-optional-validate-if"
     | "conflicting-defined-decorators-all"
 >({
@@ -32,8 +31,6 @@ const rule = createRule<
                 "Optional properties must have @IsOptional() or @ValidateIf() decorator",
             "conflicting-defined-decorators-defined-optional":
                 "Properties can have @IsDefined() or @IsOptional() but not both",
-            "conflicting-defined-decorators-defined-validate-if":
-                "Properties can have @IsDefined() or @ValidateIf() but not both",
             "conflicting-defined-decorators-optional-validate-if":
                 "Properties can have @IsOptional() or @ValidateIf() but not both",
             "conflicting-defined-decorators-all":
@@ -83,15 +80,6 @@ const rule = createRule<
                             node: propertyDefinition,
                             messageId:
                                 "conflicting-defined-decorators-defined-optional",
-                        });
-                    } else if (
-                        decoratorsStatus.hasIsDefinedDecorator &&
-                        decoratorsStatus.hasValidateIfDecorator
-                    ) {
-                        context.report({
-                            node: propertyDefinition,
-                            messageId:
-                                "conflicting-defined-decorators-defined-validate-if",
                         });
                     } else if (
                         decoratorsStatus.hasIsOptionalDecorator &&

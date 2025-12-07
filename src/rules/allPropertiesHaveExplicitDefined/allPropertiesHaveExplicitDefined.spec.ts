@@ -125,6 +125,27 @@ class A {
 }
     `,
         },
+        {
+            code: `
+import { IsDefined, IsString, ValidateIf } from 'class-validator';
+class A {
+  @ValidateIf((o) => !o.id)
+  @IsDefined()
+  @IsString()
+  key?: string
+}
+    `,
+        },
+        {
+            code: `
+import { IsDefined, ValidateIf } from 'class-validator';
+class A {
+  @ValidateIf((o) => !o.id)
+  @IsDefined()
+  key?: string
+}
+    `,
+        },
     ],
     invalid: [
         {
@@ -214,22 +235,6 @@ class A {
                 {
                     messageId:
                         "conflicting-defined-decorators-defined-optional",
-                },
-            ],
-        },
-        {
-            code: `
-            import { ValidateIf, IsDefined } from 'class-validator';
-class A {
-  @IsDefined()
-  @ValidateIf()
-  b?: string
-}
-    `,
-            errors: [
-                {
-                    messageId:
-                        "conflicting-defined-decorators-defined-validate-if",
                 },
             ],
         },
