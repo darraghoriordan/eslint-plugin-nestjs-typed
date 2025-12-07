@@ -10,8 +10,14 @@ import {createRule} from "../../utils/createRule.js";
 import {Type, TypeChecker} from "typescript";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 
+type Options = [
+    {
+        additionalDecorators?: string[];
+    },
+];
+
 const rule = createRule<
-    [],
+    Options,
     | "missing-is-defined-decorator"
     | "missing-is-optional-decorator"
     | "conflicting-defined-decorators-defined-optional"
@@ -37,11 +43,31 @@ const rule = createRule<
                 "Properties can have one of @IsDefined() or @IsOptional() or @ValidateIf()",
         },
         type: "problem",
-        schema: [],
+        schema: [
+            {
+                type: "object",
+                properties: {
+                    additionalDecorators: {
+                        type: "array",
+                        items: {
+                            type: "string",
+                        },
+                        description:
+                            "List of custom decorator names that should be treated as class-validator decorators",
+                    },
+                },
+                additionalProperties: false,
+            },
+        ],
     },
-    defaultOptions: [],
+    defaultOptions: [
+        {
+            additionalDecorators: [],
+        },
+    ],
     create: function (context) {
         const service = ESLintUtils.getParserServices(context);
+        const {additionalDecorators = []} = context.options[0] || {};
 
         const checker = service.program.getTypeChecker();
         return {
@@ -55,8 +81,10 @@ const rule = createRule<
                 // for each property in the class
                 for (const propertyDefinition of propertyDefinitions) {
                     // check for the optional or defined decorators, or any class-validator decorator
-                    const decoratorsStatus =
-                        getDecoratorsStatus(propertyDefinition);
+                    const decoratorsStatus = getDecoratorsStatus(
+                        propertyDefinition,
+                        additionalDecorators
+                    );
                     propertyDefinitionsWithDecoratorsStatus.push([
                         propertyDefinition,
                         decoratorsStatus,
@@ -167,48 +195,44 @@ function getType(
 }
 
 function getDecoratorsStatus(
-    propertyDefinition: TSESTree.PropertyDefinition
+    propertyDefinition: TSESTree.PropertyDefinition,
+    additionalDecorators: string[] = []
 ): DecoratorsStatus {
     let hasIsDefinedDecorator = false;
     let hasTypeCheckingDecorator = false;
     let hasIsOptionalDecorator = false;
     let hasValidateIfDecorator = false;
-    const program = typedTokenHelpers.getRootProgram(propertyDefinition);
 
-    if (propertyDefinition.decorators) {
-        for (const decorator of propertyDefinition.decorators) {
+    const validationDecorators = typedTokenHelpers.getValidationDecorators(
+        propertyDefinition,
+        additionalDecorators
+    );
+
+    for (const decorator of validationDecorators) {
+        if (
+            decorator.expression.type === AST_NODE_TYPES.CallExpression &&
+            decorator.expression.callee.type === AST_NODE_TYPES.Identifier
+        ) {
+            const decoratorName = decorator.expression.callee.name;
+
+            // We care if the decorator is a validation decorator like IsString etc for checks later
             if (
-                decorator.expression.type === AST_NODE_TYPES.CallExpression &&
-                decorator.expression.callee.type === AST_NODE_TYPES.Identifier
+                decoratorName !== "IsDefined" &&
+                decoratorName !== "IsOptional" &&
+                decoratorName !== "ValidateIf"
             ) {
-                // if this is not a class-validator decorator, skip it (this avoids name conflicts with decorators from other libraries)
-                if (
-                    !typedTokenHelpers.decoratorIsClassValidatorDecorator(
-                        program,
-                        decorator
-                    )
-                ) {
-                    continue;
-                }
-                // We care if the decorator is a validation decorator like IsString etc for checks later
-                if (
-                    decorator.expression.callee.name !== "IsDefined" &&
-                    decorator.expression.callee.name !== "IsOptional" &&
-                    decorator.expression.callee.name !== "ValidateIf"
-                ) {
-                    hasTypeCheckingDecorator = true;
-                }
-                // otherwise check if it is isDefined or isOptional, we will use this later
-                if (decorator.expression.callee.name === "IsDefined") {
-                    hasIsDefinedDecorator = true;
-                }
+                hasTypeCheckingDecorator = true;
+            }
+            // otherwise check if it is isDefined or isOptional, we will use this later
+            if (decoratorName === "IsDefined") {
+                hasIsDefinedDecorator = true;
+            }
 
-                if (decorator.expression.callee.name === "IsOptional") {
-                    hasIsOptionalDecorator = true;
-                }
-                if (decorator.expression.callee.name === "ValidateIf") {
-                    hasValidateIfDecorator = true;
-                }
+            if (decoratorName === "IsOptional") {
+                hasIsOptionalDecorator = true;
+            }
+            if (decoratorName === "ValidateIf") {
+                hasValidateIfDecorator = true;
             }
         }
     }

@@ -146,6 +146,44 @@ class A {
 }
     `,
         },
+        {
+            name: "should allow custom decorator with additionalDecorators option",
+            code: `
+import { IsDefined } from 'class-validator';
+
+function IsValidLoginIdentifier() {
+  return function(target: any, propertyKey: string) {};
+}
+
+class LoginDto {
+  @IsValidLoginIdentifier()
+  identifier: string;
+
+  @IsDefined()
+  password: string;
+}
+    `,
+            options: [{additionalDecorators: ["IsValidLoginIdentifier"]}],
+        },
+        {
+            name: "should allow custom decorator without @IsDefined when it's a type checking decorator",
+            code: `
+import { IsString } from 'class-validator';
+
+function IsValidLoginIdentifier() {
+  return function(target: any, propertyKey: string) {};
+}
+
+class LoginDto {
+  @IsValidLoginIdentifier()
+  identifier: string;
+
+  @IsString()
+  password: string;
+}
+    `,
+            options: [{additionalDecorators: ["IsValidLoginIdentifier"]}],
+        },
     ],
     invalid: [
         {
@@ -267,6 +305,29 @@ class A {
             errors: [
                 {
                     messageId: "conflicting-defined-decorators-all",
+                },
+            ],
+        },
+        {
+            name: "should report error when custom decorator is not in additionalDecorators",
+            code: `
+import { IsString } from 'class-validator';
+
+function IsValidLoginIdentifier() {
+  return function(target: any, propertyKey: string) {};
+}
+
+class LoginDto {
+  @IsValidLoginIdentifier()
+  identifier: string;
+
+  @IsString()
+  password: string;
+}
+    `,
+            errors: [
+                {
+                    messageId: "missing-is-defined-decorator",
                 },
             ],
         },
