@@ -41,8 +41,7 @@ export const hasRedundantRequired = (
         if (
             decorator.expression.type === TSESTree.AST_NODE_TYPES.CallExpression
         ) {
-            const firstArgument = decorator.expression
-                .arguments[0] as TSESTree.ObjectExpression;
+            const firstArgument = decorator.expression.arguments[0];
 
             if (
                 firstArgument &&
