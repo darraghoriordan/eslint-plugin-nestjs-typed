@@ -11,6 +11,32 @@ However, `@ValidateIf()` can be combined with `@IsDefined()` on optional propert
 
 The rule will ignore any classes that have 0 class-validator decorators. This is to avoid errors for classes that are not used for validation.
 
+#### Options
+
+This rule accepts an options object with the following properties:
+
+- `additionalDecorators` (optional): An array of custom decorator names that should be treated as class-validator decorators. This is useful when you have created custom validation decorators using `registerDecorator` from `class-validator`.
+
+**Example configuration:**
+
+```js
+// eslint.config.js
+export default [
+    {
+        rules: {
+            "@darraghor/nestjs-typed/all-properties-have-explicit-defined": [
+                "error",
+                {
+                    additionalDecorators: ["IsValidLoginIdentifier", "MyCustomValidator"]
+                }
+            ]
+        }
+    }
+];
+```
+
+#### Examples
+
 This PASSES - all properties are decorated correctly
 
 ```ts
@@ -35,6 +61,25 @@ export class CreateOrganisationDto {
     @IsDefined()
     @IsString()
     key?: string
+}
+```
+
+This PASSES - custom decorator with configuration
+
+```ts
+export class LoginDto {
+    @IsValidLoginIdentifier()
+    identifier: string;
+
+    @IsString()
+    password: string;
+}
+```
+
+With configuration:
+```js
+{
+    additionalDecorators: ["IsValidLoginIdentifier"]
 }
 ```
 
