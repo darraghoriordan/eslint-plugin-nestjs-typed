@@ -49,8 +49,9 @@ const rule = createRule<[], "useDependencyInjection">({
             ): void {
                 node.declarations.forEach((declaration) => {
                     if (
+                        declaration.id &&
                         declaration.id.type ===
-                        TSESTree.AST_NODE_TYPES.Identifier
+                            TSESTree.AST_NODE_TYPES.Identifier
                     ) {
                         programVariables.add(declaration.id.name);
                     }
@@ -106,13 +107,14 @@ const rule = createRule<[], "useDependencyInjection">({
                 }
 
                 // Check for require calls: private logger = require('bunyan')
-                if (
+                const isRequireCall =
                     node.value.type ===
                         TSESTree.AST_NODE_TYPES.CallExpression &&
                     node.value.callee.type ===
                         TSESTree.AST_NODE_TYPES.Identifier &&
-                    node.value.callee.name === "require"
-                ) {
+                    node.value.callee.name === "require";
+
+                if (isRequireCall) {
                     context.report({
                         node: node.value,
                         messageId: "useDependencyInjection",
@@ -121,16 +123,16 @@ const rule = createRule<[], "useDependencyInjection">({
                 }
 
                 // Check for identifiers from imports/variables: private logger = bunyan
-                if (
+                const isImportedIdentifier =
                     node.value.type === TSESTree.AST_NODE_TYPES.Identifier &&
                     (programImports.has(node.value.name) ||
-                        programVariables.has(node.value.name))
-                ) {
+                        programVariables.has(node.value.name));
+
+                if (isImportedIdentifier) {
                     context.report({
                         node: node.value,
                         messageId: "useDependencyInjection",
                     });
-                    return;
                 }
             },
 
@@ -145,13 +147,16 @@ const rule = createRule<[], "useDependencyInjection">({
                 }
 
                 // Check if it's assigning to a class member (this.property)
-                if (
+                const isThisMemberAssignment =
                     node.left.type ===
                         TSESTree.AST_NODE_TYPES.MemberExpression &&
                     node.left.object.type ===
-                        TSESTree.AST_NODE_TYPES.ThisExpression &&
-                    node.right.type === TSESTree.AST_NODE_TYPES.NewExpression
-                ) {
+                        TSESTree.AST_NODE_TYPES.ThisExpression;
+
+                const isNewExpression =
+                    node.right.type === TSESTree.AST_NODE_TYPES.NewExpression;
+
+                if (isThisMemberAssignment && isNewExpression) {
                     context.report({
                         node: node.right,
                         messageId: "useDependencyInjection",

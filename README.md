@@ -63,6 +63,7 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 | Nest Modules and Dependency Injection | [`provided-injected-should-match-factory-parameters`](./src/docs/rules/provided-injected-should-match-factory-parameters.md)         | ✅                            |
 |                                       | [`injectable-should-be-provided`](./src/docs/rules/injectable-should-be-provided.md)                                                 | ✅                            |
 |                                       | [`use-injectable-provided-token`](./src/docs/rules/use-injectable-provided-token.md)                                                 | ✅                            |
+|                                       | [`use-dependency-injection`](./src/docs/rules/use-dependency-injection.md)                                                           | ❌                            |
 |                                       |                                                                                                                                      |                               |
 | Nest Swagger                          | [`api-property-matches-property-optionality`](./src/docs/rules/api-property-matches-property-optionality.md)                         | ✅                            |
 |                                       | [`controllers-should-supply-api-tags`](./src/docs/rules/controllers-should-supply-api-tags.md)                                       | ✅                            |
