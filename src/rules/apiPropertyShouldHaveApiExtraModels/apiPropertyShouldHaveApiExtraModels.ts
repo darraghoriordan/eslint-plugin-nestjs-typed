@@ -66,8 +66,11 @@ const getModelsFromApiPropertyDecorator = (
         return [];
     }
 
-    const firstArgument = (decorators[0].expression as TSESTree.CallExpression)
-        ?.arguments[0];
+    if (decorators[0].expression.type !== AST_NODE_TYPES.CallExpression) {
+        return [];
+    }
+
+    const firstArgument = decorators[0].expression.arguments[0];
 
     // Only process object expressions
     if (
@@ -104,7 +107,7 @@ const rule = createRule<[], "shouldUseApiExtraModels">({
     meta: {
         docs: {
             description:
-                "Models used in oneOf, allOf, or anyOf should be included in ApiExtraModels",
+                "Ensures models referenced in oneOf, allOf, or anyOf within ApiProperty decorators are declared in ApiExtraModels",
         },
         messages: {
             shouldUseApiExtraModels: `Model '{{modelName}}' is referenced in {{schemaType}} but may not be included in @ApiExtraModels(). Ensure it is added to @ApiExtraModels() on a controller or included directly in an endpoint response type.`,
@@ -117,33 +120,44 @@ const rule = createRule<[], "shouldUseApiExtraModels">({
 
     create(context) {
         return {
-            PropertyDefinition(node: TSESTree.Node): void {
-                const models = getModelsFromApiPropertyDecorator(
-                    node as TSESTree.PropertyDefinition
-                );
+            PropertyDefinition(node: TSESTree.PropertyDefinition): void {
+                const models = getModelsFromApiPropertyDecorator(node);
 
                 if (models.length > 0) {
                     // Determine which schema type is being used
                     const decorators = typedTokenHelpers.getDecoratorsNamed(
-                        node as TSESTree.PropertyDefinition,
+                        node,
                         ["ApiProperty", "ApiPropertyOptional"]
                     );
 
-                    const firstArgument = (
-                        decorators[0].expression as TSESTree.CallExpression
-                    )?.arguments[0] as TSESTree.ObjectExpression;
-
                     let schemaType = "oneOf/allOf/anyOf";
-                    if (firstArgument) {
-                        for (const property of firstArgument.properties) {
-                            if (
-                                property.type === AST_NODE_TYPES.Property &&
-                                property.key.type === AST_NODE_TYPES.Identifier
-                            ) {
-                                const key = property.key.name;
-                                if (["oneOf", "allOf", "anyOf"].includes(key)) {
-                                    schemaType = key;
-                                    break;
+                    if (
+                        decorators.length > 0 &&
+                        decorators[0].expression.type ===
+                            AST_NODE_TYPES.CallExpression
+                    ) {
+                        const firstArgument =
+                            decorators[0].expression.arguments[0];
+                        if (
+                            firstArgument &&
+                            firstArgument.type ===
+                                AST_NODE_TYPES.ObjectExpression
+                        ) {
+                            for (const property of firstArgument.properties) {
+                                if (
+                                    property.type === AST_NODE_TYPES.Property &&
+                                    property.key.type ===
+                                        AST_NODE_TYPES.Identifier
+                                ) {
+                                    const key = property.key.name;
+                                    if (
+                                        ["oneOf", "allOf", "anyOf"].includes(
+                                            key
+                                        )
+                                    ) {
+                                        schemaType = key;
+                                        break;
+                                    }
                                 }
                             }
                         }
