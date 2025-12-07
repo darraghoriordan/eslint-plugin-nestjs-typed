@@ -1,5 +1,4 @@
 import {
-    AST_NODE_TYPES,
     TSESTree,
     ESLintUtils,
     ParserServicesWithTypeInformation,
@@ -209,31 +208,30 @@ function getDecoratorsStatus(
     );
 
     for (const decorator of validationDecorators) {
+        const decoratorName = typedTokenHelpers.getDecoratorName(decorator);
+
+        if (!decoratorName) {
+            continue;
+        }
+
+        // We care if the decorator is a validation decorator like IsString etc for checks later
         if (
-            decorator.expression.type === AST_NODE_TYPES.CallExpression &&
-            decorator.expression.callee.type === AST_NODE_TYPES.Identifier
+            decoratorName !== "IsDefined" &&
+            decoratorName !== "IsOptional" &&
+            decoratorName !== "ValidateIf"
         ) {
-            const decoratorName = decorator.expression.callee.name;
+            hasTypeCheckingDecorator = true;
+        }
+        // otherwise check if it is isDefined or isOptional, we will use this later
+        if (decoratorName === "IsDefined") {
+            hasIsDefinedDecorator = true;
+        }
 
-            // We care if the decorator is a validation decorator like IsString etc for checks later
-            if (
-                decoratorName !== "IsDefined" &&
-                decoratorName !== "IsOptional" &&
-                decoratorName !== "ValidateIf"
-            ) {
-                hasTypeCheckingDecorator = true;
-            }
-            // otherwise check if it is isDefined or isOptional, we will use this later
-            if (decoratorName === "IsDefined") {
-                hasIsDefinedDecorator = true;
-            }
-
-            if (decoratorName === "IsOptional") {
-                hasIsOptionalDecorator = true;
-            }
-            if (decoratorName === "ValidateIf") {
-                hasValidateIfDecorator = true;
-            }
+        if (decoratorName === "IsOptional") {
+            hasIsOptionalDecorator = true;
+        }
+        if (decoratorName === "ValidateIf") {
+            hasValidateIfDecorator = true;
         }
     }
     return {
