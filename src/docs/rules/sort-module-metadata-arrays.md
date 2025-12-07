@@ -69,9 +69,9 @@ export class MainModule {}
 
 ### Factory Providers
 
-The rule correctly handles factory providers with `useFactory` and `inject` arrays. The `inject` array order must match the parameters of the `useFactory` function, so this array is **not sorted** by the rule.
+The rule correctly handles factory providers with `useFactory` and `inject` arrays. The `inject` array order must match the parameters of the `useFactory` function, so this array is **not auto-fixed** by the rule.
 
-The following code will pass even though the `inject` array is not in alphabetical order, because it must match the `useFactory` parameters:
+However, if the `inject` array is not in alphabetical order, the rule will show a **warning** to remind you to manually ensure the order matches your `useFactory` parameters:
 
 ```ts
 @Module({
@@ -81,8 +81,27 @@ The following code will pass even though the `inject` array is not in alphabetic
             useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
                 return new WhatEver();
             },
-            // inject array is NOT sorted - it must match the useFactory parameters
+            // Warning: inject array is not in alphabetical order
+            // You need to manually verify this order matches the useFactory parameters
             inject: [BProvider, AProvider],
+        }
+    ]
+})
+export class MainModule {}
+```
+
+If your `inject` array is already in alphabetical order and matches the `useFactory` parameters, no warning will be shown:
+
+```ts
+@Module({
+    providers: [
+        {
+            provide: 'EXAMPLE_PROVIDER',
+            useFactory: (aProvider: AProvider, bProvider: BProvider): unknown => {
+                return new WhatEver();
+            },
+            // No warning - inject array is in alphabetical order
+            inject: [AProvider, BProvider],
         }
     ]
 })

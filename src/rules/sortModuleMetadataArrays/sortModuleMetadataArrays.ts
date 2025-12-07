@@ -96,7 +96,11 @@ const defaultLocaleOptions = [
         locale: DEFAULT_LOCALE,
     },
 ] as RuleOptions;
-export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
+export default createRule<
+    RuleOptions,
+    | "moduleMetadataArraysAreSorted"
+    | "factoryProviderInjectArrayShouldBeOrdered"
+>({
     name: "sort-module-metadata-arrays",
     meta: {
         type: "suggestion",
@@ -121,6 +125,8 @@ export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
         messages: {
             moduleMetadataArraysAreSorted:
                 "`Module` metadata arrays should be sorted in ASC alphabetical order",
+            factoryProviderInjectArrayShouldBeOrdered:
+                "Factory provider `inject` array should be manually ordered to match the `useFactory` parameters. The array is not in alphabetical order, but auto-fixing is disabled to prevent breaking the dependency injection.",
         },
     },
     defaultOptions: defaultLocaleOptions,
@@ -136,7 +142,11 @@ export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
                       },
                       contextWithoutDefaults
                   ) as Readonly<
-                      RuleContext<"moduleMetadataArraysAreSorted", RuleOptions>
+                      RuleContext<
+                          | "moduleMetadataArraysAreSorted"
+                          | "factoryProviderInjectArrayShouldBeOrdered",
+                          RuleOptions
+                      >
                   >);
 
         const {locale} = context.options[0];
@@ -145,9 +155,37 @@ export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
             [`${MODULE_CLASS_DECORATOR} Property > ArrayExpression`](
                 node: TSESTree.ArrayExpression
             ) {
-                // Skip sorting if this is a factory provider's inject array
+                // Check if this is a factory provider's inject array
                 // The order must match the useFactory function parameters
                 if (isFactoryProviderInjectArray(node)) {
+                    // Check if the inject array is not in alphabetical order
+                    const {elements} = node;
+                    const unorderedNodes = elements
+                        .filter(isValidModuleMetaPropertyType)
+                        .map((current, index, list) => [
+                            current,
+                            list[index + 1],
+                        ])
+                        .find(([current, next]) => {
+                            return (
+                                current &&
+                                next &&
+                                getRelevantNodeName(current).localeCompare(
+                                    getRelevantNodeName(next),
+                                    locale
+                                ) === 1
+                            );
+                        });
+
+                    // If the inject array is not sorted, report a warning without autofix
+                    if (unorderedNodes) {
+                        const [, nextNode] = unorderedNodes;
+                        context.report({
+                            node: nextNode,
+                            messageId:
+                                "factoryProviderInjectArrayShouldBeOrdered",
+                        });
+                    }
                     return;
                 }
 

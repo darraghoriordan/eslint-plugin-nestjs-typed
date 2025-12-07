@@ -43,31 +43,30 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
             export class MainModule {}`,
         },
         {
-            // Factory provider with inject array should NOT be sorted
-            // The inject array order must match the useFactory parameters
+            // Factory provider with inject array already in alphabetical order
             code: `@Module({
                 providers: [
                     {
                         provide: 'EXAMPLE_PROVIDER',
-                        useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
+                        useFactory: (aProvider: AProvider, bProvider: BProvider): unknown => {
                             return new WhatEver();
                         },
-                        inject: [BProvider, AProvider],
+                        inject: [AProvider, BProvider],
                     }
                 ]
             })
             export class MainModule {}`,
         },
         {
-            // Factory provider with multiple dependencies in specific order
+            // Factory provider with multiple dependencies already in alphabetical order
             code: `@Module({
                 providers: [
                     {
                         provide: 'DATABASE_CONNECTION',
-                        useFactory: (config: ConfigService, logger: Logger, cache: CacheService) => {
-                            return createConnection(config, logger, cache);
+                        useFactory: (cache: CacheService, config: ConfigService, logger: Logger) => {
+                            return createConnection(cache, config, logger);
                         },
-                        inject: [ConfigService, Logger, CacheService],
+                        inject: [CacheService, ConfigService, Logger],
                     }
                 ]
             })
@@ -377,7 +376,7 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
         },
         {
             // Module with factory provider - should sort top-level providers array
-            // but NOT the inject array
+            // but also warn about the unsorted inject array
             code: `@Module({
                 providers: [
                     BProvider,
@@ -425,6 +424,49 @@ ruleTester.run("sortModuleMetadataArrays", rule, {
             errors: [
                 {
                     messageId: "moduleMetadataArraysAreSorted",
+                },
+                {
+                    messageId: "factoryProviderInjectArrayShouldBeOrdered",
+                },
+            ],
+        },
+        {
+            // Factory provider with unsorted inject array should show a warning
+            code: `@Module({
+                providers: [
+                    {
+                        provide: 'EXAMPLE_PROVIDER',
+                        useFactory: (bProvider: BProvider, aProvider: AProvider): unknown => {
+                            return new WhatEver();
+                        },
+                        inject: [BProvider, AProvider],
+                    }
+                ]
+            })
+            export class MainModule {}`,
+            errors: [
+                {
+                    messageId: "factoryProviderInjectArrayShouldBeOrdered",
+                },
+            ],
+        },
+        {
+            // Factory provider with multiple unsorted dependencies
+            code: `@Module({
+                providers: [
+                    {
+                        provide: 'DATABASE_CONNECTION',
+                        useFactory: (logger: Logger, cache: CacheService, config: ConfigService) => {
+                            return createConnection(logger, cache, config);
+                        },
+                        inject: [Logger, CacheService, ConfigService],
+                    }
+                ]
+            })
+            export class MainModule {}`,
+            errors: [
+                {
+                    messageId: "factoryProviderInjectArrayShouldBeOrdered",
                 },
             ],
         },
