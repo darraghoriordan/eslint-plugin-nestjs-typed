@@ -140,12 +140,10 @@ export const shouldTrigger = (
     let pathPartsToCheck: string[] = [];
 
     // Add any RouterModule paths from configuration
-    if (
-        ruleOptions[0].routerModulePaths &&
-        ruleOptions[0].routerModulePaths.length > 0
-    ) {
+    const routerModulePaths = ruleOptions[0].routerModulePaths;
+    if (routerModulePaths && routerModulePaths.length > 0) {
         pathPartsToCheck = pathPartsToCheck.concat(
-            ruleOptions[0].routerModulePaths.map((path) => `"${path}"`)
+            routerModulePaths.map((path) => `"${path}"`)
         );
     }
 
