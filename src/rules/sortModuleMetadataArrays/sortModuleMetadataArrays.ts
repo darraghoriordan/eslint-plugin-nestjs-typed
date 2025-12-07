@@ -43,6 +43,52 @@ export const getRelevantNodeName = (node: TSESTree.Node) => {
     }
     return currentName;
 };
+
+/**
+ * Checks if an ArrayExpression is the `inject` array of a factory provider.
+ * Factory providers have both `useFactory` and `inject` properties,
+ * and the order of `inject` must match the factory function parameters.
+ */
+export const isFactoryProviderInjectArray = (
+    node: TSESTree.ArrayExpression
+): boolean => {
+    // Check if this array is a direct child of a Property
+    if (!node.parent || node.parent.type !== TSESTree.AST_NODE_TYPES.Property) {
+        return false;
+    }
+
+    const property = node.parent;
+
+    // Check if this Property has the key "inject"
+    if (
+        property.key.type !== TSESTree.AST_NODE_TYPES.Identifier ||
+        property.key.name !== "inject"
+    ) {
+        return false;
+    }
+
+    // Check if the parent of this Property is an ObjectExpression
+    if (
+        !property.parent ||
+        property.parent.type !== TSESTree.AST_NODE_TYPES.ObjectExpression
+    ) {
+        return false;
+    }
+
+    const objectExpression = property.parent;
+
+    // Check if this ObjectExpression has a `useFactory` property
+    // If it does, this is a factory provider and the inject array should NOT be sorted
+    const hasUseFactory = objectExpression.properties.some((property) => {
+        return (
+            property.type === TSESTree.AST_NODE_TYPES.Property &&
+            property.key.type === TSESTree.AST_NODE_TYPES.Identifier &&
+            property.key.name === "useFactory"
+        );
+    });
+
+    return hasUseFactory;
+};
 const defaultLocaleOptions = [
     {
         locale: DEFAULT_LOCALE,
@@ -94,9 +140,16 @@ export default createRule<RuleOptions, "moduleMetadataArraysAreSorted">({
         const {locale} = context.options[0];
         const sourceCode = context.sourceCode;
         return {
-            [`${MODULE_CLASS_DECORATOR} Property > ArrayExpression`]({
-                elements,
-            }: TSESTree.ArrayExpression) {
+            [`${MODULE_CLASS_DECORATOR} Property > ArrayExpression`](
+                node: TSESTree.ArrayExpression
+            ) {
+                // Skip sorting if this is a factory provider's inject array
+                // The order must match the useFactory function parameters
+                if (isFactoryProviderInjectArray(node)) {
+                    return;
+                }
+
+                const {elements} = node;
                 const unorderedNodes = elements
                     // nestjs modules use identifiers and call expressions
                     // can modify this later
