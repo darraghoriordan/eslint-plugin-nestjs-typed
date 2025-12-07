@@ -281,6 +281,75 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
                   @Param('chatId') chatId: string){}
             }`,
         },
+        {
+            // RouterModule paths from configuration should be considered valid
+            code: `
+            @Controller("tickets")
+            export class TicketController {
+                constructor() {}
+
+                @Get()
+                findAll(
+                    @Param("columnid") columnid: string
+                ): Promise<string> {
+                    return Promise.resolve("tickets for column " + columnid);
+                }
+            }`,
+            options: [
+                {
+                    shouldCheckController: true,
+                    routerModulePaths: ["columns/:columnid/tickets"],
+                },
+            ],
+        },
+        {
+            // RouterModule paths with multiple params
+            code: `
+            @Controller("tickets")
+            export class TicketController {
+                constructor() {}
+
+                @Get(":ticketid")
+                findOne(
+                    @Param("projectid") projectid: string,
+                    @Param("columnid") columnid: string,
+                    @Param("ticketid") ticketid: string
+                ): Promise<string> {
+                    return Promise.resolve("ticket");
+                }
+            }`,
+            options: [
+                {
+                    shouldCheckController: true,
+                    routerModulePaths: [
+                        "projects/:projectid/columns/:columnid",
+                    ],
+                },
+            ],
+        },
+        {
+            // RouterModule paths should work alongside controller paths
+            code: `
+            @Controller("api/:version")
+            export class TicketController {
+                constructor() {}
+
+                @Get(":ticketid")
+                findOne(
+                    @Param("companyid") companyid: string,
+                    @Param("version") version: string,
+                    @Param("ticketid") ticketid: string
+                ): Promise<string> {
+                    return Promise.resolve("ticket");
+                }
+            }`,
+            options: [
+                {
+                    shouldCheckController: true,
+                    routerModulePaths: ["companies/:companyid"],
+                },
+            ],
+        },
     ],
     invalid: [
         {
@@ -417,6 +486,33 @@ ruleTester.run("param-decorator-name-matches-route-param", rule, {
                 {
                     data: {paramName: "uuid"},
                     messageId: "paramIdentifierShouldMatchRouteOnly",
+                },
+            ],
+        },
+        {
+            // Should still fail when RouterModule path doesn't contain the param
+            code: `
+            @Controller("tickets")
+            export class TicketController {
+                constructor() {}
+
+                @Get()
+                findAll(
+                    @Param("wrongparam") wrongparam: string
+                ): Promise<string> {
+                    return Promise.resolve("tickets");
+                }
+            }`,
+            options: [
+                {
+                    shouldCheckController: true,
+                    routerModulePaths: ["columns/:columnid/tickets"],
+                },
+            ],
+            errors: [
+                {
+                    data: {paramName: "wrongparam"},
+                    messageId: "paramIdentifierShouldMatchRouteOrController",
                 },
             ],
         },

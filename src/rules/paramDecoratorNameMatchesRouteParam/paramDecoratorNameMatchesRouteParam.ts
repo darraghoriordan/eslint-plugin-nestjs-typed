@@ -18,6 +18,7 @@ type RuleMessageIds =
 type RuleOptions = [
     {
         shouldCheckController: boolean;
+        routerModulePaths?: string[];
     },
 ];
 
@@ -138,6 +139,16 @@ export const shouldTrigger = (
 
     let pathPartsToCheck: string[] = [];
 
+    // Add any RouterModule paths from configuration
+    if (
+        ruleOptions[0].routerModulePaths &&
+        ruleOptions[0].routerModulePaths.length > 0
+    ) {
+        pathPartsToCheck = pathPartsToCheck.concat(
+            ruleOptions[0].routerModulePaths.map((path) => `"${path}"`)
+        );
+    }
+
     // grab any controller path parts
     if (ruleOptions[0].shouldCheckController) {
         // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
@@ -203,7 +214,7 @@ const rule = createRule<RuleOptions, RuleMessageIds>({
     meta: {
         docs: {
             description:
-                'Param decorators with a name parameter e.g. Param("myvar") should match a specified route parameter - e.g. Get(":myvar")',
+                'Param decorators with a name parameter e.g. Param("myvar") should match a specified route parameter - e.g. Get(":myvar"). Supports RouterModule paths via configuration.',
         },
         messages: {
             paramIdentifierDoesntNeedColon:
@@ -222,6 +233,14 @@ const rule = createRule<RuleOptions, RuleMessageIds>({
                         description:
                             "If the name in the @Controller() decorator should be checked for route param matches or not. Turn this option off if you use variable for Controller paths that do not contain route params.",
                         type: "boolean",
+                    },
+                    routerModulePaths: {
+                        description:
+                            "Additional route paths from RouterModule.register() that should be considered when validating route params. Useful when you use RouterModule to define parent routes with params.",
+                        type: "array",
+                        items: {
+                            type: "string",
+                        },
                     },
                 },
             },
