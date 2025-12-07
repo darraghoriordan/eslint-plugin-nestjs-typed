@@ -5,7 +5,7 @@ import {ASTUtils} from "@typescript-eslint/utils";
 export const isValidationPipeNewExpression = (node: TSESTree.Node): boolean => {
     const newExpression = node as TSESTree.NewExpression;
     const callee = newExpression.callee as TSESTree.Identifier;
-    if (callee && callee.name === "ValidationPipe") {
+    if (callee?.name === "ValidationPipe") {
         return true;
     }
     return false;
@@ -70,9 +70,8 @@ export const shouldTriggerForVariableDeclaratorExpression = (
     const asExpression = variableDeclarator.init as TSESTree.TSAsExpression;
     const typeAnnotation =
         asExpression?.typeAnnotation as TSESTree.TSTypeReference;
-    const typeName =
-        typeAnnotation && (typeAnnotation?.typeName as TSESTree.Identifier);
-    if (typeName === undefined || typeName.name !== "ValidationPipeOptions") {
+    const typeName = typeAnnotation?.typeName as TSESTree.Identifier;
+    if (typeName?.name !== "ValidationPipeOptions") {
         return false;
     }
     // otherwise check the object expression is what we want
