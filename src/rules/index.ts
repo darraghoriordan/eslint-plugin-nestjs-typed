@@ -18,6 +18,7 @@ import noDuplicateDecorators from "./noDuplicateDecorators/noDuplicateDecorators
 import useCorrectEndpointNamingConvention from "./useCorrectEndpointNamingConvention/useCorrectEndpointNamingConvention.js";
 import useInjectableProvidedToken from "./useInjectableProvidedToken/useInjectableProvidedToken.js";
 import apiPropertyShouldHaveApiExtraModels from "./apiPropertyShouldHaveApiExtraModels/apiPropertyShouldHaveApiExtraModels.js";
+import apiOperationSummaryDescriptionCapitalized from "./apiOperationSummaryDescriptionCapitalized/apiOperationSummaryDescriptionCapitalized.js";
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
@@ -49,6 +50,8 @@ const allRules = {
     "use-injectable-provided-token": useInjectableProvidedToken,
     "api-property-should-have-api-extra-models":
         apiPropertyShouldHaveApiExtraModels,
+    "api-operation-summary-description-capitalized":
+        apiOperationSummaryDescriptionCapitalized,
 };
 
 export default allRules;
