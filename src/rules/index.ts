@@ -36,7 +36,8 @@ const allRules = {
     "api-enum-property-best-practices": apiEnumPropertyBestPractices,
     "api-property-returning-array-should-set-array":
         apiPropertyReturningArrayShouldSetArray,
-    "should-specify-forbid-unknown-values": shouldSpecifyForbidUnknownValues,
+    "validation-pipe-should-use-forbid-unknown":
+        shouldSpecifyForbidUnknownValues,
     "param-decorator-name-matches-route-param":
         parameterDecoratorNameMatchesRouteParam,
     "validated-non-primitive-property-needs-type-decorator":

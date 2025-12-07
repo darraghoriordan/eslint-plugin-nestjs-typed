@@ -17,7 +17,8 @@ export const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/api-enum-property-best-practices": "error",
     "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
         "error",
-    "@darraghor/nestjs-typed/should-specify-forbid-unknown-values": "error",
+    "@darraghor/nestjs-typed/validation-pipe-should-use-forbid-unknown":
+        "error",
     "@darraghor/nestjs-typed/param-decorator-name-matches-route-param": "error",
     "@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator":
         "error",
@@ -34,6 +35,7 @@ export const rules: Partial<Linter.RulesRecord> = {
     "@darraghor/nestjs-typed/api-operation-summary-description-capitalized":
         "error",
     "@darraghor/nestjs-typed/use-dependency-injection": "off",
+    "@darraghor/nestjs-typed/use-correct-endpoint-naming-convention": "off",
 };
 export default {
     extends: ["./configs/base"],

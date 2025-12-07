@@ -68,9 +68,10 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 | Nest Swagger                          | [`api-property-matches-property-optionality`](./src/docs/rules/api-property-matches-property-optionality.md)                         | ✅                            |
 |                                       | [`controllers-should-supply-api-tags`](./src/docs/rules/controllers-should-supply-api-tags.md)                                       | ✅                            |
 |                                       | [`api-method-should-specify-api-response`](./src/docs/rules/api-method-should-specify-api-response.md)                               | ✅                            |
-|                                       | [`api-method-should-specify-api-operation`](./src/docs/rules/api-method-should-specify-api-operation.md)                             | ✅                            |
+|                                       | [`api-method-should-specify-api-operation`](./src/docs/rules/api-method-should-specify-api-operation.md)                             | ❌                            |
 |                                       | [`api-enum-property-best-practices`](./src/docs/rules/api-enum-property-best-practices.md)                                           | ✅                            |
 |                                       | [`api-property-returning-array-should-set-array`](./src/docs/rules/api-property-returning-array-should-set-array.md)                 | ✅                            |
+|                                       | [`api-property-should-have-api-extra-models`](./src/docs/rules/api-property-should-have-api-extra-models.md)                         | ✅                            |
 |                                       | [`api-operation-summary-description-capitalized`](./src/docs/rules/api-operation-summary-description-capitalized.md)                 | ✅                            |
 |                                       |                                                                                                                                      |                               |
 | Preventing bugs                       | [`param-decorator-name-matches-route-param`](./src/docs/rules/param-decorator-name-matches-route-param.md)                           | ✅                            |
@@ -84,6 +85,7 @@ Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-ty
 | Security                              | [`api-methods-should-be-guarded`](./src/docs/rules/api-methods-should-be-guarded.md)                                                 | ❌                            |
 |                                       |                                                                                                                                      |                               |
 | Code Consistency                      | [`sort-module-metadata-arrays`](./src/docs/rules/sort-module-metadata-arrays.md)                                                     | ❌                            |
+|                                       | [`use-correct-endpoint-naming-convention`](./src/docs/rules/use-correct-endpoint-naming-convention.md)                               | ❌                            |
 
 The "recommended" ruleset are the default rules that are turned on when you configure the plugin as described in this document.
 
