@@ -25,7 +25,8 @@ const getStringPropertyValue = (
     const property = objectExpression.properties.find(
         (p) =>
             p.type === TSESTree.AST_NODE_TYPES.Property &&
-            (p.key as TSESTree.Identifier).name === propertyName
+            p.key.type === TSESTree.AST_NODE_TYPES.Identifier &&
+            p.key.name === propertyName
     );
 
     if (
