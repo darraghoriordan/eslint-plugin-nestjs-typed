@@ -227,12 +227,11 @@ const rule = createRule<
 
                                 if (foundParams?.length === 1) {
                                     const firstParam = foundParams[0];
-                                    
                                     // Check if the parameter is a type reference (not an inline type like {})
                                     if (
                                         firstParam.type ===
                                         AST_NODE_TYPES.TSTypeReference &&
-                                        firstParam.typeName.type ===
+                                        firstParam.typeName?.type ===
                                         AST_NODE_TYPES.Identifier
                                     ) {
                                         typeIdentifier = firstParam.typeName.name;
