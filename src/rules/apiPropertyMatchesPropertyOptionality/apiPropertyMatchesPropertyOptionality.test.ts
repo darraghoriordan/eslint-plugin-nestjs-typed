@@ -44,6 +44,19 @@ ruleTester.run("api-property-matches-property-optionality", rule, {
                 @ApiProperty()
                 thisIsAStringProp!: string;}`,
         },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty({ description: 'test' })
+                thisIsAStringProp!: string;}`,
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty({ required: true })
+                thisIsAStringProp!: string;}`,
+            options: [{checkRedundantRequired: false}],
+        },
     ],
     invalid: [
         {
@@ -119,6 +132,63 @@ ruleTester.run("api-property-matches-property-optionality", rule, {
             errors: [
                 {
                     messageId: "shouldUseRequiredDecorator",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty({ required: true })
+                thisIsAStringProp!: string;
+            }`,
+            errors: [
+                {
+                    messageId: "redundantRequired",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty({ 
+                    required: true,
+                    description: 'A test property'
+                })
+                thisIsAStringProp!: string;
+            }`,
+            errors: [
+                {
+                    messageId: "redundantRequired",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty({ 
+                    description: 'A test property',
+                    required: true
+                })
+                thisIsAStringProp!: string;
+            }`,
+            errors: [
+                {
+                    messageId: "redundantRequired",
+                },
+            ],
+        },
+        {
+            code: `class TestClass {
+                @Expose()
+                @ApiProperty({ required: true })
+                thisIsAStringProp?: string;
+            }`,
+            errors: [
+                {
+                    messageId: "shouldUseOptionalDecorator",
+                },
+                {
+                    messageId: "redundantRequired",
                 },
             ],
         },
