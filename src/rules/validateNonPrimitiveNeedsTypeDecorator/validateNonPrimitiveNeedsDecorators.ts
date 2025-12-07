@@ -230,11 +230,12 @@ const rule = createRule<
                                     // Check if the parameter is a type reference (not an inline type like {})
                                     if (
                                         firstParam.type ===
-                                        AST_NODE_TYPES.TSTypeReference &&
+                                            AST_NODE_TYPES.TSTypeReference &&
                                         firstParam.typeName?.type ===
-                                        AST_NODE_TYPES.Identifier
+                                            AST_NODE_TYPES.Identifier
                                     ) {
-                                        typeIdentifier = firstParam.typeName.name;
+                                        typeIdentifier =
+                                            firstParam.typeName.name;
                                     }
                                 }
                             }
