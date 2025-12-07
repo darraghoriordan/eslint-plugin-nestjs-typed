@@ -2,6 +2,6 @@
 
   "*.ts": [
     "prettier --parser typescript --write",
-    "pnpm run lint"
+    "npm run lint"
   ]
 }
