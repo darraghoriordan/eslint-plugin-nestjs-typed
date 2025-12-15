@@ -54,6 +54,20 @@ ruleTester.run("api-property-should-have-api-extra-models", rule, {
                 value: any;
             }`,
         },
+        {
+            // with annotation extraModels
+            code: `
+            @ApiExtraModels(Cat, Dog)
+            class TestClass {
+                @ApiProperty({
+                    oneOf: [
+                        { $ref: getSchemaPath(Cat) },
+                        { $ref: getSchemaPath(Dog) },
+                    ],
+                })
+                pet: Cat | Dog;
+            }`,
+        },
     ],
     invalid: [
         {
