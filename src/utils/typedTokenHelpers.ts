@@ -129,7 +129,7 @@ export const typedTokenHelpers = {
     parseStringToAst(
         code: string,
         path: string,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
         _context: Readonly<TSESLint.RuleContext<never, never[]>>
     ): TSESTree.Program {
         return parse(code, {

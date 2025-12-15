@@ -23,6 +23,7 @@ declare module "eslint/use-at-your-own-risk" {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 type AstParsed = TSESTree.Program & {
     range?: [number, number] | undefined;
     tokens?: Token[] | undefined;
