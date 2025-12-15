@@ -35,7 +35,7 @@
         "url": "https://github.com/darraghoriordan/eslint-plugin-nestjs-typed"
     },
     "engines": {
-        "node": "^18.18.0 || >=20.0.0"
+        "node": ">=24.0.0"
     },
     "files": [
         "dist",
