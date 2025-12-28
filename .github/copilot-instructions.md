@@ -8,6 +8,8 @@ High level
 
 - **What this repo is**: an ESLint plugin for NestJS that ships both Classic and Flat configs. Core rule code lives under `src/rules/*`, docs for rules under `src/docs/rules/`, and example fixtures under `src/fixtures/`.
 - **Module format**: ESM (`"type": "module"` in `package.json`). Builds to `dist/` with `tsc` (see `tsconfig.build.json`).
+- Use pnpm for package management (see `pnpm-lock.yaml`). `pnpm install` to set up.
+- Use semantic commit messages for changelog generation. commits and PR titles should follow conventional commit format (feat, fix, chore, docs, etc)
 
 Key files to read first
 
@@ -20,11 +22,11 @@ Key files to read first
 
 Workflows & commands
 
-- Build: `npm run build` — cleans and runs `tsc --project tsconfig.build.json` (output to `dist/`).
-- Lint: `npm run lint` — runs `npx eslint --no-error-on-unmatched-pattern` (note: flat configs are used in exports; watch parser/project settings in `eslint.config.mjs`).
-- Test: `npm test` or `npm run test:watch` — uses `vitest` (`vitest run`).
-- Precommit: `npm run pre-commit` triggers `lint-staged` via husky hooks.
-- Release: semantic-release via `npm run release` (CI oriented).
+- Build: `pnpm run build` — cleans and runs `tsc --project tsconfig.build.json` (output to `dist/`).
+- Lint: `pnpm run lint` — runs `npx eslint --no-error-on-unmatched-pattern` (note: flat configs are used in exports; watch parser/project settings in `eslint.config.mjs`).
+- Test: `pnpm run test` or `npm run test:watch` — uses `vitest` (`vitest run`).
+- Precommit: `pnpm run pre-commit` triggers `lint-staged` via husky hooks.
+- Release: semantic-release via `pnpm run release` (CI oriented).
 
 Project-specific conventions
 
@@ -39,7 +41,7 @@ Adding a new rule — minimal checklist
 2. Add a docs file `src/docs/rules/<your-rule>.md` describing rationale and examples.
 3. Import and add to the map in `src/rules/index.ts` with the rule key string (kebab-case) matching docs filename.
 4. Write tests using fixtures in `src/fixtures/` and add test files under `src/...` following existing patterns.
-5. Run `npm run build` and `npm test` locally.
+5. Run `pnpm run build` and `pnpm test` locally.
 
 Testing and CI notes
 
@@ -70,7 +72,6 @@ For PRs - use semantic commit messages and PR titles for changelog generation. e
 
 Security considerations
 
-- **Dependencies**: Always check for vulnerabilities when adding or updating dependencies. Run `npm audit` to identify issues.
 - **Type safety**: Maintain strict TypeScript configuration. Don't use `any` types unless absolutely necessary and well-documented.
 - **Input validation**: When working with user-facing rules or configurations, ensure proper validation and sanitization.
 - **ESLint rule security**: Be cautious about rules that perform file system operations or execute code. Follow the patterns in existing rules like `injectablesShouldBeProvided`.
@@ -78,7 +79,7 @@ Security considerations
 
 Troubleshooting and common issues
 
-- **TypeScript compilation errors**: If you see "cannot find module" errors, ensure `npm install` has been run and check `tsconfig.*.json` files for correct path mappings.
+- **TypeScript compilation errors**: If you see "cannot find module" errors, ensure `pnpm install` has been run and check `tsconfig.*.json` files for correct path mappings.
 - **Test failures with type checking**: Some tests require `parserOptions.project` to be set correctly. Check `tsconfig.test.json` for the right configuration.
 - **ESM import issues**: Remember this is an ESM project. Import statements in compiled code should use `.js` extensions even when source uses `.ts`.
 - **Fixture scanning issues**: If the `injectablesShouldBeProvided` rule is scanning too many files, use `filterFromPaths` option in the rule configuration or keep test fixtures minimal.
@@ -88,10 +89,10 @@ Troubleshooting and common issues
 Contribution workflow
 
 1. **Fork and clone**: Fork the repository and clone your fork locally.
-2. **Install dependencies**: Run `npm install` to install all dependencies.
+2. **Install dependencies**: Run `pnpm install` to install all dependencies.
 3. **Create a branch**: Use a descriptive branch name like `feat/new-rule-name` or `fix/rule-bug`.
 4. **Make changes**: Follow the conventions outlined above. Keep changes focused and minimal.
-5. **Test locally**: Run `npm run build`, `npm run lint`, and `npm test` before committing.
+5. **Test locally**: Run `pnpm run build`, `pnpm run lint`, and `pnpm run test` before committing.
 6. **Commit with semantic messages**: Use conventional commit format (feat, fix, chore, docs, etc.).
 7. **Push and create PR**: Push to your fork and create a pull request with a clear title and description.
 8. **Respond to feedback**: Address review comments and update your PR as needed.
@@ -102,6 +103,6 @@ Testing guidelines
 - **Fixtures**: Use fixtures in `src/fixtures/` for complex test scenarios. Keep fixtures minimal and focused.
 - **Rule tests**: Each rule should have a corresponding `.test.ts` file testing both valid and invalid cases.
 - **Coverage expectations**: Aim for comprehensive coverage of rule logic, including edge cases and error conditions.
-- **Running specific tests**: Use `npm test -- path/to/test.ts` to run a specific test file during development.
-- **Watch mode**: Use `npm run test:watch` for continuous testing during development.
+- **Running specific tests**: Use `pnpm test -- path/to/test.ts` to run a specific test file during development.
+- **Watch mode**: Use `pnpm run test:watch` for continuous testing during development.
 - **Type-aware rules**: When testing rules that use TypeScript type information, ensure test files have proper `parserOptions.project` configuration.

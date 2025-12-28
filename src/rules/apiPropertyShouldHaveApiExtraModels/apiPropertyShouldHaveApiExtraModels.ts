@@ -52,6 +52,54 @@ const extractModelsFromSchemaReferences = (
 };
 
 /**
+ * Finds the parent class declaration of a property definition
+ */
+const findParentClass = (
+    node: TSESTree.PropertyDefinition
+): TSESTree.ClassDeclaration | null => {
+    let parent: TSESTree.Node | undefined = node.parent;
+    while (parent) {
+        if (parent.type === AST_NODE_TYPES.ClassDeclaration) {
+            return parent as TSESTree.ClassDeclaration;
+        }
+        parent = parent.parent;
+    }
+    return null;
+};
+
+/**
+ * Extracts model names from @ApiExtraModels decorator arguments
+ */
+const getModelsFromApiExtraModels = (
+    classNode: TSESTree.ClassDeclaration
+): Set<string> => {
+    const decorators = typedTokenHelpers.getDecoratorsNamed(classNode, [
+        "ApiExtraModels",
+    ]);
+
+    if (decorators.length === 0) {
+        return new Set();
+    }
+
+    const models = new Set<string>();
+
+    for (const decorator of decorators) {
+        if (decorator.expression.type !== AST_NODE_TYPES.CallExpression) {
+            continue;
+        }
+
+        // Extract all arguments (model identifiers) from @ApiExtraModels(Cat, Dog, ...)
+        for (const argument of decorator.expression.arguments) {
+            if (argument.type === AST_NODE_TYPES.Identifier) {
+                models.add(argument.name);
+            }
+        }
+    }
+
+    return models;
+};
+
+/**
  * Checks if a property definition uses oneOf/allOf/anyOf with model references
  */
 const getModelsFromApiPropertyDecorator = (
@@ -124,6 +172,12 @@ const rule = createRule<[], "shouldUseApiExtraModels">({
                 const models = getModelsFromApiPropertyDecorator(node);
 
                 if (models.length > 0) {
+                    // Find the parent class and check for @ApiExtraModels
+                    const parentClass = findParentClass(node);
+                    const declaredModels = parentClass
+                        ? getModelsFromApiExtraModels(parentClass)
+                        : new Set<string>();
+
                     // Determine which schema type is being used
                     const decorators = typedTokenHelpers.getDecoratorsNamed(
                         node,
@@ -163,16 +217,18 @@ const rule = createRule<[], "shouldUseApiExtraModels">({
                         }
                     }
 
-                    // Report each model
+                    // Report each model that is not declared in @ApiExtraModels
                     for (const model of models) {
-                        context.report({
-                            node: model.node,
-                            messageId: "shouldUseApiExtraModels",
-                            data: {
-                                modelName: model.modelName,
-                                schemaType: schemaType,
-                            },
-                        });
+                        if (!declaredModels.has(model.modelName)) {
+                            context.report({
+                                node: model.node,
+                                messageId: "shouldUseApiExtraModels",
+                                data: {
+                                    modelName: model.modelName,
+                                    schemaType: schemaType,
+                                },
+                            });
+                        }
                     }
                 }
             },

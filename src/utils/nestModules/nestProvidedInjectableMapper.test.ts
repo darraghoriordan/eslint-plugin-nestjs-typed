@@ -1,5 +1,4 @@
-import {TSESTree} from "@typescript-eslint/utils";
-import {EcmaVersion, ParserOptions} from "@typescript-eslint/types";
+import {TSESLint, TSESTree} from "@typescript-eslint/utils";
 import {typedTokenHelpers} from "../typedTokenHelpers.js";
 import {NestProvidedInjectablesMap} from "./models/NestProvidedInjectablesMap.js";
 import nestModuleAstMapper from "./nestProvidedInjectableMapper.js";
@@ -17,10 +16,10 @@ describe("nest module ast mapper", () => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             {
                 parserOptions: {
-                    ecmaVersion: 2019 as EcmaVersion,
+                    ecmaVersion: 2019,
                     ecmaFeatures: {globalReturn: false},
                     sourceType: "module",
-                } as ParserOptions,
+                } as TSESLint.ParserOptions,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any
         );

@@ -22,12 +22,14 @@ jobs:
                   registry-url: "https://registry.npmjs.org"
 
                   cache: pnpm
+            - name: Update npm
+              run: npm install -g npm@latest
             - run: pnpm install --frozen-lockfile
             - run: pnpm test
             - run: pnpm build
             - name: Release
               env:
                   NPM_CONFIG_PROVENANCE: true
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-                  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+                  # NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: npx semantic-release
