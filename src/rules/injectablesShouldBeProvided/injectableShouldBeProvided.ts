@@ -75,7 +75,7 @@ const checkNode = (
             nestModuleMap
         );
 
-        if (foundModuleMaps.length === 1) {
+        if (foundModuleMaps.length >= 1) {
             return;
         }
         // couldn't find map so error
@@ -127,8 +127,8 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
             description: "Public api methods should have documentation",
         },
         messages: {
-            injectableInModule: `Expected Injectable "{{name}}" to be referenced in 1 module's providers array, but found {{numberOfReferences}} references ({{refLocations}}). If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
-            controllersInModule: `Expected Controller "{{name}}" to be referenced in 1 module's controllers array, but found {{numberOfReferences}} references ({{refLocations}}). If you added it already but this error still shows in your editor, please change one character in the controller file to poke your eslint plugin.`,
+            injectableInModule: `Expected Injectable "{{name}}" to be referenced in at least 1 module's providers array, but found {{numberOfReferences}} references ({{refLocations}}). If you added it already but this error still shows in your editor, please change one character in the injectable file to poke your eslint plugin.`,
+            controllersInModule: `Expected Controller "{{name}}" to be referenced in at least 1 module's controllers array, but found {{numberOfReferences}} references ({{refLocations}}). If you added it already but this error still shows in your editor, please change one character in the controller file to poke your eslint plugin.`,
         },
         schema: [
             {
