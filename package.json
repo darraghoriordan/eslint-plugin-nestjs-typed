@@ -65,11 +65,11 @@
         "eslint-module-utils": "2.12.1",
         "glob": "13.0.0",
         "reflect-metadata": "0.2.2",
-        "ts-api-utils": "2.3.0"
+        "ts-api-utils": "2.4.0"
     },
     "devDependencies": {
-        "@commitlint/cli": "20.2.0",
-        "@commitlint/config-conventional": "20.2.0",
+        "@commitlint/cli": "20.3.0",
+        "@commitlint/config-conventional": "20.3.0",
         "@eslint/js": "9.39.2",
         "@semantic-release/changelog": "6.0.3",
         "@semantic-release/exec": "7.1.0",
