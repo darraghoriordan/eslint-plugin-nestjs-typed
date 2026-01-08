@@ -2,5 +2,11 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>darraghoriordan/renovate-config:base"],
     "baseBranchPatterns": ["main"],
-    "ignoreTests": true
+    "ignoreTests": true,
+    "packageRules": [
+        {
+            "matchPackageNames": ["node"],
+            "allowedVersions": "22.x"
+        }
+    ]
 }
