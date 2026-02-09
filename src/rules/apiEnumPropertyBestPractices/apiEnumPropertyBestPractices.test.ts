@@ -130,5 +130,26 @@ ruleTester.run("api-enum-property-best-practices", rule, {
                 },
             ],
         },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional({
+                    type: MyEnum,
+                })
+                public myProperty?:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+                {
+                    messageId: "needsTypeRemoved",
+                },
+            ],
+        },
     ],
 });
