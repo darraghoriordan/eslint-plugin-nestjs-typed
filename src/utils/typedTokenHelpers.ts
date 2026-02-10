@@ -69,8 +69,8 @@ export const typedTokenHelpers = {
             );
 
             didMatchExpectedValues =
-                foundPropertyOfName !== undefined &&
-                foundPropertyOfName.type === TSESTree.AST_NODE_TYPES.Property &&
+                foundPropertyOfName?.type ===
+                    TSESTree.AST_NODE_TYPES.Property &&
                 (foundPropertyOfName.value as TSESTree.Literal).value ===
                     expectedValue;
         }
@@ -141,7 +141,22 @@ export const typedTokenHelpers = {
             // creating TypeScript programs for each scanned file
         });
     },
-    isEnumType(type: ts.Type) {
+    isEnumType(type: ts.Type): boolean {
+        if (type.isUnion()) {
+            let enumCount = 0;
+            let othersCount = 0;
+            for (const t of type.types) {
+                if (this.isEnumType(t)) {
+                    enumCount++;
+                } else if (
+                    !tsutils.isTypeFlagSet(t, ts.TypeFlags.Undefined) &&
+                    !tsutils.isTypeFlagSet(t, ts.TypeFlags.Null)
+                ) {
+                    othersCount++;
+                }
+            }
+            return enumCount >= 1 && othersCount === 0;
+        }
         // if for some reason this returns true...
         if (tsutils.isTypeFlagSet(type, ts.TypeFlags.Enum)) return true;
         if (tsutils.isTypeFlagSet(type, ts.TypeFlags.EnumLike)) return true;
@@ -158,10 +173,7 @@ export const typedTokenHelpers = {
         if (symbol == null) return false;
 
         const {valueDeclaration} = symbol;
-        return (
-            valueDeclaration != null &&
-            valueDeclaration.kind === ts.SyntaxKind.EnumDeclaration
-        );
+        return valueDeclaration?.kind === ts.SyntaxKind.EnumDeclaration;
     },
     isOptionalPropertyValue(node: TSESTree.PropertyDefinition): boolean {
         const isUndefinedType =
