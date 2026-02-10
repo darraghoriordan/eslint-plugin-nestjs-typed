@@ -111,6 +111,9 @@ ruleTester.run("api-enum-property-best-practices", rule, {
             }`,
             errors: [
                 {
+                    messageId: "needsEnumAdded",
+                },
+                {
                     messageId: "needsEnumNameAdded",
                 },
             ],
@@ -154,11 +157,32 @@ ruleTester.run("api-enum-property-best-practices", rule, {
             
             class MyClass {
                 @ApiProperty({
+                    enumName: "MyEnum",
+                })
+                public myProperty!:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumAdded",
+                },
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({
                     type: MyEnum,
                 })
                 public myProperty!:MyEnum
             }`,
             errors: [
+                {
+                    messageId: "needsEnumAdded",
+                },
                 {
                     messageId: "needsEnumNameAdded",
                 },
@@ -198,6 +222,9 @@ ruleTester.run("api-enum-property-best-practices", rule, {
                 public myProperty?:MyEnum
             }`,
             errors: [
+                {
+                    messageId: "needsEnumAdded",
+                },
                 {
                     messageId: "needsEnumNameAdded",
                 },
@@ -247,6 +274,9 @@ ruleTester.run("api-enum-property-best-practices", rule, {
                 public myProperty?:MyEnum
             }`,
             errors: [
+                {
+                    messageId: "needsEnumAdded",
+                },
                 {
                     messageId: "needsEnumNameAdded",
                 },
