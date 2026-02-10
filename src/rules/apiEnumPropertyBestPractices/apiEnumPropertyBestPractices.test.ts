@@ -40,6 +40,43 @@ ruleTester.run("api-enum-property-best-practices", rule, {
                 public myProperty!:Object
             }`,
         },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional({
+                    enumName: "MyEnum",
+                    enum: MyEnum,
+                })
+                public myProperty?:MyEnum
+            }`,
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional()
+                public myProperty?:Object
+            }`,
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiProperty({
+                })
+                public myProperty: MyEnum | string
+            }`,
+        },
     ],
     invalid: [
         {
@@ -120,6 +157,94 @@ ruleTester.run("api-enum-property-best-practices", rule, {
                     type: MyEnum,
                 })
                 public myProperty!:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+                {
+                    messageId: "needsTypeRemoved",
+                },
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional({
+                    type: MyEnum,
+                    enum: MyEnum,
+                })
+                public myProperty?:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+                {messageId: "needsTypeRemoved"},
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional({})
+                public myProperty?:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional({enumName: "MyEnumTYPO",
+                    enum: MyEnum,})
+                public myProperty?:MyEnum
+            }`,
+            errors: [{messageId: "enumNameShouldMatchType"}],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional({
+                    enum: MyEnum,
+                })
+                public myProperty?:MyEnum
+            }`,
+            errors: [
+                {
+                    messageId: "needsEnumNameAdded",
+                },
+            ],
+        },
+        {
+            code: `enum MyEnum{
+                ValA,
+                ValB
+            }
+            
+            class MyClass {
+                @ApiPropertyOptional({
+                    type: MyEnum,
+                })
+                public myProperty?:MyEnum
             }`,
             errors: [
                 {
