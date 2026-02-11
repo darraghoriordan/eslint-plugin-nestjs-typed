@@ -32,16 +32,8 @@ export const hasEnumSpecifiedCorrectly = (
     // check if there is an enum property in the provided options (enums should specify the enum property)
     const firstArgument = (decorators[0].expression as TSESTree.CallExpression)
         .arguments[0] as TSESTree.ObjectExpression;
-    if (!firstArgument) {
-        return new EnumTestResultModel({
-            needsEnumAdded: true,
-            needsEnumNameAdded: true,
-            needsEnumNameToMatchEnumType: false,
-            needsTypeRemoved: false,
-        });
-    }
 
-    const enumProperty = firstArgument.properties.find(
+    const enumProperty = firstArgument?.properties?.find(
         (p) =>
             ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
             "enum"
@@ -49,14 +41,14 @@ export const hasEnumSpecifiedCorrectly = (
 
     // check if there is a type: property in the provided options (enums shouldn't specify type)
     const hasTypeProperty =
-        firstArgument.properties.find(
+        firstArgument?.properties?.find(
             (p) =>
                 ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
                 "type"
         ) !== undefined;
 
     // check if there is an enumName: property in the provided options (enums should specify a name)
-    const enumNameProperty = firstArgument.properties.find(
+    const enumNameProperty = firstArgument?.properties?.find(
         (p) =>
             ((p as TSESTree.Property).key as TSESTree.Identifier).name ===
             "enumName"
@@ -90,7 +82,10 @@ export const needsEnumNameMatchingEnumType = (
 
 const rule = createRule<
     [],
-    "needsEnumNameAdded" | "needsTypeRemoved" | "enumNameShouldMatchType"
+    | "needsEnumAdded"
+    | "needsEnumNameAdded"
+    | "needsTypeRemoved"
+    | "enumNameShouldMatchType"
 >({
     name: "api-enum-property-best-practices",
     meta: {
@@ -99,6 +94,7 @@ const rule = createRule<
                 "Enums should use the best practices for api documentation",
         },
         messages: {
+            needsEnumAdded: `Enum properties should specify an enum`,
             needsEnumNameAdded: `Properties with enum should also specify an enumName property to keep generated models clean`,
             needsTypeRemoved: `Properties with enum should not specify a type property`,
             enumNameShouldMatchType: `The enumName should match the enum type provided`,
@@ -122,7 +118,12 @@ const rule = createRule<
                 const isEnumType = typedTokenHelpers.isEnumType(objectType);
 
                 const result = hasEnumSpecifiedCorrectly(node, isEnumType);
-
+                if (result.needsEnumAdded) {
+                    context.report({
+                        node: node,
+                        messageId: "needsEnumAdded",
+                    });
+                }
                 if (result.needsEnumNameAdded) {
                     context.report({
                         node: node,
