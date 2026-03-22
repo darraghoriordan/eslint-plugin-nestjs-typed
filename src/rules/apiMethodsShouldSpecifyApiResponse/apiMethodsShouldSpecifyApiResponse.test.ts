@@ -71,6 +71,16 @@ ruleTester.run("api-method-should-specify-api-response", rule, {
                 }
             }`,
         },
+        {
+            // Controller with @nestjs/terminus decorator
+            code: `class TestClass {
+                @Get()
+                @HealthCheck()
+                public getAll(): Promise<string[]> {
+                    return [];
+                }
+            }`,
+        },
     ],
     invalid: [
         {
