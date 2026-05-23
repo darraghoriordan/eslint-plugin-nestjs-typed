@@ -34,17 +34,15 @@ export const parser: TSESLint.FlatConfig.Parser = {
 
 const classicPlugin: Linter.Plugin = {
     configs: {
-        recommended: recommended as unknown as TSESLint.ClassicConfig.Config,
-        "no-swagger": noSwagger as unknown as TSESLint.ClassicConfig.Config,
+        recommended,
+        "no-swagger": noSwagger,
     },
     rules,
     meta,
 };
 
-export const plugin: TSESLint.FlatConfig.Plugin = classicPlugin as Omit<
-    typeof classicPlugin,
-    "configs"
->;
+export const plugin: TSESLint.FlatConfig.Plugin =
+    classicPlugin as unknown as TSESLint.FlatConfig.Plugin;
 const flatBaseConfig = (
     plugin: FlatConfig.Plugin,
     parser: FlatConfig.Parser
@@ -65,25 +63,28 @@ const flatBaseConfig = (
 // export the classic plugin configs
 export {classicPlugin};
 export type ConfigArray = EslintLinter.Config[];
+const flatConfigs: {
+    flatRecommended: ConfigArray;
+    flatNoSwagger: ConfigArray;
+} = {
+    flatRecommended: [
+        flatBaseConfig(plugin, parser),
+        {
+            name: "@darraghor/nestjs-typed/recommended",
+            rules: recommended.rules,
+        },
+    ] as unknown as ConfigArray,
+    flatNoSwagger: [
+        {
+            name: "@darraghor/nestjs-typed/no-swagger",
+            rules: noSwagger.rules,
+        },
+    ],
+};
 // export the flat configs
 export default {
+    meta,
+    rules,
     plugin,
-    configs: {
-        flatRecommended: [
-            flatBaseConfig(plugin, parser) as unknown as EslintLinter.Config,
-            {
-                name: "@darraghor/nestjs-typed/recommended",
-                rules: recommended.rules,
-            } as unknown as EslintLinter.Config,
-        ],
-        flatNoSwagger: [
-            {
-                name: "@darraghor/nestjs-typed/no-swagger",
-                rules: noSwagger.rules,
-            } as unknown as EslintLinter.Config,
-        ],
-    } as {
-        flatRecommended: ConfigArray;
-        flatNoSwagger: ConfigArray;
-    },
+    configs: flatConfigs,
 };

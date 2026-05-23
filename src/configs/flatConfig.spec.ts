@@ -24,4 +24,10 @@ describe("flat config", () => {
         expect(recommendedConfig).toBeDefined();
         expect(recommendedConfig?.rules).toBeDefined();
     });
+
+    it("should expose plugin rules and meta at the top level", () => {
+        expect(plugin.rules).toBe(plugin.plugin.rules);
+        expect(plugin.meta).toBe(plugin.plugin.meta);
+        expect(plugin.rules).toHaveProperty("use-dependency-injection");
+    });
 });
