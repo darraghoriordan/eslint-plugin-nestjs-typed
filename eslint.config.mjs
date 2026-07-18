@@ -106,16 +106,7 @@ export default tseslint.config(
             "unicorn/no-useless-undefined": "off",
             "unicorn/prefer-ternary": "off",
             "unicorn/prefer-node-protocol": "off",
-            "unicorn/prevent-abbreviations": [
-                "error",
-                {
-                    allowList: {
-                        Param: true,
-                        Req: true,
-                        Res: true,
-                    },
-                },
-            ],
+            "unicorn/prevent-abbreviations": "error",
         },
     }
     // eslintConfigPrettier

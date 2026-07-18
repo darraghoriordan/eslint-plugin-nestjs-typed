@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prevent-abbreviations */
 import {AST_NODE_TYPES, TSESTree, ESLintUtils} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule.js";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";

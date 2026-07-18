@@ -49,9 +49,8 @@ const rule = createRule<[], "useDependencyInjection">({
             ): void {
                 node.declarations.forEach((declaration) => {
                     if (
-                        declaration.id &&
                         declaration.id.type ===
-                            TSESTree.AST_NODE_TYPES.Identifier
+                        TSESTree.AST_NODE_TYPES.Identifier
                     ) {
                         programVariables.add(declaration.id.name);
                     }

@@ -62,8 +62,7 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
             ["PropertyDefinition,ClassDeclaration"](node) {
                 const allDecorators = (
                     node as
-                        | TSESTree.PropertyDefinition
-                        | TSESTree.ClassDeclaration
+                        TSESTree.PropertyDefinition | TSESTree.ClassDeclaration
                 ).decorators;
                 if (allDecorators && allDecorators.length > 1) {
                     const decoratorNames = allDecorators.map(
@@ -71,7 +70,6 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
                             if (
                                 decorator.expression.type ===
                                     TSESTree.AST_NODE_TYPES.CallExpression &&
-                                decorator.expression.callee &&
                                 decorator.expression.callee.type ===
                                     TSESTree.AST_NODE_TYPES.Identifier
                             ) {

@@ -44,8 +44,7 @@ export const hasRedundantRequired = (
             const firstArgument = decorator.expression.arguments[0];
 
             if (
-                firstArgument &&
-                firstArgument.type === TSESTree.AST_NODE_TYPES.ObjectExpression
+                firstArgument?.type === TSESTree.AST_NODE_TYPES.ObjectExpression
             ) {
                 const hasRequiredTrue =
                     typedTokenHelpers.getPropertyValueEqualsExpected(

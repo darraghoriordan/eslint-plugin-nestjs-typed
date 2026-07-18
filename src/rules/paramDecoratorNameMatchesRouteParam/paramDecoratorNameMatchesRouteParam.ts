@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prevent-abbreviations */
 import {TSESTree} from "@typescript-eslint/utils";
 import {createRule} from "../../utils/createRule.js";
 import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
@@ -76,7 +75,7 @@ export const hasPathPartsAnyRegexParams = (
 ): boolean => {
     // prettier-ignore
 
-    const specialCharacterRegex = /(dareslint__skip|\*|\+|\?|\(|\)|_)/ //new RegExp("([\?\+\*\_\(\)])")
+    const specialCharacterRegex = /(dareslint__skip|\*|\+|\?|\(|\)|_)/; //new RegExp("([\?\+\*\_\(\)])")
     return pathPartsToCheck.some((pathPart) => {
         return specialCharacterRegex.test(pathPart);
     });

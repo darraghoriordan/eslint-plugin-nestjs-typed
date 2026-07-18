@@ -14,8 +14,7 @@ export type RuleOptions = [
 ];
 
 export type ValidModuleNodeTypes =
-    | TSESTree.Identifier
-    | TSESTree.CallExpression;
+    TSESTree.Identifier | TSESTree.CallExpression;
 
 export const isValidModuleMetaPropertyType = (
     node: TSESTree.Expression | TSESTree.SpreadElement | null
@@ -53,7 +52,7 @@ export const isFactoryProviderInjectArray = (
     node: TSESTree.ArrayExpression
 ): boolean => {
     // Check if this array is a direct child of a Property
-    if (!node.parent || node.parent.type !== TSESTree.AST_NODE_TYPES.Property) {
+    if (node.parent?.type !== TSESTree.AST_NODE_TYPES.Property) {
         return false;
     }
 
@@ -68,10 +67,7 @@ export const isFactoryProviderInjectArray = (
     }
 
     // Check if the parent of this Property is an ObjectExpression
-    if (
-        !property.parent ||
-        property.parent.type !== TSESTree.AST_NODE_TYPES.ObjectExpression
-    ) {
+    if (property.parent?.type !== TSESTree.AST_NODE_TYPES.ObjectExpression) {
         return false;
     }
 

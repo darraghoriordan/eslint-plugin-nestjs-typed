@@ -127,7 +127,7 @@ ruleTester.run("api-property-matches-property-optionality", rule, {
             code: `class TestClass {
                 @Expose()
                 @ApiPropertyOptional()
-                thisIsAStringProp!: string = 'default';
+                readonly thisIsAStringProp: string;
             }`,
             errors: [
                 {

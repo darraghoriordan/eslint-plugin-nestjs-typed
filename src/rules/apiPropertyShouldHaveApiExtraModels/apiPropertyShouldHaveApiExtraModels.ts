@@ -26,8 +26,7 @@ const extractModelsFromSchemaReferences = (
             ) as TSESTree.Property | undefined;
 
             if (
-                referenceProperty &&
-                referenceProperty.value.type === AST_NODE_TYPES.CallExpression
+                referenceProperty?.value.type === AST_NODE_TYPES.CallExpression
             ) {
                 const callExpression = referenceProperty.value;
                 // Check if it's a getSchemaPath call
@@ -60,7 +59,7 @@ const findParentClass = (
     let parent: TSESTree.Node | undefined = node.parent;
     while (parent) {
         if (parent.type === AST_NODE_TYPES.ClassDeclaration) {
-            return parent as TSESTree.ClassDeclaration;
+            return parent;
         }
         parent = parent.parent;
     }
@@ -121,10 +120,7 @@ const getModelsFromApiPropertyDecorator = (
     const firstArgument = decorators[0].expression.arguments[0];
 
     // Only process object expressions
-    if (
-        !firstArgument ||
-        firstArgument.type !== AST_NODE_TYPES.ObjectExpression
-    ) {
+    if (firstArgument?.type !== AST_NODE_TYPES.ObjectExpression) {
         return [];
     }
 
@@ -193,9 +189,8 @@ const rule = createRule<[], "shouldUseApiExtraModels">({
                         const firstArgument =
                             decorators[0].expression.arguments[0];
                         if (
-                            firstArgument &&
-                            firstArgument.type ===
-                                AST_NODE_TYPES.ObjectExpression
+                            firstArgument?.type ===
+                            AST_NODE_TYPES.ObjectExpression
                         ) {
                             for (const property of firstArgument.properties) {
                                 if (

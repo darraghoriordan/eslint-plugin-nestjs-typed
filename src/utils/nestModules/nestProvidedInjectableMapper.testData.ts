@@ -4,7 +4,7 @@ export const fakeFilePath = "fake/path.ts";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 export const fakeContext = {
     parserOptions: {
-        ecmaVersion: 2019 as TSESLint.EcmaVersion,
+        ecmaVersion: 2019,
         ecmaFeatures: {globalReturn: false},
         sourceType: "module",
     } as TSESLint.ParserOptions,

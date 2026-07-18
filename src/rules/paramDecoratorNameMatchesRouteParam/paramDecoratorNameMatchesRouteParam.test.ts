@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/prevent-abbreviations */
-
 import {pathPartTestCases, responseParsingTestCases} from "./rule.testData.js";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
 import {

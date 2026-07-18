@@ -2,7 +2,8 @@
     "compilerOptions": {
         "target": "ES2021" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */,
         "module": "Node16",
-        "typeRoots": ["./src/typings", "node_modules/@types"],
+        "typeRoots": ["./src/typings", "./node_modules/@types"],
+        "types": ["node"],
         "moduleResolution": "node16",
         "lib": ["ES2021"],
         "rootDir": "./src",

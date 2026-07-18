@@ -377,7 +377,7 @@ class Foo {
 
                 @ApiProperty({isArray: true})    
                 @Allow()
-                EXAMPLE6!: Array<object> = [];
+                EXAMPLE6: Array<object> = [];
             }
     `,
         },

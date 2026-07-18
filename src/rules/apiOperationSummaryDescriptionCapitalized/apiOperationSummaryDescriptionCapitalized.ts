@@ -30,8 +30,7 @@ const getStringPropertyValue = (
     );
 
     if (
-        property &&
-        property.type === TSESTree.AST_NODE_TYPES.Property &&
+        property?.type === TSESTree.AST_NODE_TYPES.Property &&
         property.value.type === TSESTree.AST_NODE_TYPES.Literal &&
         typeof property.value.value === "string"
     ) {
@@ -61,8 +60,7 @@ const checkApiOperationDecorator = (
             const firstArgument = decorator.expression.arguments[0];
 
             if (
-                firstArgument &&
-                firstArgument.type === TSESTree.AST_NODE_TYPES.ObjectExpression
+                firstArgument?.type === TSESTree.AST_NODE_TYPES.ObjectExpression
             ) {
                 // Check summary property
                 const summary = getStringPropertyValue(
