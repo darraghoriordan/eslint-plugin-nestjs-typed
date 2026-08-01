@@ -71,7 +71,7 @@
         "@commitlint/cli": "21.2.1",
         "@commitlint/config-conventional": "21.2.0",
         "@eslint/js": "10.0.1",
-        "@semantic-release/changelog": "6.0.3",
+        "@semantic-release/changelog": "7.0.0",
         "@semantic-release/exec": "7.1.0",
         "@types/eslint": "9.6.1",
         "@types/jest": "30.0.0",
