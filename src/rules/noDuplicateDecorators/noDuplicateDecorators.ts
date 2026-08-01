@@ -50,6 +50,7 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
     ],
 
     create(context) {
+        const {sourceCode} = context;
         const customListArrayItem = context.options[0];
         let decoratorsToValidate: string[] = customListArrayItem?.customList;
         if (
@@ -99,23 +100,49 @@ const rule = createRule<NoDuplicateDecoratorsOptions, "noDuplicateDecorators">({
                                 {
                                     messageId: "noDuplicateDecorators",
                                     fix: (fixer) => {
-                                        const decoratorsToKeep =
-                                            decoratorNames.filter(
-                                                (decoratorName, index) => {
+                                        return allDecorators
+                                            .map((decorator, index) => ({
+                                                decorator,
+                                                decoratorName:
+                                                    decoratorNames[index],
+                                                index,
+                                            }))
+                                            .filter(
+                                                ({decoratorName, index}) => {
                                                     return (
-                                                        decoratorName &&
+                                                        decoratorsToValidate.includes(
+                                                            decoratorName
+                                                        ) &&
                                                         decoratorNames.indexOf(
                                                             decoratorName
-                                                        ) === index
+                                                        ) !== index
                                                     );
                                                 }
-                                            );
-                                        const decoratorsToKeepText =
-                                            decoratorsToKeep.join(", ");
-                                        return fixer.replaceText(
-                                            node,
-                                            decoratorsToKeepText
-                                        );
+                                            )
+                                            .map(({decorator}) => {
+                                                const nextToken =
+                                                    sourceCode.getTokenAfter(
+                                                        decorator,
+                                                        {includeComments: true}
+                                                    );
+
+                                                if (
+                                                    nextToken &&
+                                                    sourceCode.text
+                                                        .slice(
+                                                            decorator.range[1],
+                                                            nextToken.range[0]
+                                                        )
+                                                        .trim() === ""
+                                                ) {
+                                                    return fixer.removeRange([
+                                                        decorator.range[0],
+                                                        nextToken.range[0],
+                                                    ]);
+                                                }
+
+                                                return fixer.remove(decorator);
+                                            });
                                     },
                                 },
                             ],

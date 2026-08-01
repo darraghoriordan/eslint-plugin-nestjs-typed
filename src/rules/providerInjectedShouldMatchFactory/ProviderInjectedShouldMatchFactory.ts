@@ -38,11 +38,21 @@ const isNestProviderWithFactory = (
 export const hasMismatchedInjected = (
     node: TSESTree.VariableDeclarator | TSESTree.ObjectExpression
 ): boolean => {
-    // count number of factory params
-    const factoryParameterCount = (
-        nestProviderAstParser.findProvideProperty(node, "useFactory")
-            ?.value as TSESTree.ArrowFunctionExpression
-    ).params.length;
+    const factory = nestProviderAstParser.findProvideProperty(
+        node,
+        "useFactory"
+    )?.value;
+
+    // The arity of a referenced factory cannot be determined from this object.
+    // Skip it instead of crashing the entire lint run.
+    if (
+        factory?.type !== TSESTree.AST_NODE_TYPES.ArrowFunctionExpression &&
+        factory?.type !== TSESTree.AST_NODE_TYPES.FunctionExpression
+    ) {
+        return false;
+    }
+
+    const factoryParameterCount = factory.params.length;
 
     // Count number of injected params
     const injectedParameter = nestProviderAstParser.findProvideProperty(

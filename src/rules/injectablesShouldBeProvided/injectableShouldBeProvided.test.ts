@@ -165,6 +165,32 @@ ruleTester.run("injectable-should-be-provided", rule, {
                 },
             ],
         },
+        {
+            // A mapping cached for an earlier rule configuration must not be
+            // reused when this instance scans a different source path.
+            code: `
+            import {Injectable} from "./Injectable.stub";
+
+            @Injectable()
+            class ExampleProviderIncludedInModule {}
+            `,
+            errors: [
+                {
+                    messageId: "injectableInModule",
+                },
+            ],
+            options: [
+                {
+                    src: [
+                        path.join(
+                            __dirname + "../../../fixtures",
+                            "does-not-exist/*.ts"
+                        ),
+                    ],
+                    filterFromPaths: ["node_modules", ".test.", ".spec."],
+                },
+            ],
+        },
 
         {
             // this provider is not included in the module's providers located in /fixtures

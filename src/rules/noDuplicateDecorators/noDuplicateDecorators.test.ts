@@ -48,7 +48,12 @@ ruleTester.run("no-duplicate-decorators", rule, {
                     suggestions: [
                         {
                             messageId: "noDuplicateDecorators",
-                            output: "Controller",
+                            output: `@Controller()
+        class MyClass {
+            @Controller()
+            myProperty: string;
+
+        }`,
                         },
                     ],
                 },
@@ -72,7 +77,8 @@ ruleTester.run("no-duplicate-decorators", rule, {
                             output: `
         @Controller()
         class MyClass {
-            Controller
+            @Controller()
+            myProperty: string;
 
         }`,
                         },
@@ -99,7 +105,8 @@ ruleTester.run("no-duplicate-decorators", rule, {
                             output: `
         @Controller()
         class MyClass {
-            Validated
+            @Validated()
+            myProperty: string;
 
         }`,
                         },

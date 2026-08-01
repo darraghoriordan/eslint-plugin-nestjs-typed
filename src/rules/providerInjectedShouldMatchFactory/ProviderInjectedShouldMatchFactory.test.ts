@@ -47,6 +47,18 @@ export default class UserDiscriminatedCacheInterceptor extends CacheInterceptor 
             };`,
         },
         {
+            // Referenced factories are valid, but their arity cannot be
+            // determined from the provider object without resolving symbols.
+            code: `const createMyInjectable = (service: MyService) => {
+                return new MyOtherInjectable(service);
+            };
+            export const MyOtherInjectableProvider: Provider = {
+                provide: MyOtherInjectable,
+                useFactory: createMyInjectable,
+                inject: [MyService],
+            };`,
+        },
+        {
             code: `export const MyOtherInjectableProvider: NotAProvider = {
                 provide: MyOtherInjectable,
                 useFactory: async (

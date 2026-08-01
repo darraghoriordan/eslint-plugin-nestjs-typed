@@ -5,13 +5,14 @@ import {createRule} from "../../utils/createRule.js";
 import NestProvidedInjectableMapper from "../../utils/nestModules/nestProvidedInjectableMapper.js";
 import {NestProvidedInjectablesMap} from "../../utils/nestModules/models/NestProvidedInjectablesMap.js";
 import {typedTokenHelpers} from "../../utils/typedTokenHelpers.js";
-import {FilePath} from "eslint/use-at-your-own-risk";
 import {JSONSchema4TypeName} from "@typescript-eslint/utils/json-schema";
 import {RuleContext} from "@typescript-eslint/utils/ts-eslint";
 import FileEnumeratorWrapper from "../../utils/files/customFileEnumeratorWrapper.js";
 
-let listOfPotentialNestModuleFiles: FilePath[];
-let nestModuleMap: Map<string, NestProvidedInjectablesMap>;
+const moduleMappingsCache = new Map<
+    string,
+    Map<string, NestProvidedInjectablesMap>
+>();
 
 type Options = [
     {
@@ -57,7 +58,8 @@ const checkNode = (
             "injectableInModule" | "controllersInModule",
             Options
         >
-    >
+    >,
+    nestModuleMap: Map<string, NestProvidedInjectablesMap>
 ) => {
     if (
         NestProvidedInjectableMapper.isNestInjectableThatIsNeverProvided(node)
@@ -92,27 +94,44 @@ const checkNode = (
     }
 };
 
-function initializeModuleMappings(
-    sourcePath: string,
+function getModuleMappings(
+    sourcePaths: string[],
     filterFromPaths: string[],
     context: Readonly<TSESLint.RuleContext<never, Options>>
-) {
+): Map<string, NestProvidedInjectablesMap> {
+    const currentWorkingDirectory = process.cwd();
     const mappedSourceDirectory =
         NestProvidedInjectableMapper.detectDirectoryToScanForFiles(
-            sourcePath,
-            process.cwd()
+            sourcePaths,
+            currentWorkingDirectory
         );
 
-    listOfPotentialNestModuleFiles = FileEnumeratorWrapper.enumerateFiles({
-        sourceGlobs: mappedSourceDirectory,
-        extensions: [".ts"],
-        filterFromPaths,
+    const cacheKey = JSON.stringify({
+        currentWorkingDirectory,
+        sourcePaths: [...mappedSourceDirectory].sort(),
+        filterFromPaths: [...filterFromPaths].sort(),
     });
+    const cached = moduleMappingsCache.get(cacheKey);
 
-    nestModuleMap = NestProvidedInjectableMapper.parseFileList(
+    if (cached) {
+        return cached;
+    }
+
+    const listOfPotentialNestModuleFiles = FileEnumeratorWrapper.enumerateFiles(
+        {
+            sourceGlobs: mappedSourceDirectory,
+            extensions: [".ts"],
+            filterFromPaths,
+        }
+    );
+
+    const mappings = NestProvidedInjectableMapper.parseFileList(
         listOfPotentialNestModuleFiles,
         context
     );
+    moduleMappingsCache.set(cacheKey, mappings);
+
+    return mappings;
 }
 const defaultOptions = [
     {
@@ -182,11 +201,8 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
                       >
                   >);
 
-        const {src, filterFromPaths} = context.options[0] || {};
-
-        if (nestModuleMap === undefined || nestModuleMap.size === 0) {
-            initializeModuleMappings(src[0], filterFromPaths, context);
-        }
+        const {src, filterFromPaths} = context.options[0] ?? defaultOptions[0];
+        const nestModuleMap = getModuleMappings(src, filterFromPaths, context);
 
         return {
             ClassDeclaration(node: TSESTree.ClassDeclaration): void {
@@ -195,14 +211,16 @@ const rule = createRule<Options, "injectableInModule" | "controllersInModule">({
                     "Injectable",
                     "providers",
                     "injectableInModule",
-                    context
+                    context,
+                    nestModuleMap
                 );
                 checkNode(
                     node,
                     "Controller",
                     "controllers",
                     "controllersInModule",
-                    context
+                    context,
+                    nestModuleMap
                 );
             },
             "Program:exit"(): void {
