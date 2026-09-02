@@ -36,6 +36,10 @@ export const rules: Partial<Linter.RulesRecord> = {
         "error",
     "@darraghor/nestjs-typed/use-dependency-injection": "off",
     "@darraghor/nestjs-typed/use-correct-endpoint-naming-convention": "off",
+    "@darraghor/nestjs-typed/forward-ref-injection-should-use-wrapper-type":
+        "error",
+    "@darraghor/nestjs-typed/swagger-file-upload-should-be-documented": "error",
+    "@darraghor/nestjs-typed/uploaded-file-should-be-validated": "error",
 };
 export default {
     extends: ["./configs/base"],

@@ -20,6 +20,9 @@ import useInjectableProvidedToken from "./useInjectableProvidedToken/useInjectab
 import apiPropertyShouldHaveApiExtraModels from "./apiPropertyShouldHaveApiExtraModels/apiPropertyShouldHaveApiExtraModels.js";
 import apiOperationSummaryDescriptionCapitalized from "./apiOperationSummaryDescriptionCapitalized/apiOperationSummaryDescriptionCapitalized.js";
 import useDependencyInjection from "./useDependencyInjection/useDependencyInjection.js";
+import forwardRefInjectionShouldUseWrapperType from "./forwardRefInjectionShouldUseWrapperType/forwardRefInjectionShouldUseWrapperType.js";
+import swaggerFileUploadShouldBeDocumented from "./swaggerFileUploadShouldBeDocumented/swaggerFileUploadShouldBeDocumented.js";
+import uploadedFileShouldBeValidated from "./uploadedFileShouldBeValidated/uploadedFileShouldBeValidated.js";
 const allRules = {
     "all-properties-have-explicit-defined": allPropertiesHaveExplicitDefined,
     "api-property-matches-property-optionality":
@@ -55,6 +58,11 @@ const allRules = {
     "api-operation-summary-description-capitalized":
         apiOperationSummaryDescriptionCapitalized,
     "use-dependency-injection": useDependencyInjection,
+    "forward-ref-injection-should-use-wrapper-type":
+        forwardRefInjectionShouldUseWrapperType,
+    "swagger-file-upload-should-be-documented":
+        swaggerFileUploadShouldBeDocumented,
+    "uploaded-file-should-be-validated": uploadedFileShouldBeValidated,
 };
 
 export default allRules;

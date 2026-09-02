@@ -9,6 +9,7 @@ export const rules: Partial<TSESLint.ClassicConfig.RulesRecord> = {
     "@darraghor/nestjs-typed/api-enum-property-best-practices": "off",
     "@darraghor/nestjs-typed/api-property-returning-array-should-set-array":
         "off",
+    "@darraghor/nestjs-typed/swagger-file-upload-should-be-documented": "off",
 };
 
 const config = {

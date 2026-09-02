@@ -1,0 +1,7 @@
+{
+    "extends": "./tsconfig-withMeta.json",
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext"
+    }
+}
