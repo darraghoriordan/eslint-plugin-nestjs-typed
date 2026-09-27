@@ -54,7 +54,7 @@ This plugin only supports typescript up to the version typescript eslint parser 
 
 ## Have an idea for a rule?
 
-Awesome! [Click here](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/issues/new?title=New%20Rule%20Suggestion&labels=Rule%20Suggestion&body=Hi!%20I%20have%20an%20idea%20for%20a%20rule...) to submit a new issue!
+Please submit a pull request. See [Contributing](./CONTRIBUTING.md).
 
 ## Index of available rules
 
