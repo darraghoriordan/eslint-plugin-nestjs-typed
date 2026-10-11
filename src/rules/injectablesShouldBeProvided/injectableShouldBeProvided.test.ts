@@ -1,10 +1,19 @@
 import rule from "./injectableShouldBeProvided.js";
 import {RuleTester} from "@typescript-eslint/rule-tester";
+import {Linter} from "eslint";
+import parser from "@typescript-eslint/parser";
 
 import {getFixturesRootDirectory} from "../../testing/fixtureSetup.js";
 import path from "path";
+import fs from "fs";
+import os from "os";
+import {afterAll, describe, expect, it} from "vitest";
 
 const tsRootDirectory = getFixturesRootDirectory();
+const fixturesGlob = path
+    .join(tsRootDirectory, "*.ts")
+    .split(path.sep)
+    .join("/");
 
 const ruleTester = new RuleTester({
     languageOptions: {
@@ -32,7 +41,7 @@ ruleTester.run("injectable-should-be-provided", rule, {
             `,
             options: [
                 {
-                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    src: [fixturesGlob],
                     filterFromPaths: [
                         "node_modules",
                         ".test.",
@@ -52,7 +61,7 @@ ruleTester.run("injectable-should-be-provided", rule, {
             `,
             options: [
                 {
-                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    src: [fixturesGlob],
                     filterFromPaths: [
                         "node_modules",
                         ".test.",
@@ -73,7 +82,7 @@ ruleTester.run("injectable-should-be-provided", rule, {
             `,
             options: [
                 {
-                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    src: [fixturesGlob],
                     filterFromPaths: [
                         "node_modules",
                         ".test.",
@@ -98,7 +107,7 @@ ruleTester.run("injectable-should-be-provided", rule, {
             `,
             options: [
                 {
-                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    src: [fixturesGlob],
                     filterFromPaths: [
                         "node_modules",
                         ".test.",
@@ -121,7 +130,7 @@ ruleTester.run("injectable-should-be-provided", rule, {
 
             options: [
                 {
-                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    src: [fixturesGlob],
                     filterFromPaths: [
                         "node_modules",
                         ".test.",
@@ -155,7 +164,7 @@ ruleTester.run("injectable-should-be-provided", rule, {
             ],
             options: [
                 {
-                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    src: [fixturesGlob],
                     filterFromPaths: [
                         "node_modules",
                         ".test.",
@@ -182,10 +191,10 @@ ruleTester.run("injectable-should-be-provided", rule, {
             options: [
                 {
                     src: [
-                        path.join(
-                            __dirname + "../../../fixtures",
-                            "does-not-exist/*.ts"
-                        ),
+                        path
+                            .join(tsRootDirectory, "does-not-exist", "*.ts")
+                            .split(path.sep)
+                            .join("/"),
                     ],
                     filterFromPaths: ["node_modules", ".test.", ".spec."],
                 },
@@ -214,7 +223,7 @@ ruleTester.run("injectable-should-be-provided", rule, {
             ],
             options: [
                 {
-                    src: [path.join(__dirname + "../../../fixtures", "*.ts")],
+                    src: [fixturesGlob],
                     filterFromPaths: [
                         "node_modules",
                         ".test.",
@@ -225,4 +234,83 @@ ruleTester.run("injectable-should-be-provided", rule, {
             ],
         },
     ],
+});
+
+describe("injectable-should-be-provided cache updates", () => {
+    const tempRoot = fs.mkdtempSync(
+        path.join(os.tmpdir(), "nestjs-rule-cache-")
+    );
+
+    afterAll(() => {
+        fs.rmSync(tempRoot, {recursive: true, force: true});
+    });
+
+    it("uses module mappings inserted and replaced during sequential lint runs", () => {
+        const sourceDirectory = path.join(tempRoot, "src");
+        fs.mkdirSync(sourceDirectory);
+        const modulePath = path.join(sourceDirectory, "example.module.ts");
+        const targetPath = path.join(sourceDirectory, "example.service.ts");
+        const sourceGlob = path
+            .join(sourceDirectory, "*.ts")
+            .split(path.sep)
+            .join("/");
+        const options = {
+            src: [sourceGlob],
+            filterFromPaths: ["node_modules", ".test.", ".spec."],
+        };
+        const linter = new Linter({cwd: tempRoot});
+        const config = {
+            files: ["**/*.ts"],
+            languageOptions: {
+                parser,
+                parserOptions: {
+                    ecmaVersion: 2015,
+                    sourceType: "module" as const,
+                },
+            },
+            plugins: {
+                test: {rules: {"injectable-should-be-provided": rule}},
+            },
+            rules: {"test/injectable-should-be-provided": ["error", options]},
+        };
+        const targetSource = `
+            import {Injectable} from "./Injectable.stub";
+            @Injectable()
+            export class CachedProvider {}
+        `;
+        const moduleSource = (providers: string) => `
+            import {Module} from "@nestjs/common";
+            import {CachedProvider} from "./example.service";
+            @Module({providers: [${providers}]})
+            export class ExampleModule {}
+        `;
+        const verify = (code: string, filename: string) =>
+            linter.verify(code, config, {filename});
+
+        try {
+            const initiallyMissing = verify(targetSource, targetPath);
+            expect(initiallyMissing).toHaveLength(1);
+            expect(initiallyMissing[0].message).toContain(
+                'Injectable "CachedProvider"'
+            );
+
+            fs.writeFileSync(modulePath, moduleSource("CachedProvider"));
+            expect(
+                verify(fs.readFileSync(modulePath, "utf8"), modulePath)
+            ).toEqual([]);
+            expect(verify(targetSource, targetPath)).toHaveLength(0);
+
+            fs.writeFileSync(modulePath, moduleSource(""));
+            expect(
+                verify(fs.readFileSync(modulePath, "utf8"), modulePath)
+            ).toEqual([]);
+            const missingAfterReplacement = verify(targetSource, targetPath);
+            expect(missingAfterReplacement).toHaveLength(1);
+            expect(missingAfterReplacement[0].message).toContain(
+                'Injectable "CachedProvider"'
+            );
+        } finally {
+            fs.rmSync(sourceDirectory, {recursive: true, force: true});
+        }
+    });
 });

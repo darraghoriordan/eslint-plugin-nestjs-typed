@@ -1,9 +1,9 @@
 import {TSESLint, TSESTree} from "@typescript-eslint/utils";
+import {parse} from "@typescript-eslint/typescript-estree";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as unambiguous from "eslint-module-utils/unambiguous";
 import fs from "fs";
-import {typedTokenHelpers} from "../typedTokenHelpers.js";
 import {
     NestProvidedFilePath,
     NestProvidedInjectablesMap,
@@ -40,8 +40,8 @@ const NestProvidedInjectableMapper = {
             ignored: boolean;
             filename: string;
         }[],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        context: Readonly<TSESLint.RuleContext<never, any>>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+        _context: Readonly<TSESLint.RuleContext<never, any>>
     ): Map<string, NestProvidedInjectablesMap> {
         const moduleMaps = new Map<string, NestProvidedInjectablesMap>();
         files
@@ -49,11 +49,10 @@ const NestProvidedInjectableMapper = {
                 const fileContents =
                     NestProvidedInjectableMapper.readFileContents(f.filename);
 
-                const fileAstString = typedTokenHelpers.parseStringToAst(
-                    fileContents,
-                    f.filename,
-                    context
-                );
+                // Metadata scanning needs node structure only, so skip ESLint scope analysis.
+                const fileAstString = parse(fileContents, {
+                    filePath: f.filename,
+                });
 
                 const result: [string, NestProvidedInjectablesMap] | null =
                     NestProvidedInjectableMapper.mapAllProvidedInjectablesInModuleOrProviderFile(
@@ -97,8 +96,7 @@ const NestProvidedInjectableMapper = {
         path: string
     ): [string, NestProvidedInjectablesMap] | null {
         try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (!unambiguous.isModule(ast as any)) {
+            if (!unambiguous.isModule(ast)) {
                 return null;
             }
             // This does too much and should probably be split up
@@ -107,8 +105,8 @@ const NestProvidedInjectableMapper = {
 
             // set up the response model
             let moduleFileListOfControllersAndProviders:
-                | [NestProvidedFilePath, NestProvidedInjectablesMap]
-                | null = null;
+                [NestProvidedFilePath, NestProvidedInjectablesMap] | null =
+                null;
 
             // Is this a module?
             const foundNestModuleClass =

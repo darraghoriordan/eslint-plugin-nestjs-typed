@@ -61,6 +61,7 @@
     "dependencies": {
         "@typescript-eslint/scope-manager": "^8.71.0",
         "@typescript-eslint/type-utils": "^8.71.0",
+        "@typescript-eslint/typescript-estree": "^8.71.0",
         "@typescript-eslint/utils": "^8.71.0",
         "eslint-module-utils": "2.14.0",
         "glob": "13.0.6",
