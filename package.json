@@ -63,7 +63,7 @@
         "@typescript-eslint/type-utils": "^8.71.0",
         "@typescript-eslint/utils": "^8.71.0",
         "eslint-module-utils": "2.14.0",
-        "glob": "13.0.6",
+        "glob": "14.0.3",
         "reflect-metadata": "0.2.2",
         "ts-api-utils": "2.5.0"
     },
@@ -84,7 +84,7 @@
         "eslint": "10.11.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-prefer-arrow": "1.2.3",
-        "eslint-plugin-unicorn": "76.0.0",
+        "eslint-plugin-unicorn": "79.0.0",
         "globals": "17.13.0",
         "husky": "9.1.7",
         "jest": "30.5.1",
