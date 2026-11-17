@@ -25,28 +25,15 @@ const findModuleMappingsContaining = (
     className: string,
     propertyName: "controllers" | "providers",
     nestModuleMap: Map<string, NestProvidedInjectablesMap>
-): [string, NestProvidedInjectablesMap][] => {
-    // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
-    const modules = [...nestModuleMap.entries()].filter(([_, entry]) => {
-        return entry[propertyName].has(className);
-    });
+): boolean => {
+    for (const entry of nestModuleMap.values()) {
+        if (entry[propertyName].has(className)) {
+            return true;
+        }
+    }
 
-    return modules;
+    return false;
 };
-function convertNestModuleMapToString(
-    nestModules: [string, NestProvidedInjectablesMap][]
-): string {
-    // const uniqueValues = new Set<string>();
-    const vals: string[] = [];
-    nestModules.forEach((module) => {
-        // Add all paths
-        vals.push(module[0]);
-    });
-
-    // Convert the Set to an array and join with commas
-    // return Array.from(uniqueValues).join(", ");
-    return vals.join(", ");
-}
 const checkNode = (
     // super fragile types but whatevs
     node: TSESTree.ClassDeclaration,
@@ -71,13 +58,13 @@ const checkNode = (
         if (!name) {
             return;
         }
-        const foundModuleMaps = findModuleMappingsContaining(
+        const isInModule = findModuleMappingsContaining(
             name,
             propertyName,
             nestModuleMap
         );
 
-        if (foundModuleMaps.length >= 1) {
+        if (isInModule) {
             return;
         }
         // couldn't find map so error
@@ -85,9 +72,8 @@ const checkNode = (
             node: node,
             messageId: messageId,
             data: {
-                numberOfReferences: foundModuleMaps.length,
-
-                refLocations: convertNestModuleMapToString(foundModuleMaps),
+                numberOfReferences: 0,
+                refLocations: "",
                 name: name,
             },
         });
