@@ -183,6 +183,19 @@ const rule = createRule<
                     return;
                 }
 
+                // @IsIn() checks the value against a list of allowed values, so there is
+                // nothing for class-transformer to build (e.g. a string literal union alias)
+                const hasIsIn = foundClassValidatorDecorators.some(
+                    (foundClassValidatorDecorator) =>
+                        typedTokenHelpers.decoratorIsIsIn(
+                            foundClassValidatorDecorator
+                        )
+                );
+
+                if (hasIsIn) {
+                    return;
+                }
+
                 // const foundClassValidatorDecorators =
                 //     typedTokenHelpers.getDecoratorsNamed(
                 //         node,

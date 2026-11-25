@@ -65,6 +65,18 @@ class ExampleDto {
   }
 ```
 
+This PASSES because `@IsIn()` checks the value against a list of allowed values, so there is nothing for class-transformer to build. This is common with a string literal union alias.
+
+```ts
+const ACTIONS = ["accept", "deliver"] as const;
+type Action = (typeof ACTIONS)[number];
+
+export class TransitionDto {
+    @IsIn(ACTIONS)
+    action!: Action;
+}
+```
+
 This FAILS because you should always tell class-transformer the type for an array
 
 ```ts

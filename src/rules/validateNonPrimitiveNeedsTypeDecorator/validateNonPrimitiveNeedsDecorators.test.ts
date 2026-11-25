@@ -398,6 +398,35 @@ class Foo {
             }
     `,
         },
+        {
+            // a string literal union alias validated with @IsIn - nothing to transform
+            code: `
+            import { IsIn } from 'class-validator';
+
+            const ACTIONS = ['accept', 'deliver'] as const;
+            type Action = (typeof ACTIONS)[number];
+
+            export class TransitionDto {
+                @IsIn(ACTIONS)
+                action!: Action;
+            }
+    `,
+        },
+        {
+            // an array of a string literal union alias validated with @IsIn each
+            code: `
+            import { IsArray, IsIn } from 'class-validator';
+
+            const ACTIONS = ['accept', 'deliver'] as const;
+            type Action = (typeof ACTIONS)[number];
+
+            export class TransitionsDto {
+                @IsArray()
+                @IsIn(ACTIONS, { each: true })
+                actions!: Action[];
+            }
+    `,
+        },
     ],
     invalid: [
         {
