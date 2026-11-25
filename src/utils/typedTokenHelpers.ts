@@ -314,6 +314,15 @@ export const typedTokenHelpers = {
 
         return decoratorName === "IsEnum";
     },
+    /**
+     * Checks if the decorator is the IsIn decorator
+     * @param decorator
+     */
+    decoratorIsIsIn(decorator: TSESTree.Decorator): boolean {
+        const decoratorName = this.getDecoratorName(decorator);
+
+        return decoratorName === "IsIn";
+    },
     /** Checks if the decorator is the IsObject decorator
      * @param decorator
      */
